@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/widgets/app_drawer.dart';
 import 'package:share_learning/widgets/post.dart';
 
@@ -18,7 +19,18 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Post(),
+      // body: Post(),
+      body: ListView.builder(
+        itemCount: Books().books.length,
+        itemBuilder: (context, index) => Post(
+          title: Books().books[index].title,
+          description: Books().books[index].description,
+          author: Books().books[index].author,
+          boughtTime: Books().books[index].boughtTime,
+          price: Books().books[index].price,
+          selling: Books().books[index].selling,
+        ),
+      ),
     );
   }
 }

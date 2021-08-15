@@ -6,6 +6,7 @@ class Book {
   final DateTime boughtTime;
   final double price;
   final bool isWishlisted;
+  final bool selling;
 
   Book({
     required this.id,
@@ -15,5 +16,6 @@ class Book {
     required this.boughtTime,
     required this.price,
     required this.isWishlisted,
+    required this.selling,
   });
 }
