@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_learning/screens/single_post_screen.dart';
 import 'screens/home_screen.dart';
 
 // import './widgets';
@@ -16,7 +17,11 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.blueAccent,
         scaffoldBackgroundColor: Colors.grey[100],
       ),
-      home: HomeScreen(),
+      // home: HomeScreen(),
+      home: SinglePostScreen(),
+      routes: {
+        SinglePostScreen.routeName: (context) => SinglePostScreen(),
+      },
     );
   }
 }

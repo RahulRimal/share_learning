@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_learning/screens/single_post_screen.dart';
 
 // ignore: must_be_immutable
 class Post extends StatelessWidget {
@@ -41,55 +42,78 @@ class Post extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: ListTile(
-              contentPadding: EdgeInsets.only(
-                top: 17,
-                bottom: 50,
-                left: 10,
-                right: 10,
-              ),
-              title: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          this.title,
+            child: GestureDetector(
+              onTap: () =>
+                  Navigator.of(context).pushNamed(SinglePostScreen.routeName),
+              child: ListTile(
+                contentPadding: EdgeInsets.only(
+                  top: 17,
+                  bottom: 50,
+                  left: 10,
+                  right: 10,
+                ),
+                title: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            this.title,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          'Available',
                           style: TextStyle(
-                            color: Theme.of(context).primaryColor,
+                            color: Colors.green[800],
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                      Text(
-                        'Available',
-                        style: TextStyle(
-                          color: Colors.green[800],
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _shouldFlex(this.author)
-                          ? Flexible(
-                              child: Container(
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _shouldFlex(this.author)
+                            ? Flexible(
+                                child: Container(
+                                  padding: EdgeInsets.all(10),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.person),
+                                      Text('Author'),
+                                      Text(
+                                        this.author,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                          fontStyle: FontStyle.italic,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : Container(
                                 padding: EdgeInsets.all(10),
                                 child: Column(
-                                  mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Icon(Icons.person),
                                     Text('Author'),
                                     Text(
                                       this.author,
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.w600,
@@ -99,91 +123,73 @@ class Post extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                            )
-                          : Container(
-                              padding: EdgeInsets.all(10),
-                              child: Column(
-                                children: [
-                                  Icon(Icons.person),
-                                  Text('Author'),
-                                  Text(
-                                    this.author,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600,
-                                      fontStyle: FontStyle.italic,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.history),
-                            Text('Bought time'),
-                            Text(
-                              '1 Year ago',
-                              style: TextStyle(
-                                color: Colors.yellow[300],
-                                fontWeight: FontWeight.w600,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.monetization_on),
-                            Text('Price'),
-                            Text(
-                              'Rs.$price',
-                              style: TextStyle(
-                                color: Colors.green[800],
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Flexible(
-                        child: Container(
+                        Container(
                           padding: EdgeInsets.all(10),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(
-                                Icons.shop,
-                                color: Theme.of(context).primaryColor,
-                              ),
+                              Icon(Icons.history),
+                              Text('Bought time'),
                               Text(
-                                'Add to Wishlist',
+                                '1 Year ago',
                                 style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Colors.yellow[700],
+                                  fontWeight: FontWeight.w600,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.monetization_on),
+                              Text('Price'),
+                              Text(
+                                'Rs.$price',
+                                style: TextStyle(
+                                  color: Colors.green[800],
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                ],
-              ),
-              subtitle: Text(
-                'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                overflow: TextOverflow.ellipsis,
+                        Flexible(
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.shop,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                Text(
+                                  'Add to Wishlist',
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                  ],
+                ),
+                subtitle: Text(
+                  'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
           ),
