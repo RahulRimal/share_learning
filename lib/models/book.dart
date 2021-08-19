@@ -1,5 +1,5 @@
 class Book {
-  final String id;
+  late final String id;
   final String title;
   final String description;
   final String author;
@@ -7,6 +7,7 @@ class Book {
   final double price;
   final bool isWishlisted;
   final bool selling;
+  List<String>? pictures;
 
   Book({
     required this.id,
@@ -17,5 +18,6 @@ class Book {
     required this.price,
     required this.isWishlisted,
     required this.selling,
+    this.pictures,
   });
 }

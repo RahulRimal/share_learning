@@ -21,7 +21,6 @@ class SinglePostScreen extends StatelessWidget {
       ),
       body: Container(
         width: double.infinity,
-        // width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.symmetric(
           vertical: 40,
           horizontal: 20,
@@ -31,14 +30,20 @@ class SinglePostScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.max,
           children: [
-            Text(
-              'C Programming Fundamentals II Edition',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
+            Padding(
+              padding: const EdgeInsets.only(
+                bottom: 5,
+              ),
+              child: Text(
+                'C Programming Fundamentals II Edition',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
             ),
             Row(
@@ -131,6 +136,139 @@ class SinglePostScreen extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+            Container(
+              height: 150,
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(
+                horizontal: 5,
+                vertical: 10,
+              ),
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  // Post Image Starts Here
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Container(
+                      width: 150,
+                      height: 150,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      child: Image.network(
+                        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  // Post Image ends Here
+                  // Post Image Starts Here
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Container(
+                      width: 150,
+                      height: 150,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      child: Image.network(
+                        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  // Post Image ends Here
+                  // Post Image Starts Here
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Container(
+                      width: 150,
+                      height: 150,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      child: Image.network(
+                        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  // Post Image ends Here
+                  // Post Image Starts Here
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Container(
+                      width: 150,
+                      height: 150,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      child: Image.network(
+                        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  // Post Image ends Here
+                  // Post Image Starts Here
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Container(
+                      width: 150,
+                      height: 150,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      child: Image.network(
+                        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  // Post Image ends Here
+                  // Post Image Starts Here
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Container(
+                      width: 150,
+                      height: 150,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      child: Image.network(
+                        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  // Post Image ends Here
+                ],
+              ),
             ),
           ],
         ),

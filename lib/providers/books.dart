@@ -13,6 +13,12 @@ class Books with ChangeNotifier {
       price: 299,
       isWishlisted: true,
       selling: true,
+      pictures: [
+        'https://cdn.pixabay.com/photo/2021/08/16/19/24/boat-6551183_960_720.jpg',
+        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
+        'https://cdn.pixabay.com/photo/2021/08/10/18/32/cat-6536684__340.jpg',
+        'https://cdn.pixabay.com/photo/2021/06/25/17/51/ladybug-6364312__340.jpg',
+        ],
     ),
     Book(
       id: '1',
@@ -35,6 +41,12 @@ class Books with ChangeNotifier {
       price: 1000,
       isWishlisted: false,
       selling: false,
+      pictures: [
+        'https://cdn.pixabay.com/photo/2021/08/16/19/24/boat-6551183_960_720.jpg',
+        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
+        'https://cdn.pixabay.com/photo/2021/08/10/18/32/cat-6536684__340.jpg',
+        'https://cdn.pixabay.com/photo/2021/06/25/17/51/ladybug-6364312__340.jpg',
+        ],
     ),
     Book(
       id: '2',
@@ -46,10 +58,24 @@ class Books with ChangeNotifier {
       price: 800,
       isWishlisted: true,
       selling: true,
+      pictures: [
+        'https://cdn.pixabay.com/photo/2021/08/16/19/24/boat-6551183_960_720.jpg',
+        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
+        'https://cdn.pixabay.com/photo/2021/08/10/18/32/cat-6536684__340.jpg',
+        'https://cdn.pixabay.com/photo/2021/06/25/17/51/ladybug-6364312__340.jpg',
+        ],
     ),
   ];
 
   List<Book> get books {
     return [..._myBooks];
   }
+
+  Book getBookById(String bookId)
+  {
+    return books.firstWhere((book) => book.id == bookId );
+  }
+
+
+
 }
