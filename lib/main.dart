@@ -17,8 +17,8 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.blueAccent,
         scaffoldBackgroundColor: Colors.grey[100],
       ),
-      // home: HomeScreen(),
-      home: SinglePostScreen(),
+      home: HomeScreen(),
+      // home: SinglePostScreen(),
       routes: {
         SinglePostScreen.routeName: (context) => SinglePostScreen(),
       },
