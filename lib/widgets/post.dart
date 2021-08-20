@@ -3,6 +3,7 @@ import 'package:share_learning/screens/single_post_screen.dart';
 
 // ignore: must_be_immutable
 class Post extends StatelessWidget {
+  final String id;
   final String title;
   final String author;
   final String description;
@@ -11,6 +12,7 @@ class Post extends StatelessWidget {
   final bool selling;
 
   Post({
+    required this.id,
     required this.title,
     required this.author,
     required this.description,
@@ -43,8 +45,10 @@ class Post extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             child: GestureDetector(
-              onTap: () =>
-                  Navigator.of(context).pushNamed(SinglePostScreen.routeName),
+              onTap: () => Navigator.of(context).pushNamed(
+                SinglePostScreen.routeName,
+                arguments: {'id': this.id},
+              ),
               child: ListTile(
                 contentPadding: EdgeInsets.only(
                   top: 17,

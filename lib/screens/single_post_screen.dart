@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:share_learning/models/book.dart';
+import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/widgets/app_drawer.dart';
 
 class SinglePostScreen extends StatelessWidget {
   static const routeName = '/post-details';
 
+  var bookId;
+
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+
+    if (args != null) {
+      bookId = args['id'];
+    }
+
+    Book selectedPost = Provider.of<Books>(context).getBookById(bookId);
+
     return Scaffold(
       drawer: AppDrawer(),
       appBar: AppBar(
@@ -37,8 +50,8 @@ class SinglePostScreen extends StatelessWidget {
                 bottom: 5,
               ),
               child: Text(
-                'C Programming Fundamentals II Edition',
-                textAlign: TextAlign.left,
+                selectedPost.title,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -47,7 +60,6 @@ class SinglePostScreen extends StatelessWidget {
               ),
             ),
             Row(
-              // mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
@@ -59,7 +71,7 @@ class SinglePostScreen extends StatelessWidget {
                         'Author',
                       ),
                       Text(
-                        'this.author',
+                        selectedPost.author,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
@@ -100,7 +112,7 @@ class SinglePostScreen extends StatelessWidget {
                                 bottom: 10,
                               ),
                               child: Text(
-                                'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est labor',
+                                selectedPost.description,
                                 textAlign: TextAlign.justify,
                               ),
                             ),
@@ -120,7 +132,7 @@ class SinglePostScreen extends StatelessWidget {
                               ),
                               children: [
                                 TextSpan(
-                                  text: 'Rs.600',
+                                  text: 'Rs.${selectedPost.price}',
                                   style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.bold,
@@ -144,130 +156,30 @@ class SinglePostScreen extends StatelessWidget {
                 horizontal: 5,
                 vertical: 10,
               ),
-              child: ListView(
+              child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                children: [
-                  // Post Image Starts Here
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
-                      width: 150,
-                      height: 150,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                      child: Image.network(
-                        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
-                        fit: BoxFit.cover,
+                itemCount: selectedPost.pictures!.length,
+                itemBuilder: (context, index) =>
+                    // Post Image Starts Here
+                    Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Container(
+                    width: 150,
+                    height: 150,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
-                  ),
-                  // Post Image ends Here
-                  // Post Image Starts Here
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
-                      width: 150,
-                      height: 150,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                      child: Image.network(
-                        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
-                        fit: BoxFit.cover,
-                      ),
+                    child: Image.network(
+                      selectedPost.pictures![index],
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  // Post Image ends Here
-                  // Post Image Starts Here
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
-                      width: 150,
-                      height: 150,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                      child: Image.network(
-                        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  // Post Image ends Here
-                  // Post Image Starts Here
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
-                      width: 150,
-                      height: 150,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                      child: Image.network(
-                        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  // Post Image ends Here
-                  // Post Image Starts Here
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
-                      width: 150,
-                      height: 150,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                      child: Image.network(
-                        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  // Post Image ends Here
-                  // Post Image Starts Here
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
-                      width: 150,
-                      height: 150,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                      child: Image.network(
-                        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  // Post Image ends Here
-                ],
+                ),
+                // Post Image ends Here,
               ),
             ),
           ],

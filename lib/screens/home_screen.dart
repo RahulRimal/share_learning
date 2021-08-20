@@ -19,10 +19,10 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      // body: Post(),
       body: ListView.builder(
         itemCount: Books().books.length,
         itemBuilder: (context, index) => Post(
+          id: Books().books[index].id,
           title: Books().books[index].title,
           description: Books().books[index].description,
           author: Books().books[index].author,
