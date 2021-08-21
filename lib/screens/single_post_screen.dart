@@ -55,7 +55,7 @@ class SinglePostScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             children: [
               Padding(
                 padding: const EdgeInsets.only(
@@ -239,7 +239,6 @@ class SinglePostScreen extends StatelessWidget {
                 child:Column(
                   children: [
                     Container(
-                      // width: 315,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.white,
@@ -247,21 +246,22 @@ class SinglePostScreen extends StatelessWidget {
                       child: Row(    
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
-                    // padding: EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          backgroundImage: NetworkImage('https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg'),
-                        ),
-                        _shouldFlex(selectedPost.author)
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: NetworkImage('https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg'),
+                      ),
+                      _shouldFlex(selectedPost.author)
                             ? Flexible(
                                 child: Container(
+                                  width: 100,
                                   padding: EdgeInsets.all(10),
                                   child: Text(
                                     selectedPost.author,
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
+                                      color: Colors.black,
                                       fontWeight: FontWeight.w600,
                                       fontStyle: FontStyle.italic,
                                     ),
@@ -269,23 +269,22 @@ class SinglePostScreen extends StatelessWidget {
                                 ),
                               )
                             : Container(
+                              width: 100,
                                 padding: EdgeInsets.all(10),
                                 child: Text(
                                   selectedPost.author,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
+                                    color: Colors.black,
                                     fontWeight: FontWeight.w600,
                                     fontStyle: FontStyle.italic,
                                   ),
                                 ),
                               ),
-                      ],
-                    ),
+                    ],
                   ),
                   Container(
                     child: Flexible(
-                      fit: FlexFit.loose,
                       child: Padding(
                         padding: const EdgeInsets.only(
                           top: 5,
