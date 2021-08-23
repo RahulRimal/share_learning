@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/widgets/app_drawer.dart';
-// import 'package:share_learning/widgets/image_gallery.dart';
+import 'package:share_learning/widgets/image_gallery.dart';
 
 class SinglePostScreen extends StatelessWidget {
   static const routeName = '/post-details';
@@ -165,7 +165,7 @@ class SinglePostScreen extends StatelessWidget {
               ),
               // Image Gallery Starts Here
 
-              // ImageGallery(bookId),
+              ImageGallery(bookId),
 
               // Image Gallery Ends Here
 
