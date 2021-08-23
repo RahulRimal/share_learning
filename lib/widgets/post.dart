@@ -97,12 +97,12 @@ class Post extends StatelessWidget {
                                 child: Container(
                                   padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.03,),
                                   child: Column(
-                                    mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Icon(Icons.person),
                                       Text('Author'),
                                       Text(
                                         this.author,
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w600,
@@ -171,7 +171,7 @@ class Post extends StatelessWidget {
                             // padding: EdgeInsets.all(10),
                             padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.01,),
                             child: Column(
-                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Icon(
                                   Icons.shop,
@@ -179,6 +179,7 @@ class Post extends StatelessWidget {
                                 ),
                                 Text(
                                   'Add to Wishlist',
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Theme.of(context).primaryColor,
                                     fontWeight: FontWeight.w600,
@@ -199,7 +200,7 @@ class Post extends StatelessWidget {
                   'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
                   textAlign: TextAlign.justify,
                   overflow: TextOverflow.ellipsis,
-                  maxLines: 3,
+                  maxLines: 2,
                 ),
               ),
             ),
