@@ -39,7 +39,8 @@ class Post extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           Container(
-            height: 250,
+            // height: 250,
+            // height: MediaQuery.of(context).size.height * 0.35,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
@@ -52,11 +53,13 @@ class Post extends StatelessWidget {
               child: ListTile(
                 contentPadding: EdgeInsets.only(
                   top: 17,
-                  bottom: 50,
+                  bottom: 10,
+                  // bottom: MediaQuery.of(context).size.height * 0.3,
                   left: 10,
                   right: 10,
                 ),
                 title: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -86,12 +89,13 @@ class Post extends StatelessWidget {
                       height: 20,
                     ),
                     Row(
+                      mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _shouldFlex(this.author)
                             ? Flexible(
                                 child: Container(
-                                  padding: EdgeInsets.all(10),
+                                  padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.03,),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -110,7 +114,7 @@ class Post extends StatelessWidget {
                                 ),
                               )
                             : Container(
-                                padding: EdgeInsets.all(10),
+                                padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.03,),
                                 child: Column(
                                   children: [
                                     Icon(Icons.person),
@@ -128,7 +132,7 @@ class Post extends StatelessWidget {
                                 ),
                               ),
                         Container(
-                          padding: EdgeInsets.all(10),
+                          padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.03,),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -146,7 +150,7 @@ class Post extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.all(10),
+                          padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.03,),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -164,7 +168,8 @@ class Post extends StatelessWidget {
                         ),
                         Flexible(
                           child: Container(
-                            padding: EdgeInsets.all(10),
+                            // padding: EdgeInsets.all(10),
+                            padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.01,),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -192,7 +197,9 @@ class Post extends StatelessWidget {
                 ),
                 subtitle: Text(
                   'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                  textAlign: TextAlign.justify,
                   overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
                 ),
               ),
             ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+// import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/widgets/app_drawer.dart';
+// import 'package:share_learning/widgets/image_gallery.dart';
 
 class SinglePostScreen extends StatelessWidget {
   static const routeName = '/post-details';
@@ -13,12 +15,12 @@ class SinglePostScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map;
 
-    if (args != null) {
+    // if (args != null) {
+      if(true) {
       bookId = args['id'];
     }
 
     Book selectedPost = Provider.of<Books>(context).getBookById(bookId);
-
 
     bool _shouldFlex(String testString) {
     if (testString.length > 11) return true;
@@ -162,50 +164,11 @@ class SinglePostScreen extends StatelessWidget {
                 ],
               ),
               // Image Gallery Starts Here
-              Container(
-                height: 150,
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 5,
-                  vertical: 10,
-                ),
-                child: selectedPost.pictures != null ? ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: selectedPost.pictures!.length,
-                  itemBuilder: (context, index) =>
-                      // Post Image Starts Here
-                      Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
-                      width: 150,
-                      height: 150,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                      child: Image.network(
-                        selectedPost.pictures![index],
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  // Post Image ends Here,
-                ): Center(
-                  child: Text('No Images found',
-                  // textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  ),
-                ),
-              ),
+
+              // ImageGallery(bookId),
 
               // Image Gallery Ends Here
-      
+
               // Comments Starts here
               Container(
                 padding: EdgeInsets.all(5),
