@@ -3,6 +3,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/providers/books.dart';
+import 'package:share_learning/widgets/custom_image.dart';
 
 class ImageGallery extends StatelessWidget {
   final String bookId;
@@ -43,11 +44,16 @@ class ImageGallery extends StatelessWidget {
                   //   selectedPost.pictures![index],
                   //   fit: BoxFit.cover,
                   // ),
-                  child: PhotoView(
-                    imageProvider: NetworkImage(selectedPost.pictures![index]),
-                    minScale: PhotoViewComputedScale.contained * 0.8,
-                    maxScale: PhotoViewComputedScale.covered * 2,
+                  // child: PhotoView(
+                  //   imageProvider: NetworkImage(selectedPost.pictures![index]),
+                  //   minScale: PhotoViewComputedScale.contained * 0.8,
+                  //   maxScale: PhotoViewComputedScale.covered * 2,
+                  // ),
+
+                  child: CustomImage(
+                    selectedPost.pictures![index],
                   ),
+
                 ),
               ),
               // Post Image ends Here,
