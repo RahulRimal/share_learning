@@ -5,6 +5,7 @@ class Books with ChangeNotifier {
   List<Book> _myBooks = [
     Book(
       id: '0',
+      uId: '0',
       title: 'C Programming Fundamentals II Edition',
       description:
           'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
@@ -22,6 +23,7 @@ class Books with ChangeNotifier {
     ),
     Book(
       id: '1',
+      uId: '0',
       title: 'Data Structures and Algorithms Revised Edition',
       description:
           'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
@@ -33,6 +35,7 @@ class Books with ChangeNotifier {
     ),
     Book(
       id: '2',
+      uId: '1',
       title: 'Mathematics II',
       description:
           'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
@@ -50,6 +53,7 @@ class Books with ChangeNotifier {
     ),
     Book(
       id: '3',
+      uId: '1',
       title: 'Computer Networking',
       description:
           'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
@@ -74,4 +78,11 @@ class Books with ChangeNotifier {
   Book getBookById(String bookId) {
     return books.firstWhere((book) => book.id == bookId);
   }
+
+  List<Book> postsByUser(String uId)
+  {
+    return books.where((book) => book.uId == uId).toList();
+  }
+
+
 }

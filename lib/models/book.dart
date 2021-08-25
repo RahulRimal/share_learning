@@ -1,5 +1,6 @@
 class Book {
   late final String id;
+  final String uId;
   final String title;
   final String description;
   final String author;
@@ -11,6 +12,7 @@ class Book {
 
   Book({
     required this.id,
+    required this.uId,
     required this.title,
     required this.description,
     required this.author,

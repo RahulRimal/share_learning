@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/providers/books.dart';
+import 'package:share_learning/providers/comment.dart';
+import 'package:share_learning/providers/user.dart';
+import 'package:share_learning/screens/user_posts_screen.dart';
 import 'package:share_learning/widgets/app_drawer.dart';
 import 'package:share_learning/widgets/image_gallery.dart';
 
@@ -16,16 +19,18 @@ class SinglePostScreen extends StatelessWidget {
     final args = ModalRoute.of(context)!.settings.arguments as Map;
 
     // if (args != null) {
-      if(true) {
+    if (true) {
       bookId = args['id'];
     }
 
     Book selectedPost = Provider.of<Books>(context).getBookById(bookId);
+    List<Comment> postComments =
+        Provider.of<Comments>(context).getPostComments(bookId);
 
     bool _shouldFlex(String testString) {
-    if (testString.length > 11) return true;
-    return false;
-  }
+      if (testString.length > 11) return true;
+      return false;
+    }
 
     return Scaffold(
       drawer: AppDrawer(),
@@ -48,9 +53,9 @@ class SinglePostScreen extends StatelessWidget {
             horizontal: 15,
           ),
           padding: EdgeInsets.only(
-          right: 10,
-          left: 10,
-          bottom: 20,
+            right: 10,
+            left: 10,
+            bottom: 20,
           ),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -78,22 +83,30 @@ class SinglePostScreen extends StatelessWidget {
                 children: [
                   Container(
                     padding: EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        Icon(Icons.person),
-                        Text(
-                          'Author',
-                        ),
-                        Text(
-                          selectedPost.author,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.w600,
-                            fontStyle: FontStyle.italic,
+                    child: GestureDetector(
+                      onTap: () => Navigator.of(context).pushNamed(
+                        UserPostsScreen.routeName,
+                        arguments: {
+                          'uId': selectedPost.uId,
+                        },
+                      ),
+                      child: Column(
+                        children: [
+                          Icon(Icons.person),
+                          Text(
+                            'Author',
                           ),
-                        ),
-                      ],
+                          Text(
+                            selectedPost.author,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.w600,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Expanded(
@@ -175,100 +188,124 @@ class SinglePostScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Comments',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
+                    Text(
+                      'Comments',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
                     ),
                     Expanded(
                       child: Divider(
-                      thickness: 1,
-                      height: 5,
-                      indent: 15,
-                      color: Theme.of(context).primaryColor,
+                        thickness: 1,
+                        height: 5,
+                        indent: 15,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                   ],
                 ),
               ),
 
-              // Comment Post Starts Here
               Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                ),
-                child:Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
-                      ),
-                      child: Row(    
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CircleAvatar(
-                        backgroundImage: NetworkImage('https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg'),
-                      ),
-                      _shouldFlex(selectedPost.author)
-                            ? Flexible(
-                                child: Container(
-                                  width: 100,
-                                  padding: EdgeInsets.all(10),
-                                  child: Text(
-                                    selectedPost.author,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600,
-                                      fontStyle: FontStyle.italic,
+                height: 200,
+                child: ListView.builder(
+                    itemCount: postComments.length,
+                    itemBuilder: (context, index) {
+                      User commentUser = Provider.of<Users>(context)
+                          .getUser(postComments[index].uId);
+              
+                      // Comment Post Starts Here
+                      return Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () => Navigator.of(context).pushNamed(
+                                      UserPostsScreen.routeName,
+                                      arguments: {
+                                        'uId': commentUser.id,
+                                      },
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                            commentUser.image,
+                                          ),
+                                        ),
+                                        _shouldFlex(selectedPost.author)
+                                            ? Flexible(
+                                                child: Container(
+                                                  width: 100,
+                                                  padding: EdgeInsets.all(10),
+                                                  child: Text(
+                                                    // selectedPost.author,
+                                                    '${commentUser.firstName} ${commentUser.lastName}',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight: FontWeight.w600,
+                                                      fontStyle: FontStyle.italic,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            : Container(
+                                                width: 100,
+                                                padding: EdgeInsets.all(10),
+                                                child: Text(
+                                                  // selectedPost.author,
+                                                  '${commentUser.firstName} ${commentUser.lastName}',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ),
+                                      ],
                                     ),
                                   ),
-                                ),
-                              )
-                            : Container(
-                              width: 100,
-                                padding: EdgeInsets.all(10),
-                                child: Text(
-                                  selectedPost.author,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600,
-                                    fontStyle: FontStyle.italic,
+                                  Container(
+                                    child: Flexible(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 5,
+                                          bottom: 20,
+                                        ),
+                                        child: Text(
+                                          postComments[index].commentBody,
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                    ],
-                  ),
-                  Container(
-                    child: Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 5,
-                          bottom: 20,
+                            ),
+                          ],
                         ),
-                        child: Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-                    ),
-                  ],
-                ),
+                      );
+              
+                      // Comment Post Ends Here
+                    }),
               ),
 
-              // Comment Post Starts Here
-      
               // Comments Ends here
             ],
           ),
