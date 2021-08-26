@@ -213,24 +213,37 @@ class SinglePostScreen extends StatelessWidget {
                 ),
               ),
 
-              Container(
-                height: 200,
-                child: ListView.builder(
-                    itemCount: postComments.length,
-                    itemBuilder: (context, index) {
-                      User commentUser = Provider.of<Users>(context)
-                          .getUser(postComments[index].uId);
+              postComments.isEmpty
+                  ? Container(
+                      child: Center(
+                        child: Text(
+                          'No Comments Yet',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      height: 200,
+                      child: ListView.builder(
+                          itemCount: postComments.length,
+                          itemBuilder: (context, index) {
+                            User commentUser = Provider.of<Users>(context)
+                                .getUser(postComments[index].uId);
 
-                      // Comment Post Starts Here
-                      return PostComment(
-                        commentUser,
-                        // selectedPost,
-                        postComments[index].commentBody,
-                      );
+                            // Comment Post Starts Here
 
-                      // Comment Post Ends Here
-                    }),
-              ),
+                            return PostComment(
+                              commentUser,
+                              postComments[index].commentBody,
+                            );
+
+                            // Comment Post Ends Here
+                          }),
+                    ),
 
               // Comments Ends here
             ],
