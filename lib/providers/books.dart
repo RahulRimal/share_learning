@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../models/book.dart';
+import 'package:collection/collection.dart';
 
 class Books with ChangeNotifier {
   List<Book> _myBooks = [
@@ -79,10 +80,16 @@ class Books with ChangeNotifier {
     return books.firstWhere((book) => book.id == bookId);
   }
 
-  List<Book> postsByUser(String uId)
-  {
+  List<Book> postsByUser(String uId) {
     return books.where((book) => book.uId == uId).toList();
   }
 
+  bool hasPostByUser(String uId) {
+    final userBook = books.firstWhereOrNull((post) => post.uId == uId);
 
+    if (userBook != null)
+      return true;
+    else
+      return false;
+  }
 }

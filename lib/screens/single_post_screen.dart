@@ -8,6 +8,7 @@ import 'package:share_learning/providers/user.dart';
 import 'package:share_learning/screens/user_posts_screen.dart';
 import 'package:share_learning/widgets/app_drawer.dart';
 import 'package:share_learning/widgets/image_gallery.dart';
+import 'package:share_learning/widgets/post_comment.dart';
 
 class SinglePostScreen extends StatelessWidget {
   static const routeName = '/post-details';
@@ -23,14 +24,19 @@ class SinglePostScreen extends StatelessWidget {
       bookId = args['id'];
     }
 
-    Book selectedPost = Provider.of<Books>(context).getBookById(bookId);
-    List<Comment> postComments =
-        Provider.of<Comments>(context).getPostComments(bookId);
+    Book selectedPost = Provider.of<Books>(
+      context,
+      listen: false,
+    ).getBookById(bookId);
+    List<Comment> postComments = Provider.of<Comments>(
+      context,
+      listen: false,
+    ).getPostComments(bookId);
 
-    bool _shouldFlex(String testString) {
-      if (testString.length > 11) return true;
-      return false;
-    }
+    // bool _shouldFlex(String testString) {
+    //   if (testString.length > 11) return true;
+    //   return false;
+    // }
 
     return Scaffold(
       drawer: AppDrawer(),
@@ -214,94 +220,14 @@ class SinglePostScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       User commentUser = Provider.of<Users>(context)
                           .getUser(postComments[index].uId);
-              
+
                       // Comment Post Starts Here
-                      return Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () => Navigator.of(context).pushNamed(
-                                      UserPostsScreen.routeName,
-                                      arguments: {
-                                        'uId': commentUser.id,
-                                      },
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        CircleAvatar(
-                                          backgroundImage: NetworkImage(
-                                            commentUser.image,
-                                          ),
-                                        ),
-                                        _shouldFlex(selectedPost.author)
-                                            ? Flexible(
-                                                child: Container(
-                                                  width: 100,
-                                                  padding: EdgeInsets.all(10),
-                                                  child: Text(
-                                                    // selectedPost.author,
-                                                    '${commentUser.firstName} ${commentUser.lastName}',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight: FontWeight.w600,
-                                                      fontStyle: FontStyle.italic,
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
-                                            : Container(
-                                                width: 100,
-                                                padding: EdgeInsets.all(10),
-                                                child: Text(
-                                                  // selectedPost.author,
-                                                  '${commentUser.firstName} ${commentUser.lastName}',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontStyle: FontStyle.italic,
-                                                  ),
-                                                ),
-                                              ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Flexible(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 5,
-                                          bottom: 20,
-                                        ),
-                                        child: Text(
-                                          postComments[index].commentBody,
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                      return PostComment(
+                        commentUser,
+                        // selectedPost,
+                        postComments[index].commentBody,
                       );
-              
+
                       // Comment Post Ends Here
                     }),
               ),

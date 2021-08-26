@@ -23,7 +23,7 @@ class Users with ChangeNotifier {
     User(
       id: '0',
       firstName: 'Rahul',
-      lastName: 'lastName',
+      lastName: 'Rimal',
       userName: 'RahulR',
       password: '123',
       image: 'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
