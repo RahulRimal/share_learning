@@ -15,6 +15,8 @@ class SinglePostScreen extends StatelessWidget {
 
   var bookId;
 
+  TextEditingController commentController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map;
@@ -244,8 +246,54 @@ class SinglePostScreen extends StatelessWidget {
                             // Comment Post Ends Here
                           }),
                     ),
-
               // Comments Ends here
+
+              // Add your comment starts here !!
+
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 5,
+                  vertical: 15,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Add Your Comment',
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                            child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: TextField(
+                            controller: commentController,
+                            cursorColor: Theme.of(context).primaryColor,
+                            decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                onPressed: () => print(commentController.text),
+                                icon: Icon(
+                                  Icons.send,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                          ),
+                        )),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              // Add your comment ends here !!
             ],
           ),
         ),

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/providers/comment.dart';
 import 'package:share_learning/providers/user.dart';
+import 'package:share_learning/screens/add_post_screen.dart';
 import 'package:share_learning/screens/single_post_screen.dart';
 import 'package:share_learning/screens/user_posts_screen.dart';
 import 'screens/home_screen.dart';
@@ -29,10 +30,11 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: Colors.grey[100],
         ),
         home: HomeScreen(),
-        // home: TestScreen(),
+        // home: AddPostScreen(),
         routes: {
           SinglePostScreen.routeName: (context) => SinglePostScreen(),
           UserPostsScreen.routeName: (context) => UserPostsScreen(),
+          AddPostScreen.routeName: (context) => AddPostScreen(),
         },
       ),
     );

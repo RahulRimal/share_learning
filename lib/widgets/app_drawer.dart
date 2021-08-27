@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_learning/screens/add_post_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -30,6 +31,7 @@ class AppDrawer extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
+            onTap: () => Navigator.of(context).pushNamed(AddPostScreen.routeName),
           ),
           ListTile(
             leading: Row(
