@@ -21,14 +21,17 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   picker.NepaliDateTime? _boughtTime;
 
-  // Book _edittedBook = new Book(
-  //   id: '',
-  //   author: '',
-  //   boughtTime: DateTime.now(),
-  //   description: '',
-  //   isWishlisted: false,
-  //   price: 0,
-  // );
+  var _edittedBook = Book(
+    id: '',
+    author: '',
+    title: '',
+    uId: '',
+    selling: false,
+    boughtTime: DateTime.now(),
+    description: '',
+    isWishlisted: false,
+    price: 0,
+  );
 
   final _datePickercontroller = TextEditingController(
     text:
@@ -47,9 +50,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
         DateFormat('yyyy/MM/dd').format(_boughtTime as DateTime).toString();
   }
 
-  void _savePost()
-  {
+  void _savePost() {
     _form.currentState!.save();
+
+    print(_edittedBook.title);
+    print(_edittedBook.author);
+    print(_edittedBook.boughtTime);
+    print(_edittedBook.price);
+    print(_edittedBook.description);
+
   }
 
   @override
@@ -78,36 +87,39 @@ class _AddPostScreenState extends State<AddPostScreen> {
             child: ListView(
               children: [
                 TextFormField(
-                  cursorColor: Theme.of(context).primaryColor,
-
-                  decoration: InputDecoration(
-                    labelText: 'Title',
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.redAccent,
+                    cursorColor: Theme.of(context).primaryColor,
+                    decoration: InputDecoration(
+                      labelText: 'Title',
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.redAccent,
+                        ),
                       ),
                     ),
-                  ),
-                  textInputAction: TextInputAction.next,
-                  onFieldSubmitted: (_) {
-                    FocusScope.of(context).requestFocus(_authorFocusNode);
-                  },
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please provide a value.';
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (_) {
+                      FocusScope.of(context).requestFocus(_authorFocusNode);
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please provide a value.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _edittedBook = Book(
+                        id: _edittedBook.id,
+                        author: _edittedBook.author,
+                        title: value as String,
+                        uId: _edittedBook.uId,
+                        selling: _edittedBook.selling,
+                        boughtTime: _edittedBook.boughtTime,
+                        description: _edittedBook.description,
+                        isWishlisted: _edittedBook.isWishlisted,
+                        price: _edittedBook.price,
+                      );
                     }
-                    return null;
-                  },
-                  // onSaved: (value) {
-                  //   _editedProduct = Product(
-                  //       title: value,
-                  //       price: _editedProduct.price,
-                  //       description: _editedProduct.description,
-                  //       imageUrl: _editedProduct.imageUrl,
-                  //       id: _editedProduct.id,
-                  //       isFavorite: _editedProduct.isFavorite);
-                  // },
-                ),
+                    ),
                 Row(
                   children: [
                     Expanded(
@@ -125,6 +137,19 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           onFieldSubmitted: (_) {
                             FocusScope.of(context).requestFocus(_dateFocusNode);
                           },
+                          onSaved: (value) {
+                      _edittedBook = Book(
+                        id: _edittedBook.id,
+                        author: value as String,
+                        title: _edittedBook.title,
+                        uId: _edittedBook.uId,
+                        selling: _edittedBook.selling,
+                        boughtTime: _edittedBook.boughtTime,
+                        description: _edittedBook.description,
+                        isWishlisted: _edittedBook.isWishlisted,
+                        price: _edittedBook.price,
+                      );
+                    }
                         ),
                       ),
                     ),
@@ -168,6 +193,19 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             FocusScope.of(context)
                                 .requestFocus(_priceFocusNode);
                           },
+                          onSaved: (value) {
+                      _edittedBook = Book(
+                        id: _edittedBook.id,
+                        author: _edittedBook.author,
+                        title: _edittedBook.title,
+                        uId: _edittedBook.uId,
+                        selling: _edittedBook.selling,
+                        boughtTime: DateFormat("yyyy/MM/dd").parse(value as String),
+                        description: _edittedBook.description,
+                        isWishlisted: _edittedBook.isWishlisted,
+                        price: _edittedBook.price,
+                      );
+                    }
                         ),
                       ),
                     ),
@@ -192,6 +230,19 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             FocusScope.of(context)
                                 .requestFocus(_booksCountFocusNode);
                           },
+                          onSaved: (value) {
+                      _edittedBook = Book(
+                        id: _edittedBook.id,
+                        author: _edittedBook.author,
+                        title: _edittedBook.title,
+                        uId: _edittedBook.uId,
+                        selling: _edittedBook.selling,
+                        boughtTime: _edittedBook.boughtTime,
+                        description: _edittedBook.description,
+                        isWishlisted: _edittedBook.isWishlisted,
+                        price: double.parse(value as String),
+                      );
+                    }
                         ),
                       ),
                     ),
@@ -216,22 +267,34 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     ),
                   ],
                 ),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      focusNode: _descFocusNode,
-                      keyboardType: TextInputType.number,
-                      cursorColor: Theme.of(context).primaryColor,
-                      decoration: InputDecoration(
-                        labelText: 'Book description',
-                      ),
-                      textInputAction: TextInputAction.newline,
-                      autovalidateMode: AutovalidateMode.always,
-                      // onFieldSubmitted: (_) {
-                      //   FocusScope.of(context).requestFocus(_descFocusNode);
-                      // },
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    focusNode: _descFocusNode,
+                    keyboardType: TextInputType.number,
+                    cursorColor: Theme.of(context).primaryColor,
+                    decoration: InputDecoration(
+                      labelText: 'Book description',
                     ),
+                    textInputAction: TextInputAction.newline,
+                    autovalidateMode: AutovalidateMode.always,
+                    // onFieldSubmitted: (_) {
+                    //   FocusScope.of(context).requestFocus(_descFocusNode);
+                    // },
+
+                    onSaved: (value) {
+                    _edittedBook = Book(
+                      id: _edittedBook.id,
+                      author: _edittedBook.author,
+                      title: _edittedBook.title,
+                      uId: _edittedBook.uId,
+                      selling: _edittedBook.selling,
+                      boughtTime: _edittedBook.boughtTime,
+                      description: value as String,
+                      isWishlisted: _edittedBook.isWishlisted,
+                      price: _edittedBook.price,
+                    );
+                  }
                   ),
                 ),
                 Padding(
@@ -241,7 +304,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       backgroundColor: MaterialStateProperty.all(
                           Theme.of(context).primaryColor),
                     ),
-                    onPressed: () {},
+                    onPressed: _savePost,
                     child: Text(
                       'Add this Post',
                       style: TextStyle(
