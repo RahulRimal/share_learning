@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
+import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
+import 'package:share_learning/providers/books.dart';
 
 class AddPostScreen extends StatefulWidget {
   static const routeName = '/add-post';
@@ -23,9 +25,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   var _edittedBook = Book(
     id: '',
-    author: '',
+    author: 'Unknown',
     title: '',
-    uId: '',
+    uId: '1',
     selling: false,
     boughtTime: DateTime.now(),
     description: '',
@@ -51,14 +53,20 @@ class _AddPostScreenState extends State<AddPostScreen> {
   }
 
   void _savePost() {
+    final isValid = _form.currentState!.validate();
+
+    if (!isValid) {
+      return;
+    }
     _form.currentState!.save();
-
-    print(_edittedBook.title);
-    print(_edittedBook.author);
-    print(_edittedBook.boughtTime);
-    print(_edittedBook.price);
-    print(_edittedBook.description);
-
+    Provider.of<Books>(context, listen: false).addPost(_edittedBook);
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
+    // print(_edittedBook.title);
+    // print(_edittedBook.author);
+    // print(_edittedBook.boughtTime);
+    // print(_edittedBook.price);
+    // print(_edittedBook.description);
   }
 
   @override
@@ -102,7 +110,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please provide a value.';
+                        return 'Please provide the title';
                       }
                       return null;
                     },
@@ -118,95 +126,101 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         isWishlisted: _edittedBook.isWishlisted,
                         price: _edittedBook.price,
                       );
-                    }
-                    ),
+                    }),
                 Row(
                   children: [
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
-                          cursorColor: Theme.of(context).primaryColor,
-                          focusNode: _authorFocusNode,
-                          decoration: InputDecoration(
-                            labelText: 'Author',
-                            focusColor: Colors.redAccent,
-                          ),
-                          textInputAction: TextInputAction.next,
-                          autovalidateMode: AutovalidateMode.always,
-                          onFieldSubmitted: (_) {
-                            FocusScope.of(context).requestFocus(_dateFocusNode);
-                          },
-                          onSaved: (value) {
-                      _edittedBook = Book(
-                        id: _edittedBook.id,
-                        author: value as String,
-                        title: _edittedBook.title,
-                        uId: _edittedBook.uId,
-                        selling: _edittedBook.selling,
-                        boughtTime: _edittedBook.boughtTime,
-                        description: _edittedBook.description,
-                        isWishlisted: _edittedBook.isWishlisted,
-                        price: _edittedBook.price,
-                      );
-                    }
-                        ),
+                            cursorColor: Theme.of(context).primaryColor,
+                            focusNode: _authorFocusNode,
+                            decoration: InputDecoration(
+                              labelText: 'Author',
+                              focusColor: Colors.redAccent,
+                            ),
+                            textInputAction: TextInputAction.next,
+                            autovalidateMode: AutovalidateMode.always,
+                            onFieldSubmitted: (_) {
+                              FocusScope.of(context)
+                                  .requestFocus(_dateFocusNode);
+                            },
+                            onSaved: (value) {
+                              _edittedBook = Book(
+                                id: _edittedBook.id,
+                                author: value!.isEmpty ? 'Unknown' : value,
+                                title: _edittedBook.title,
+                                uId: _edittedBook.uId,
+                                selling: _edittedBook.selling,
+                                boughtTime: _edittedBook.boughtTime,
+                                description: _edittedBook.description,
+                                isWishlisted: _edittedBook.isWishlisted,
+                                price: _edittedBook.price,
+                              );
+                            }),
                       ),
                     ),
                     Flexible(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
-                          controller: _datePickercontroller,
-                          focusNode: _dateFocusNode,
-                          // initialValue:
-                          //     DateFormat('yyyy/MM/dd').format(DateTime.now()),
-                          keyboardType: TextInputType.datetime,
-                          cursorColor: Theme.of(context).primaryColor,
-                          decoration: InputDecoration(
-                            labelText: 'Bought Date',
-                            // suffix: IconButton(
-                            //   // onPressed: _showPicker,
-                            //   tooltip: 'Tap to open datePicker',
-                            //   onPressed: () {
-                            //     DatePickerDialog(
-                            //       initialDate: DateTime.now(),
-                            //       firstDate: DateTime(2000),
-                            //       lastDate: DateTime(2025),
-                            //     );
-                            //   },
-                            //   icon: Icon(Icons.calendar_view_day_rounded),
-                            // ),
-                            suffix: IconButton(
-                              icon: Icon(Icons.calendar_today),
-                              tooltip: 'Tap to open date picker',
-                              onPressed: () {
-                                _showPicker(context);
+                            controller: _datePickercontroller,
+                            focusNode: _dateFocusNode,
+                            // initialValue:
+                            //     DateFormat('yyyy/MM/dd').format(DateTime.now()),
+                            keyboardType: TextInputType.datetime,
+                            cursorColor: Theme.of(context).primaryColor,
+                            decoration: InputDecoration(
+                              labelText: 'Bought Date',
+                              // suffix: IconButton(
+                              //   // onPressed: _showPicker,
+                              //   tooltip: 'Tap to open datePicker',
+                              //   onPressed: () {
+                              //     DatePickerDialog(
+                              //       initialDate: DateTime.now(),
+                              //       firstDate: DateTime(2000),
+                              //       lastDate: DateTime(2025),
+                              //     );
+                              //   },
+                              //   icon: Icon(Icons.calendar_view_day_rounded),
+                              // ),
+                              suffix: IconButton(
+                                icon: Icon(Icons.calendar_today),
+                                tooltip: 'Tap to open date picker',
+                                onPressed: () {
+                                  _showPicker(context);
 
-                                // _datePickercontroller.text = _boughtTime.toString();
-                              },
+                                  // _datePickercontroller.text = _boughtTime.toString();
+                                },
+                              ),
                             ),
-                          ),
-                          textInputAction: TextInputAction.next,
-                          autovalidateMode: AutovalidateMode.always,
-                          onFieldSubmitted: (_) {
-                            FocusScope.of(context)
-                                .requestFocus(_priceFocusNode);
-                          },
-                          onSaved: (value) {
-                      _edittedBook = Book(
-                        id: _edittedBook.id,
-                        author: _edittedBook.author,
-                        title: _edittedBook.title,
-                        uId: _edittedBook.uId,
-                        selling: _edittedBook.selling,
-                        boughtTime: DateFormat("yyyy/MM/dd").parse(value as String),
-                        description: _edittedBook.description,
-                        isWishlisted: _edittedBook.isWishlisted,
-                        price: _edittedBook.price,
-                      );
-                    }
-                        ),
+                            textInputAction: TextInputAction.next,
+                            autovalidateMode: AutovalidateMode.always,
+                            onFieldSubmitted: (_) {
+                              FocusScope.of(context)
+                                  .requestFocus(_priceFocusNode);
+                            },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please provide bought date';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              // print(DateFormat.yMd());
+                              _edittedBook = Book(
+                                id: _edittedBook.id,
+                                author: _edittedBook.author,
+                                title: _edittedBook.title,
+                                uId: _edittedBook.uId,
+                                selling: _edittedBook.selling,
+                                boughtTime: DateFormat("yyyy/MM/dd")
+                                    .parse(value as String),
+                                description: _edittedBook.description,
+                                isWishlisted: _edittedBook.isWishlisted,
+                                price: _edittedBook.price,
+                              );
+                            }),
                       ),
                     ),
                   ],
@@ -217,33 +231,41 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
-                          cursorColor: Theme.of(context).primaryColor,
-                          focusNode: _priceFocusNode,
-                          decoration: InputDecoration(
-                            prefix: Text('Rs. '),
-                            labelText: 'Price',
-                            focusColor: Colors.redAccent,
-                          ),
-                          textInputAction: TextInputAction.next,
-                          autovalidateMode: AutovalidateMode.always,
-                          onFieldSubmitted: (_) {
-                            FocusScope.of(context)
-                                .requestFocus(_booksCountFocusNode);
-                          },
-                          onSaved: (value) {
-                      _edittedBook = Book(
-                        id: _edittedBook.id,
-                        author: _edittedBook.author,
-                        title: _edittedBook.title,
-                        uId: _edittedBook.uId,
-                        selling: _edittedBook.selling,
-                        boughtTime: _edittedBook.boughtTime,
-                        description: _edittedBook.description,
-                        isWishlisted: _edittedBook.isWishlisted,
-                        price: double.parse(value as String),
-                      );
-                    }
-                        ),
+                            cursorColor: Theme.of(context).primaryColor,
+                            focusNode: _priceFocusNode,
+                            decoration: InputDecoration(
+                              prefix: Text('Rs. '),
+                              labelText: 'Price',
+                              focusColor: Colors.redAccent,
+                            ),
+                            textInputAction: TextInputAction.next,
+                            autovalidateMode: AutovalidateMode.always,
+                            onFieldSubmitted: (_) {
+                              FocusScope.of(context)
+                                  .requestFocus(_booksCountFocusNode);
+                            },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Price can\'t be empty';
+                              }
+                              if (double.tryParse(value) == null) {
+                                return 'Invalid number';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              _edittedBook = Book(
+                                id: _edittedBook.id,
+                                author: _edittedBook.author,
+                                title: _edittedBook.title,
+                                uId: _edittedBook.uId,
+                                selling: _edittedBook.selling,
+                                boughtTime: _edittedBook.boughtTime,
+                                description: _edittedBook.description,
+                                isWishlisted: _edittedBook.isWishlisted,
+                                price: double.parse(value as String),
+                              );
+                            }),
                       ),
                     ),
                     Flexible(
@@ -262,6 +284,16 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           onFieldSubmitted: (_) {
                             FocusScope.of(context).requestFocus(_descFocusNode);
                           },
+                          validator: (value) {
+                            if (double.tryParse(value as String) == null) {
+                              return 'Invalid Number';
+                            }
+
+                            if (double.parse(value) < 1) {
+                              return 'Book count must be at least 1';
+                            }
+                            return null;
+                          },
                         ),
                       ),
                     ),
@@ -270,32 +302,38 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                    focusNode: _descFocusNode,
-                    keyboardType: TextInputType.number,
-                    cursorColor: Theme.of(context).primaryColor,
-                    decoration: InputDecoration(
-                      labelText: 'Book description',
-                    ),
-                    textInputAction: TextInputAction.newline,
-                    autovalidateMode: AutovalidateMode.always,
-                    // onFieldSubmitted: (_) {
-                    //   FocusScope.of(context).requestFocus(_descFocusNode);
-                    // },
-
-                    onSaved: (value) {
-                    _edittedBook = Book(
-                      id: _edittedBook.id,
-                      author: _edittedBook.author,
-                      title: _edittedBook.title,
-                      uId: _edittedBook.uId,
-                      selling: _edittedBook.selling,
-                      boughtTime: _edittedBook.boughtTime,
-                      description: value as String,
-                      isWishlisted: _edittedBook.isWishlisted,
-                      price: _edittedBook.price,
-                    );
-                  }
-                  ),
+                      focusNode: _descFocusNode,
+                      keyboardType: TextInputType.number,
+                      cursorColor: Theme.of(context).primaryColor,
+                      decoration: InputDecoration(
+                        labelText: 'Book description',
+                      ),
+                      textInputAction: TextInputAction.newline,
+                      autovalidateMode: AutovalidateMode.always,
+                      minLines: 3,
+                      maxLines: 7,
+                      // onFieldSubmitted: (_) {
+                      //   FocusScope.of(context).requestFocus(_descFocusNode);
+                      // },
+                      validator: (value) {
+                        if (value!.length < 50) {
+                          return 'Please provide a big description';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _edittedBook = Book(
+                          id: _edittedBook.id,
+                          author: _edittedBook.author,
+                          title: _edittedBook.title,
+                          uId: _edittedBook.uId,
+                          selling: _edittedBook.selling,
+                          boughtTime: _edittedBook.boughtTime,
+                          description: value as String,
+                          isWishlisted: _edittedBook.isWishlisted,
+                          price: _edittedBook.price,
+                        );
+                      }),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),

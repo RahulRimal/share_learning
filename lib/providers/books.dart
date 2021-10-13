@@ -92,4 +92,21 @@ class Books with ChangeNotifier {
     else
       return false;
   }
+
+  void addPost(Book receivedInfo) {
+    Book newBook = Book(
+      id: '4',
+      uId: receivedInfo.uId,
+      title: receivedInfo.title,
+      author: receivedInfo.author,
+      boughtTime: receivedInfo.boughtTime,
+      description: receivedInfo.description,
+      isWishlisted: receivedInfo.isWishlisted,
+      price: receivedInfo.price,
+      selling: receivedInfo.selling,
+    );
+
+    books.add(newBook);
+    notifyListeners();
+  }
 }

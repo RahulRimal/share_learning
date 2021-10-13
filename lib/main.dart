@@ -8,8 +8,6 @@ import 'package:share_learning/screens/single_post_screen.dart';
 import 'package:share_learning/screens/user_posts_screen.dart';
 import 'screens/home_screen.dart';
 
-// import './widgets';
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
