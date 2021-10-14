@@ -35,8 +35,6 @@ class Post extends StatelessWidget {
     double duration =
         double.parse((timeDifference.inDays / 365).toStringAsFixed(1));
 
-    // ((247.2364646122587197 % 1) * 10).floor();
-
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 10,

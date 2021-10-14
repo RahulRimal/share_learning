@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/providers/books.dart';
@@ -49,10 +50,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
       initialDate: picker.NepaliDateTime.now(),
       firstDate: picker.NepaliDateTime(2070),
       lastDate: picker.NepaliDateTime.now(),
-    ) as picker.NepaliDateTime;
+      // ) as picker.NepaliDateTime;
+    );
 
     _datePickercontroller.text =
-        DateFormat('yyyy/MM/dd').format(_boughtTime as DateTime).toString();
+        DateFormat('yyyy-MM-dd').format(_boughtTime as DateTime).toString();
+    // DateFormat('yyyy/MM/dd').format(_boughtTime as DateTime).toString();
   }
 
   bool _savePost() {
@@ -219,9 +222,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 title: _edittedBook.title,
                                 uId: _edittedBook.uId,
                                 selling: _edittedBook.selling,
-                                boughtTime: DateFormat("yyyy/MM/dd")
-                                    .parse(value as String)
-                                    .toNepaliDateTime(),
+                                // boughtTime: (DateFormat("yyyy/MM/dd")
+                                //         .parse(value as String))
+                                //     .toNepaliDateTime(),
+                                boughtTime:
+                                    NepaliDateTime.parse(value as String),
+
                                 description: _edittedBook.description,
                                 isWishlisted: _edittedBook.isWishlisted,
                                 price: _edittedBook.price,
