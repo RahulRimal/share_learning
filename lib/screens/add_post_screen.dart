@@ -21,6 +21,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
   final _booksCountFocusNode = FocusNode();
   final _descFocusNode = FocusNode();
 
+  List<bool> sellingBuying = [true, false];
+  bool isSelling = true;
+
   picker.NepaliDateTime? _boughtTime;
 
   var _edittedBook = Book(
@@ -329,13 +332,55 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           author: _edittedBook.author,
                           title: _edittedBook.title,
                           uId: _edittedBook.uId,
-                          selling: _edittedBook.selling,
+                          selling: isSelling,
                           boughtTime: _edittedBook.boughtTime,
                           description: value as String,
                           isWishlisted: _edittedBook.isWishlisted,
                           price: _edittedBook.price,
                         );
                       }),
+                ),
+                Container(
+                  child: ToggleButtons(
+                    isSelected: sellingBuying,
+                    color: Colors.grey,
+                    selectedColor: Colors.white,
+                    fillColor: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(20),
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(5),
+                        child: Text(
+                          'Selling',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(5),
+                        child: Text(
+                          'Buying',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                    onPressed: (int index) {
+                      setState(() {
+                        for (int i = 0; i < sellingBuying.length; i++) {
+                          if (i == index)
+                            sellingBuying[i] = true;
+                          else
+                            sellingBuying[i] = false;
+                        }
+                        isSelling = sellingBuying[0];
+                      });
+                    },
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
