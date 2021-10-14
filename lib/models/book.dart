@@ -1,10 +1,13 @@
+import 'package:nepali_date_picker/nepali_date_picker.dart';
+
 class Book {
   late final String id;
   final String uId;
   final String title;
   final String description;
   final String author;
-  final DateTime boughtTime;
+  // final DateTime boughtTime;
+  final NepaliDateTime boughtTime;
   final double price;
   final bool isWishlisted;
   final bool selling;

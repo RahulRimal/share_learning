@@ -32,7 +32,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
     title: '',
     uId: '1',
     selling: false,
-    boughtTime: DateTime.now(),
+    boughtTime: DateTime.now().toNepaliDateTime(),
     description: '',
     isWishlisted: false,
     price: 0,
@@ -220,7 +220,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 uId: _edittedBook.uId,
                                 selling: _edittedBook.selling,
                                 boughtTime: DateFormat("yyyy/MM/dd")
-                                    .parse(value as String),
+                                    .parse(value as String)
+                                    .toNepaliDateTime(),
                                 description: _edittedBook.description,
                                 isWishlisted: _edittedBook.isWishlisted,
                                 price: _edittedBook.price,

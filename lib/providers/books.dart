@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 import '../models/book.dart';
 import 'package:collection/collection.dart';
 
@@ -11,7 +12,7 @@ class Books with ChangeNotifier {
       description:
           'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       author: 'Rahul Rimal',
-      boughtTime: DateTime.parse('1967-10-12'),
+      boughtTime: NepaliDateTime.parse('2078-03-12'),
       price: 299,
       isWishlisted: true,
       selling: true,
@@ -29,7 +30,7 @@ class Books with ChangeNotifier {
       description:
           'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       author: 'Rahul Rimal',
-      boughtTime: DateTime.parse('2010-10-12'),
+      boughtTime: NepaliDateTime.parse('2072-10-12'),
       price: 100,
       isWishlisted: false,
       selling: false,
@@ -41,7 +42,7 @@ class Books with ChangeNotifier {
       description:
           'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       author: 'Surendra Jha',
-      boughtTime: DateTime.parse('2019-01-12'),
+      boughtTime: NepaliDateTime.parse('2077-06-12'),
       price: 1000,
       isWishlisted: false,
       selling: false,
@@ -59,7 +60,7 @@ class Books with ChangeNotifier {
       description:
           'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       author: 'Krishna Pd. Rimal',
-      boughtTime: DateTime.parse('2021-05-12'),
+      boughtTime: NepaliDateTime.parse('2078-05-12'),
       price: 800,
       isWishlisted: true,
       selling: true,

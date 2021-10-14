@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:share_learning/screens/single_post_screen.dart';
 
 // ignore: must_be_immutable
@@ -7,7 +8,7 @@ class Post extends StatelessWidget {
   final String title;
   final String author;
   final String description;
-  final DateTime boughtTime;
+  final NepaliDateTime boughtTime;
   final double price;
   final bool selling;
 
@@ -30,9 +31,11 @@ class Post extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Duration timeDifference = DateTime.now().difference(this.boughtTime);
+    Duration timeDifference = NepaliDateTime.now().difference(this.boughtTime);
     double duration =
         double.parse((timeDifference.inDays / 365).toStringAsFixed(1));
+
+    // ((247.2364646122587197 % 1) * 10).floor();
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -154,7 +157,11 @@ class Post extends StatelessWidget {
                                 // '1 Year ago',
                                 duration > 1.0
                                     ? '$duration Years ago'
-                                    : '$duration Year ago',
+                                    : duration == 1.0
+                                        ? '$duration Year ago'
+                                        : duration == 0.1
+                                            ? '1 Month ago'
+                                            : '${((duration % 1) * 10).floor()} Months ago',
                                 style: TextStyle(
                                   color: Colors.yellow[700],
                                   fontWeight: FontWeight.w600,
