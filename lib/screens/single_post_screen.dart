@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 // import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
@@ -39,6 +40,11 @@ class SinglePostScreen extends StatelessWidget {
     //   if (testString.length > 11) return true;
     //   return false;
     // }
+
+    Duration timeDifference =
+        NepaliDateTime.now().difference(selectedPost.boughtTime);
+    double duration =
+        double.parse((timeDifference.inDays / 365).toStringAsFixed(1));
 
     return Scaffold(
       drawer: AppDrawer(),
@@ -129,7 +135,15 @@ class SinglePostScreen extends StatelessWidget {
                               color: Colors.yellow,
                             ),
                             child: Text(
-                              'Bought 1 Year Ago',
+                              // 'Bought 1 Year Ago',
+                              duration > 1.0
+                                  ? '$duration Years ago'
+                                  : duration == 1.0
+                                      ? '$duration Year ago'
+                                      : duration == 0.1
+                                          ? '1 Month ago'
+                                          : '${((duration % 1) * 10).floor()} Months ago',
+
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 17,

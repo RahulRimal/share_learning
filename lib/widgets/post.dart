@@ -152,7 +152,6 @@ class Post extends StatelessWidget {
                               Icon(Icons.history),
                               Text('Bought time'),
                               Text(
-                                // '1 Year ago',
                                 duration > 1.0
                                     ? '$duration Years ago'
                                     : duration == 1.0
