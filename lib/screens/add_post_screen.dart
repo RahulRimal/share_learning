@@ -41,7 +41,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   final _datePickercontroller = TextEditingController(
     text:
-        DateFormat('yyyy/MM/dd').format(picker.NepaliDateTime.now()).toString(),
+        // DateFormat('yyyy/MM/dd').format(picker.NepaliDateTime.now()).toString(),
+        DateFormat('yyyy-MM-dd').format(picker.NepaliDateTime.now()).toString(),
   );
 
   Future<void> _showPicker(BuildContext context) async {
