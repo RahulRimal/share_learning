@@ -30,6 +30,10 @@ class Post extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Duration timeDifference = DateTime.now().difference(this.boughtTime);
+    double duration =
+        double.parse((timeDifference.inDays / 365).toStringAsFixed(1));
+
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 10,
@@ -95,7 +99,10 @@ class Post extends StatelessWidget {
                         _shouldFlex(this.author)
                             ? Flexible(
                                 child: Container(
-                                  padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.03,),
+                                  padding: EdgeInsets.only(
+                                    right: MediaQuery.of(context).size.width *
+                                        0.03,
+                                  ),
                                   child: Column(
                                     children: [
                                       Icon(Icons.person),
@@ -114,7 +121,10 @@ class Post extends StatelessWidget {
                                 ),
                               )
                             : Container(
-                                padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.03,),
+                                padding: EdgeInsets.only(
+                                  right:
+                                      MediaQuery.of(context).size.width * 0.03,
+                                ),
                                 child: Column(
                                   children: [
                                     Icon(Icons.person),
@@ -132,14 +142,19 @@ class Post extends StatelessWidget {
                                 ),
                               ),
                         Container(
-                          padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.03,),
+                          padding: EdgeInsets.only(
+                            right: MediaQuery.of(context).size.width * 0.03,
+                          ),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(Icons.history),
                               Text('Bought time'),
                               Text(
-                                '1 Year ago',
+                                // '1 Year ago',
+                                duration > 1.0
+                                    ? '$duration Years ago'
+                                    : '$duration Year ago',
                                 style: TextStyle(
                                   color: Colors.yellow[700],
                                   fontWeight: FontWeight.w600,
@@ -150,7 +165,9 @@ class Post extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.03,),
+                          padding: EdgeInsets.only(
+                            right: MediaQuery.of(context).size.width * 0.03,
+                          ),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -169,7 +186,9 @@ class Post extends StatelessWidget {
                         Flexible(
                           child: Container(
                             // padding: EdgeInsets.all(10),
-                            padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.01,),
+                            padding: EdgeInsets.only(
+                              left: MediaQuery.of(context).size.width * 0.01,
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [

@@ -96,7 +96,7 @@ packages:
     source: hosted
     version: "5.1.0"
   nepali_utils:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: nepali_utils
       url: "https://pub.dartlang.org"
