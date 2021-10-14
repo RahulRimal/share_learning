@@ -52,16 +52,18 @@ class _AddPostScreenState extends State<AddPostScreen> {
         DateFormat('yyyy/MM/dd').format(_boughtTime as DateTime).toString();
   }
 
-  void _savePost() {
+  bool _savePost() {
     final isValid = _form.currentState!.validate();
 
     if (!isValid) {
-      return;
+      return false;
     }
     _form.currentState!.save();
     Provider.of<Books>(context, listen: false).addPost(_edittedBook);
     Navigator.of(context).pop();
     Navigator.of(context).pop();
+
+    return true;
     // print(_edittedBook.title);
     // print(_edittedBook.author);
     // print(_edittedBook.boughtTime);
@@ -342,7 +344,22 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       backgroundColor: MaterialStateProperty.all(
                           Theme.of(context).primaryColor),
                     ),
-                    onPressed: _savePost,
+                    // onPressed: _savePost,
+                    onPressed: () {
+                      if (_savePost()) {
+                        final snackBar = SnackBar(
+                          content: Text(
+                            'Posted Successfully',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    },
                     child: Text(
                       'Add this Post',
                       style: TextStyle(

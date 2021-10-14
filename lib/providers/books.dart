@@ -106,7 +106,7 @@ class Books with ChangeNotifier {
       selling: receivedInfo.selling,
     );
 
-    books.add(newBook);
+    _myBooks.add(newBook);
     notifyListeners();
   }
 }
