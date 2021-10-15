@@ -18,10 +18,11 @@ class Books with ChangeNotifier {
       isWishlisted: true,
       selling: true,
       pictures: [
-        'https://cdn.pixabay.com/photo/2021/08/16/19/24/boat-6551183_960_720.jpg',
         'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
-        'https://cdn.pixabay.com/photo/2021/08/10/18/32/cat-6536684__340.jpg',
-        'https://cdn.pixabay.com/photo/2021/06/25/17/51/ladybug-6364312__340.jpg',
+        'https://cdn.pixabay.com/photo/2019/12/19/14/52/dewdrop-4706329_960_720.jpg',
+        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
+        'https://cdn.pixabay.com/photo/2020/09/06/08/00/red-thread-5548304_960_720.jpg',
+        'https://cdn.pixabay.com/photo/2014/04/10/11/24/rose-320868_960_720.jpg',
       ],
     ),
     Book(
