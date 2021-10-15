@@ -4,6 +4,7 @@ import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/providers/comment.dart';
 import 'package:share_learning/providers/user.dart';
 import 'package:share_learning/screens/add_post_screen.dart';
+import 'package:share_learning/screens/edit_post_screen.dart';
 import 'package:share_learning/screens/single_post_screen.dart';
 import 'package:share_learning/screens/user_posts_screen.dart';
 import 'screens/home_screen.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
           SinglePostScreen.routeName: (context) => SinglePostScreen(),
           UserPostsScreen.routeName: (context) => UserPostsScreen(),
           AddPostScreen.routeName: (context) => AddPostScreen(),
+          EditPostScreen.routeName: (context) => EditPostScreen(),
         },
       ),
     );

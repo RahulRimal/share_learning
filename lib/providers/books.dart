@@ -110,4 +110,12 @@ class Books with ChangeNotifier {
     _myBooks.add(newBook);
     notifyListeners();
   }
+
+  void updatePost(String id, Book edittedPost) {
+    final postIndex = _myBooks.indexWhere((element) => element.id == id);
+
+    _myBooks[postIndex] = edittedPost;
+
+    notifyListeners();
+  }
 }

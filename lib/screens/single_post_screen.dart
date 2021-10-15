@@ -6,6 +6,7 @@ import 'package:share_learning/models/book.dart';
 import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/providers/comment.dart';
 import 'package:share_learning/providers/user.dart';
+import 'package:share_learning/screens/edit_post_screen.dart';
 import 'package:share_learning/screens/user_posts_screen.dart';
 import 'package:share_learning/widgets/app_drawer.dart';
 import 'package:share_learning/widgets/image_gallery.dart';
@@ -52,9 +53,12 @@ class SinglePostScreen extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg'),
+            child: IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamed(EditPostScreen.routeName, arguments: bookId);
+              },
             ),
           ),
         ],
