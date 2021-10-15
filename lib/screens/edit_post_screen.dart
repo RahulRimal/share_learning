@@ -37,13 +37,11 @@ class _EditPostScreenState extends State<EditPostScreen> {
 
   bool isSelling = true;
 
-  picker.NepaliDateTime? _boughtTime;
+  NepaliDateTime? _boughtTime;
 
-  // final _datePickercontroller = TextEditingController(
-  //   text:
-  //       // DateFormat('yyyy/MM/dd').format(picker.NepaliDateTime.now()).toString(),
-  //       DateFormat('yyyy-MM-dd').format(picker.NepaliDateTime.now()).toString(),
-  // );
+  final _datePickercontroller = TextEditingController(
+    text: DateFormat('yyyy-MM-dd').format(NepaliDateTime.now()).toString(),
+  );
 
   @override
   void didChangeDependencies() {
@@ -57,14 +55,11 @@ class _EditPostScreenState extends State<EditPostScreen> {
     } else
       print('Book Id Is Empty');
 
+    _datePickercontroller.text =
+        DateFormat('yyyy-MM-dd').format(_edittedBook.boughtTime).toString();
+
     super.didChangeDependencies();
   }
-
-  TextEditingController _datePickercontroller = TextEditingController(
-    text:
-        // DateFormat('yyyy/MM/dd').format(picker.NepaliDateTime.now()).toString(),
-        DateFormat('yyyy-MM-dd').format(NepaliDateTime.now()).toString(),
-  );
 
   Future<void> _showPicker(BuildContext context) async {
     _boughtTime = await picker.showAdaptiveDatePicker(
@@ -73,9 +68,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
       firstDate: picker.NepaliDateTime(2070),
       lastDate: picker.NepaliDateTime.now(),
     );
-
     _datePickercontroller.text =
-        // DateFormat('yyyy/MM/dd').format(picker.NepaliDateTime.now()).toString();
         DateFormat('yyyy-MM-dd').format(_boughtTime as DateTime).toString();
   }
 
@@ -94,6 +87,20 @@ class _EditPostScreenState extends State<EditPostScreen> {
     return true;
   }
 
+  void showUpdateSnackbar(BuildContext context) {
+    final snackBar = SnackBar(
+      content: Text(
+        'Posted Updated Successfully',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,7 +109,9 @@ class _EditPostScreenState extends State<EditPostScreen> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: () {},
+            onPressed: () {
+              if (_updatePost()) showUpdateSnackbar(context);
+            },
           ),
         ],
       ),
@@ -420,19 +429,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     ),
                     // onPressed: _savePost,
                     onPressed: () {
-                      if (_updatePost()) {
-                        final snackBar = SnackBar(
-                          content: Text(
-                            'Posted Updated Successfully',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
+                      if (_updatePost()) showUpdateSnackbar(context);
                     },
                     child: Text(
                       'Update Post',
