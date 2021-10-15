@@ -43,6 +43,7 @@ class HomeScreen extends StatelessWidget {
           author: booksToRender[index].author,
           boughtTime: booksToRender[index].boughtTime,
           price: booksToRender[index].price,
+          bookCount: booksToRender[index].bookCount,
           selling: booksToRender[index].selling,
         ),
       ),

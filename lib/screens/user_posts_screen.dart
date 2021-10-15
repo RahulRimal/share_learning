@@ -6,12 +6,10 @@ import 'package:share_learning/widgets/app_drawer.dart';
 import 'package:share_learning/widgets/post.dart';
 
 class UserPostsScreen extends StatelessWidget {
-
   static const routeName = '/user-posts';
 
   @override
   Widget build(BuildContext context) {
-
     final args = ModalRoute.of(context)!.settings.arguments as Map;
 
     final String userId = args['uId'];
@@ -31,25 +29,29 @@ class UserPostsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: _allPosts.isNotEmpty ? ListView.builder(
-        itemCount: _allPosts.length,
-        itemBuilder: (context, index) => Post(
-          id: _allPosts[index].id,
-          title: _allPosts[index].title,
-          description: _allPosts[index].description,
-          author: _allPosts[index].author,
-          boughtTime: _allPosts[index].boughtTime,
-          price: _allPosts[index].price,
-          selling: _allPosts[index].selling,
-        ),
-      ) : Center(
-        child: Text('No Posts yet',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-        ),
-      ),
+      body: _allPosts.isNotEmpty
+          ? ListView.builder(
+              itemCount: _allPosts.length,
+              itemBuilder: (context, index) => Post(
+                id: _allPosts[index].id,
+                title: _allPosts[index].title,
+                description: _allPosts[index].description,
+                author: _allPosts[index].author,
+                boughtTime: _allPosts[index].boughtTime,
+                price: _allPosts[index].price,
+                bookCount: _allPosts[index].bookCount,
+                selling: _allPosts[index].selling,
+              ),
+            )
+          : Center(
+              child: Text(
+                'No Posts yet',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ),
     );
   }
 }

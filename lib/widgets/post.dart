@@ -10,6 +10,7 @@ class Post extends StatelessWidget {
   final String description;
   final NepaliDateTime boughtTime;
   final double price;
+  final int bookCount;
   final bool selling;
 
   Post({
@@ -19,6 +20,7 @@ class Post extends StatelessWidget {
     required this.description,
     required this.boughtTime,
     required this.price,
+    required this.bookCount,
     required this.selling,
   });
 
@@ -80,13 +82,25 @@ class Post extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: 10),
-                        Text(
-                          'Available',
-                          style: TextStyle(
-                            color: Colors.green[800],
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Column(
+                          children: [
+                            Text(
+                              'Available',
+                              style: TextStyle(
+                                color: Colors.green[800],
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              this.bookCount == 1
+                                  ? '${this.bookCount.toString()} Book'
+                                  : '${this.bookCount.toString()} Books',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
