@@ -173,6 +173,34 @@ class SinglePostScreen extends StatelessWidget {
                           ),
                           Container(
                             decoration: BoxDecoration(
+                              color: Colors.black,
+                            ),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                text: 'Total Books: ',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: '${selectedPost.bookCount}',
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
                               color: Colors.lightGreen,
                             ),
                             child: RichText(
