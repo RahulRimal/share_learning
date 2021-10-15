@@ -9,6 +9,7 @@ class Book {
   // final DateTime boughtTime;
   final NepaliDateTime boughtTime;
   final double price;
+  final int bookCount;
   final bool isWishlisted;
   final bool selling;
   List<String>? pictures;
@@ -21,6 +22,7 @@ class Book {
     required this.author,
     required this.boughtTime,
     required this.price,
+    required this.bookCount,
     required this.isWishlisted,
     required this.selling,
     this.pictures,

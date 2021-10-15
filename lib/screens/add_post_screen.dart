@@ -37,6 +37,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
     description: '',
     isWishlisted: false,
     price: 0,
+    bookCount: 1,
   );
 
   final _datePickercontroller = TextEditingController(
@@ -134,6 +135,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         description: _edittedBook.description,
                         isWishlisted: _edittedBook.isWishlisted,
                         price: _edittedBook.price,
+                        bookCount: _edittedBook.bookCount,
                       );
                     }),
                 Row(
@@ -165,6 +167,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 description: _edittedBook.description,
                                 isWishlisted: _edittedBook.isWishlisted,
                                 price: _edittedBook.price,
+                                bookCount: _edittedBook.bookCount,
                               );
                             }),
                       ),
@@ -232,6 +235,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 description: _edittedBook.description,
                                 isWishlisted: _edittedBook.isWishlisted,
                                 price: _edittedBook.price,
+                                bookCount: _edittedBook.bookCount,
                               );
                             }),
                       ),
@@ -277,6 +281,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 description: _edittedBook.description,
                                 isWishlisted: _edittedBook.isWishlisted,
                                 price: double.parse(value as String),
+                                bookCount: _edittedBook.bookCount,
                               );
                             }),
                       ),
@@ -307,6 +312,20 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             }
                             return null;
                           },
+                          onSaved: (value) {
+                            _edittedBook = Book(
+                              id: _edittedBook.id,
+                              author: _edittedBook.author,
+                              title: _edittedBook.title,
+                              uId: _edittedBook.uId,
+                              selling: isSelling,
+                              boughtTime: _edittedBook.boughtTime,
+                              description: _edittedBook.description,
+                              isWishlisted: _edittedBook.isWishlisted,
+                              price: _edittedBook.price,
+                              bookCount: int.parse(value as String),
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -315,38 +334,40 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                      focusNode: _descFocusNode,
-                      keyboardType: TextInputType.number,
-                      cursorColor: Theme.of(context).primaryColor,
-                      decoration: InputDecoration(
-                        labelText: 'Book description',
-                      ),
-                      textInputAction: TextInputAction.newline,
-                      autovalidateMode: AutovalidateMode.always,
-                      minLines: 3,
-                      maxLines: 7,
-                      // onFieldSubmitted: (_) {
-                      //   FocusScope.of(context).requestFocus(_descFocusNode);
-                      // },
-                      validator: (value) {
-                        if (value!.length < 50) {
-                          return 'Please provide a big description';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _edittedBook = Book(
-                          id: _edittedBook.id,
-                          author: _edittedBook.author,
-                          title: _edittedBook.title,
-                          uId: _edittedBook.uId,
-                          selling: isSelling,
-                          boughtTime: _edittedBook.boughtTime,
-                          description: value as String,
-                          isWishlisted: _edittedBook.isWishlisted,
-                          price: _edittedBook.price,
-                        );
-                      }),
+                    focusNode: _descFocusNode,
+                    keyboardType: TextInputType.number,
+                    cursorColor: Theme.of(context).primaryColor,
+                    decoration: InputDecoration(
+                      labelText: 'Book description',
+                    ),
+                    textInputAction: TextInputAction.newline,
+                    autovalidateMode: AutovalidateMode.always,
+                    minLines: 3,
+                    maxLines: 7,
+                    // onFieldSubmitted: (_) {
+                    //   FocusScope.of(context).requestFocus(_descFocusNode);
+                    // },
+                    validator: (value) {
+                      if (value!.length < 50) {
+                        return 'Please provide a big description';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _edittedBook = Book(
+                        id: _edittedBook.id,
+                        author: _edittedBook.author,
+                        title: _edittedBook.title,
+                        uId: _edittedBook.uId,
+                        selling: isSelling,
+                        boughtTime: _edittedBook.boughtTime,
+                        description: value as String,
+                        isWishlisted: _edittedBook.isWishlisted,
+                        price: _edittedBook.price,
+                        bookCount: _edittedBook.bookCount,
+                      );
+                    },
+                  ),
                 ),
                 Container(
                   child: ToggleButtons(

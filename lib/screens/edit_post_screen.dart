@@ -33,6 +33,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
     description: '',
     isWishlisted: false,
     price: 0,
+    bookCount: 1,
   );
 
   bool isSelling = true;
@@ -160,6 +161,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                         description: _edittedBook.description,
                         isWishlisted: _edittedBook.isWishlisted,
                         price: _edittedBook.price,
+                        bookCount: _edittedBook.bookCount,
                       );
                     }),
                 Row(
@@ -192,6 +194,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                 description: _edittedBook.description,
                                 isWishlisted: _edittedBook.isWishlisted,
                                 price: _edittedBook.price,
+                                bookCount: _edittedBook.bookCount,
                               );
                             }),
                       ),
@@ -259,6 +262,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                               description: _edittedBook.description,
                               isWishlisted: _edittedBook.isWishlisted,
                               price: _edittedBook.price,
+                              bookCount: _edittedBook.bookCount,
                             );
                           },
                         ),
@@ -306,6 +310,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                 description: _edittedBook.description,
                                 isWishlisted: _edittedBook.isWishlisted,
                                 price: double.parse(value as String),
+                                bookCount: _edittedBook.bookCount,
                               );
                             }),
                       ),
@@ -314,8 +319,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
+                          initialValue: _edittedBook.bookCount.toString(),
                           focusNode: _booksCountFocusNode,
-                          initialValue: '1',
                           keyboardType: TextInputType.number,
                           cursorColor: Theme.of(context).primaryColor,
                           decoration: InputDecoration(
@@ -335,6 +340,20 @@ class _EditPostScreenState extends State<EditPostScreen> {
                               return 'Book count must be at least 1';
                             }
                             return null;
+                          },
+                          onSaved: (value) {
+                            _edittedBook = Book(
+                              id: _edittedBook.id,
+                              author: _edittedBook.author,
+                              title: _edittedBook.title,
+                              uId: _edittedBook.uId,
+                              selling: isSelling,
+                              boughtTime: _edittedBook.boughtTime,
+                              description: _edittedBook.description,
+                              isWishlisted: _edittedBook.isWishlisted,
+                              price: _edittedBook.price,
+                              bookCount: int.parse(value as String),
+                            );
                           },
                         ),
                       ),
@@ -375,6 +394,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                           description: value as String,
                           isWishlisted: _edittedBook.isWishlisted,
                           price: _edittedBook.price,
+                          bookCount: _edittedBook.bookCount,
                         );
                       }),
                 ),

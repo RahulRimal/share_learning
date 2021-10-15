@@ -14,6 +14,7 @@ class Books with ChangeNotifier {
       author: 'Rahul Rimal',
       boughtTime: NepaliDateTime.parse('2078-03-12'),
       price: 299,
+      bookCount: 2,
       isWishlisted: true,
       selling: true,
       pictures: [
@@ -32,6 +33,7 @@ class Books with ChangeNotifier {
       author: 'Rahul Rimal',
       boughtTime: NepaliDateTime.parse('2072-10-12'),
       price: 100,
+      bookCount: 1,
       isWishlisted: false,
       selling: false,
     ),
@@ -44,6 +46,7 @@ class Books with ChangeNotifier {
       author: 'Surendra Jha',
       boughtTime: NepaliDateTime.parse('2077-06-12'),
       price: 1000,
+      bookCount: 4,
       isWishlisted: false,
       selling: false,
       pictures: [
@@ -62,6 +65,7 @@ class Books with ChangeNotifier {
       author: 'Krishna Pd. Rimal',
       boughtTime: NepaliDateTime.parse('2078-05-12'),
       price: 800,
+      bookCount: 1,
       isWishlisted: true,
       selling: true,
       pictures: [
@@ -104,6 +108,7 @@ class Books with ChangeNotifier {
       description: receivedInfo.description,
       isWishlisted: receivedInfo.isWishlisted,
       price: receivedInfo.price,
+      bookCount: receivedInfo.bookCount,
       selling: receivedInfo.selling,
     );
 
