@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
 import 'package:nepali_date_picker/nepali_date_picker.dart';
@@ -14,6 +15,9 @@ class AddPostScreen extends StatefulWidget {
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
+  XFile? _storedImage;
+  ImagePicker imagePicker = ImagePicker();
+
   final _form = GlobalKey<FormState>();
 
   final _authorFocusNode = FocusNode();
@@ -26,6 +30,25 @@ class _AddPostScreenState extends State<AddPostScreen> {
   bool isSelling = true;
 
   picker.NepaliDateTime? _boughtTime;
+
+  Future<void> _takePicture() async {
+    print('takePic');
+    final imageFile = imagePicker.pickImage(
+      source: ImageSource.camera,
+      maxWidth: 150,
+    );
+    print(imageFile);
+  }
+
+  Future<void> _getPicture() async {
+    print('getPic');
+    final imageFile = imagePicker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 150,
+    );
+  }
+
+  // List<Xfile>? images = await imagePicker.pickMultiImage();
 
   var _edittedBook = Book(
     id: '',
@@ -411,6 +434,39 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     },
                   ),
                 ),
+                Container(
+                  child: Column(
+                    children: [
+                      Text(
+                        'Add Images',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                              child: Text('From Gallery'),
+                              style: ButtonStyle(),
+                              onPressed: () {
+                                _getPicture();
+                              }),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          ElevatedButton(
+                            child: Text('From Camera'),
+                            style: ButtonStyle(),
+                            onPressed: () {
+                              _takePicture();
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextButton(
@@ -418,7 +474,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       backgroundColor: MaterialStateProperty.all(
                           Theme.of(context).primaryColor),
                     ),
-                    // onPressed: _savePost,
                     onPressed: () {
                       if (_savePost()) {
                         final snackBar = SnackBar(

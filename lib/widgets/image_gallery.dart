@@ -53,7 +53,6 @@ class ImageGallery extends StatelessWidget {
                   child: CustomImage(
                     selectedPost.pictures![index],
                   ),
-
                 ),
               ),
               // Post Image ends Here,
