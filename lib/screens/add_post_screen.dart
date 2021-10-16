@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -33,19 +35,24 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   Future<void> _takePicture() async {
     print('takePic');
-    final imageFile = imagePicker.pickImage(
+    final imageFile = await imagePicker.pickImage(
       source: ImageSource.camera,
       maxWidth: 150,
     );
-    print(imageFile);
+    setState(() {
+      _storedImage = imageFile;
+    });
   }
 
   Future<void> _getPicture() async {
     print('getPic');
-    final imageFile = imagePicker.pickImage(
+    final imageFile = await imagePicker.pickImage(
       source: ImageSource.gallery,
       maxWidth: 150,
     );
+    setState(() {
+      _storedImage = imageFile;
+    });
   }
 
   // List<Xfile>? images = await imagePicker.pickMultiImage();
@@ -433,6 +440,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       });
                     },
                   ),
+                ),
+                Container(
+                  height: 150,
+                  width: 150,
+                  child: _storedImage != null
+                      ? kIsWeb
+                          ? Image.network(_storedImage!.path)
+                          : Image.file(File(_storedImage!.path))
+                      : Text('No Image'),
                 ),
                 Container(
                   child: Column(
