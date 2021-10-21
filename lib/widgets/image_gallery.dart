@@ -16,8 +16,6 @@ class ImageGallery extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(this.bookId);
-    print(this.images);
 
     Book? selectedPost = bookId != null
         ? Provider.of<Books>(context).getBookById(bookId!)
@@ -107,7 +105,7 @@ class ImageGallery extends StatelessWidget {
 
                       child: CustomImage(
                         // selectedPost.pictures![index],
-                        images![index] as String,
+                        images![index],
                       ),
                     ),
                   ),

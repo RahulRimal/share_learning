@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
@@ -23,6 +25,10 @@ class CustomImage extends StatelessWidget {
       },
       child: PhotoView(
         imageProvider: NetworkImage(this.imageUrl),
+        // imageProvider: FileImage(File(this.imageUrl)),
+        // imageProvider: kIsWeb
+        //                   ? NetworkImage(this.imageUrl) as ImageProvider
+        //                   : FileImage(File(this.imageUrl)) as ImageProvider,
         minScale: PhotoViewComputedScale.contained * 0.8,
         maxScale: PhotoViewComputedScale.covered * 2,
       ),
