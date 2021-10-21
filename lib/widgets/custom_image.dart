@@ -5,8 +5,8 @@ import 'package:photo_view/photo_view.dart';
 
 class CustomImage extends StatelessWidget {
   final String imageUrl;
-
-  CustomImage(this.imageUrl);
+  final bool isNetwork;
+  CustomImage(this.imageUrl, this.isNetwork);
 
   @override
   Widget build(BuildContext context) {
@@ -16,15 +16,19 @@ class CustomImage extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => PhotoViewRouteWrapper(
-              imageProvider: NetworkImage(
-                this.imageUrl,
-              ),
+              imageProvider: isNetwork
+                  ? NetworkImage(
+                      this.imageUrl,
+                    )
+                  : FileImage(File(this.imageUrl)) as ImageProvider,
             ),
           ),
         );
       },
       child: PhotoView(
-        imageProvider: NetworkImage(this.imageUrl),
+        imageProvider: isNetwork
+            ? NetworkImage(this.imageUrl) as ImageProvider
+            : FileImage(File(this.imageUrl)),
         // imageProvider: FileImage(File(this.imageUrl)),
         // imageProvider: kIsWeb
         //                   ? NetworkImage(this.imageUrl) as ImageProvider
@@ -37,13 +41,11 @@ class CustomImage extends StatelessWidget {
 }
 
 class PhotoViewRouteWrapper extends StatelessWidget {
-  
   final ImageProvider imageProvider;
   final BoxDecoration? backgroundDecoration;
   final dynamic minScale;
   final dynamic maxScale;
-  
-  
+
   const PhotoViewRouteWrapper({
     required this.imageProvider,
     this.backgroundDecoration,

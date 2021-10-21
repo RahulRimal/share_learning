@@ -65,7 +65,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
     print('getPics');
 
     final imageFiles = await imagePicker.pickMultiImage(
-      maxWidth: 150,
+      maxWidth: 770,
+      imageQuality: 100
     );
 
     if (imageFiles == null) return;
@@ -514,7 +515,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   child: _storedImages != null
                       ?
                       // ImageGallery(null, _storedImages)
-                      ImageGallery(null, actualImages)
+                      ImageGallery(false, null, actualImages)
                       : Text('No Image'),
                 ),
                 Container(

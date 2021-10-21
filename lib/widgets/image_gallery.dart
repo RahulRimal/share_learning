@@ -10,9 +10,10 @@ import 'package:share_learning/widgets/custom_image.dart';
 class ImageGallery extends StatelessWidget {
   var bookId;
   List<dynamic>? images;
+  final bool isNetwork;
 
   // ImageGallery({bookId = null, images = null});
-  ImageGallery([this.bookId, this.images]);
+  ImageGallery(this.isNetwork, [this.bookId, this.images]);
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +61,7 @@ class ImageGallery extends StatelessWidget {
 
                       child: CustomImage(
                         selectedPost.pictures![index],
+                        isNetwork
                       ),
                     ),
                   ),
@@ -106,6 +108,7 @@ class ImageGallery extends StatelessWidget {
                       child: CustomImage(
                         // selectedPost.pictures![index],
                         images![index],
+                        isNetwork
                       ),
                     ),
                   ),
