@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/widgets/custom_image.dart';
 
+// ignore: must_be_immutable
 class ImageGallery extends StatelessWidget {
-  final String bookId;
+  var bookId;
+  List<dynamic>? images;
 
-  ImageGallery(this.bookId);
+  // ImageGallery({bookId = null, images = null});
+  ImageGallery([this.bookId, this.images]);
 
   @override
   Widget build(BuildContext context) {
-    Book selectedPost = Provider.of<Books>(context).getBookById(bookId);
+    print(this.bookId);
+    print(this.images);
+
+    Book? selectedPost = bookId != null
+        ? Provider.of<Books>(context).getBookById(bookId!)
+        : null;
 
     return // Image Gallery Starts Here
         Container(
@@ -22,51 +31,98 @@ class ImageGallery extends StatelessWidget {
         horizontal: 5,
         vertical: 10,
       ),
-      child: selectedPost.pictures != null
-          ? ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: selectedPost.pictures!.length,
-              itemBuilder: (context, index) =>
-                  // Post Image Starts Here
-                  Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Container(
-                  width: 150,
-                  height: 150,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: Theme.of(context).primaryColor,
+      child: selectedPost != null
+          ? selectedPost.pictures != null
+              ? ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: selectedPost.pictures!.length,
+                  itemBuilder: (context, index) =>
+                      // Post Image Starts Here
+                      Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Container(
+                      width: 150,
+                      height: 150,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      // child: Image.network(
+                      //   selectedPost.pictures![index],
+                      //   fit: BoxFit.cover,
+                      // ),
+                      // child: PhotoView(
+                      //   imageProvider: NetworkImage(selectedPost.pictures![index]),
+                      //   minScale: PhotoViewComputedScale.contained * 0.8,
+                      //   maxScale: PhotoViewComputedScale.covered * 2,
+                      // ),
+
+                      child: CustomImage(
+                        selectedPost.pictures![index],
+                      ),
                     ),
                   ),
-                  // child: Image.network(
-                  //   selectedPost.pictures![index],
-                  //   fit: BoxFit.cover,
-                  // ),
-                  // child: PhotoView(
-                  //   imageProvider: NetworkImage(selectedPost.pictures![index]),
-                  //   minScale: PhotoViewComputedScale.contained * 0.8,
-                  //   maxScale: PhotoViewComputedScale.covered * 2,
-                  // ),
+                  // Post Image ends Here,
+                )
+              : Center(
+                  child: Text(
+                    'No Images found',
+                    // textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+          : images != null
+              ? ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: images!.length,
+                  itemBuilder: (context, index) =>
+                      // Post Image Starts Here
+                      Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Container(
+                      width: 150,
+                      height: 150,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      // child: Image.network(
+                      //   selectedPost.pictures![index],
+                      //   fit: BoxFit.cover,
+                      // ),
+                      // child: PhotoView(
+                      //   imageProvider: NetworkImage(selectedPost.pictures![index]),
+                      //   minScale: PhotoViewComputedScale.contained * 0.8,
+                      //   maxScale: PhotoViewComputedScale.covered * 2,
+                      // ),
 
-                  child: CustomImage(
-                    selectedPost.pictures![index],
+                      child: CustomImage(
+                        // selectedPost.pictures![index],
+                        images![index] as String,
+                      ),
+                    ),
+                  ),
+                  // Post Image ends Here,
+                )
+              : Center(
+                  child: Text(
+                    'No Images found',
+                    // textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              // Post Image ends Here,
-            )
-          : Center(
-              child: Text(
-                'No Images found',
-                // textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
     );
 
     // Image Gallery Ends Here

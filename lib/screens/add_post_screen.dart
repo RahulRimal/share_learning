@@ -9,6 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/providers/books.dart';
 
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart' as syspaths;
+
 class AddPostScreen extends StatefulWidget {
   static const routeName = '/add-post';
 
@@ -17,6 +20,7 @@ class AddPostScreen extends StatefulWidget {
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
+  List<XFile>? _storedImages;
   XFile? _storedImage;
   ImagePicker imagePicker = ImagePicker();
 
@@ -33,27 +37,77 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   picker.NepaliDateTime? _boughtTime;
 
-  Future<void> _takePicture() async {
-    print('takePic');
-    final imageFile = await imagePicker.pickImage(
-      source: ImageSource.camera,
-      maxWidth: 150,
-    );
-    setState(() {
-      _storedImage = imageFile;
-    });
-  }
-
   Future<void> _getPicture() async {
     print('getPic');
-    final imageFile = await imagePicker.pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 150,
-    );
+
+    final imageFile = await imagePicker.pickImage(source: ImageSource.gallery);
+
+    if (imageFile == null) return;
+
     setState(() {
       _storedImage = imageFile;
     });
+
+    final appDir = await syspaths.getApplicationDocumentsDirectory();
+
+    
+      String imageName= path.basename(imageFile.path);
+
+      await imageFile.saveTo('${appDir.path}/${imageName}');
+    
+
+    // final imageName = path.basename(imageFile.path);
+
+    // await imageFile.saveTo('${appDir.path}/$imageName');
   }
+  
+
+  // Future<void> _getPicture() async {
+  //   print('getPic');
+
+  //   final imageFiles = await imagePicker.pickMultiImage(
+  //     maxWidth: 150,
+  //   );
+
+  //   if (imageFiles == null) return;
+
+  //   setState(() {
+  //     _storedImages = imageFiles;
+  //   });
+
+  //   final appDir = await syspaths.getApplicationDocumentsDirectory();
+
+  //   List<String> imagesName = [];
+
+  //   for (int i = 0; i < imageFiles.length; i++) {
+  //     imagesName[i] = path.basename(imageFiles[i].path);
+
+  //     await imageFiles[i].saveTo('${appDir.path}/${imagesName[i]}');
+  //   }
+
+  //   // final imageName = path.basename(imageFile.path);
+
+  //   // await imageFile.saveTo('${appDir.path}/$imageName');
+  // }
+
+  // Future<void> _takePicture() async {
+  //   print('takePic');
+  //   final imageFile = await imagePicker.pickImage(
+  //     source: ImageSource.gallery,
+  //     maxWidth: 150,
+  //   );
+  //   if (imageFile == null) return;
+
+  //   setState(() {
+  //     _storedImage = imageFile;
+  //   });
+
+  //   final appDir = await syspaths.getApplicationDocumentsDirectory();
+
+  //   final imageName = path.basename(imageFile.path);
+
+  //   await imageFile.saveTo('${appDir.path}/$imageName');
+  // }
 
   // List<Xfile>? images = await imagePicker.pickMultiImage();
 
@@ -68,6 +122,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
     isWishlisted: false,
     price: 0,
     bookCount: 1,
+    pictures: [],
   );
 
   final _datePickercontroller = TextEditingController(
@@ -444,6 +499,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 Container(
                   height: 150,
                   width: 150,
+                  // child: _storedImage != null
+                  //     ? kIsWeb
+                  //         ? Image.network(_storedImage!.path)
+                  //         : Image.file(File(_storedImage!.path))
+                  //     : Text('No Image'),
                   child: _storedImage != null
                       ? kIsWeb
                           ? Image.network(_storedImage!.path)
@@ -471,13 +531,13 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           SizedBox(
                             width: 10,
                           ),
-                          ElevatedButton(
-                            child: Text('From Camera'),
-                            style: ButtonStyle(),
-                            onPressed: () {
-                              _takePicture();
-                            },
-                          ),
+                          // ElevatedButton(
+                          //   child: Text('From Camera'),
+                          //   style: ButtonStyle(),
+                          //   onPressed: () {
+                          //     _takePicture();
+                          //   },
+                          // ),
                         ],
                       ),
                     ],

@@ -232,7 +232,7 @@ class SinglePostScreen extends StatelessWidget {
               ),
               // Image Gallery Starts Here
 
-              ImageGallery(bookId),
+              ImageGallery(this.bookId),
 
               // Image Gallery Ends Here
 
