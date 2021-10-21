@@ -62,7 +62,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
   // }
 
   Future<void> _getPicture() async {
-    print('getPics');
 
     final imageFiles = await imagePicker.pickMultiImage(
       maxWidth: 770,
@@ -156,6 +155,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
       return false;
     }
     _form.currentState!.save();
+    // _edittedBook.pictures = actualImages;
     Provider.of<Books>(context, listen: false).addPost(_edittedBook);
     Navigator.of(context).pop();
     Navigator.of(context).pop();
@@ -454,6 +454,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         isWishlisted: _edittedBook.isWishlisted,
                         price: _edittedBook.price,
                         bookCount: _edittedBook.bookCount,
+                        pictures: actualImages,
                       );
                     },
                   ),

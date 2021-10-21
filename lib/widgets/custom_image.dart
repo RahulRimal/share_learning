@@ -16,6 +16,7 @@ class CustomImage extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => PhotoViewRouteWrapper(
+              
               imageProvider: isNetwork
                   ? NetworkImage(
                       this.imageUrl,
