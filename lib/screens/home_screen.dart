@@ -1,14 +1,56 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/widgets/app_drawer.dart';
 import 'package:share_learning/widgets/post.dart';
 
 class HomeScreen extends StatelessWidget {
+  Future<void> getPosts() async {
+    try {
+      // const url = 'http://localhost/ProjectShareBooks/';
+      const url = 'http://localhost/ProjectShareBooks/posts/u/1';
+      final response = await http.get(Uri.parse(url), headers: {
+        HttpHeaders.authorizationHeader:
+            'MmJkMjU5MTM5NmNmNTkyNTdmMGEzY2EzOTExY2U2ZWE3YTU0ZDk3NDAxM2ZiMzViMzEzNjMzMzUzNzM3MzEzOTM1MzY='
+      }
+          //headers: {
+          //     "Authorization":
+          //         "MmJkMjU5MTM5NmNmNTkyNTdmMGEzY2EzOTExY2U2ZWE3YTU0ZDk3NDAxM2ZiMzViMzEzNjMzMzUzNzM3MzEzOTM1MzY=",
+          //     "Accept": "application/json",
+          //     "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+          // "Access-Control-Allow-Methods": "POST, GET, OPTIONS"
+          //   }
+          );
+      print(response);
+      print(json.decode(response.body));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // Future<List<Post>> getPostsList() async {
+  // Future<void> getPostsList() async {
+  //   // const url = 'http://localhost/ProjectShareBooks/';
+  //   const url = 'http://localhost/ProjectShareBooks/posts/u/1';
+  //   final response = await http.get(Uri.parse(url), headers: {
+  //     //  'Content-Type': 'application/json',
+  //     // 'Accept': 'application/json',
+  //     'Access-Control_Allow_Origin': '*',
+  //     'Authorization':
+  //         'MmJkMjU5MTM5NmNmNTkyNTdmMGEzY2EzOTExY2U2ZWE3YTU0ZDk3NDAxM2ZiMzViMzEzNjMzMzUzNzM3MzEzOTM1MzY=',
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     List<Book> booksToRender = Provider.of<Books>(context).books;
+    getPosts();
+    // getPostsList();
     return Scaffold(
       drawer: AppDrawer(),
       appBar: AppBar(
