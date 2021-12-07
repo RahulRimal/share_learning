@@ -10,15 +10,16 @@ import 'package:share_learning/widgets/app_drawer.dart';
 import 'package:share_learning/widgets/post.dart';
 
 class HomeScreen extends StatelessWidget {
-  Future<void> getPosts() async {
+  Future<List<dynamic>?> getUserPosts() async {
     try {
       // const url = 'http://localhost/ProjectShareBooks/';
-      const url = 'http://localhost/ProjectShareBooks/posts/u/1';
-      final response = await http.get(Uri.parse(url), headers: {
+      const url = 'http://localhost/apiforsharelearn/posts/u/1';
+      final response = await http.get(Uri.parse(url),
+      headers: {
         HttpHeaders.authorizationHeader:
             'MmJkMjU5MTM5NmNmNTkyNTdmMGEzY2EzOTExY2U2ZWE3YTU0ZDk3NDAxM2ZiMzViMzEzNjMzMzUzNzM3MzEzOTM1MzY='
       }
-          //headers: {
+          // headers: {
           //     "Authorization":
           //         "MmJkMjU5MTM5NmNmNTkyNTdmMGEzY2EzOTExY2U2ZWE3YTU0ZDk3NDAxM2ZiMzViMzEzNjMzMzUzNzM3MzEzOTM1MzY=",
           //     "Accept": "application/json",
@@ -26,13 +27,15 @@ class HomeScreen extends StatelessWidget {
           // "Access-Control-Allow-Methods": "POST, GET, OPTIONS"
           //   }
           );
-      print(response);
-      print(json.decode(response.body));
+      // print(json.decode(response.body));
+      final responseData = json.decode(response.body);
+      final responsePosts = responseData['data']['posts'];
+      print(responsePosts);
+      return responsePosts;
     } catch (e) {
       print(e);
     }
   }
-
   // Future<List<Post>> getPostsList() async {
   // Future<void> getPostsList() async {
   //   // const url = 'http://localhost/ProjectShareBooks/';
@@ -49,8 +52,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Book> booksToRender = Provider.of<Books>(context).books;
-    getPosts();
-    // getPostsList();
+    Future<List<dynamic>?> userPosts = getUserPosts();
+    // getUserPosts();
     return Scaffold(
       drawer: AppDrawer(),
       appBar: AppBar(
