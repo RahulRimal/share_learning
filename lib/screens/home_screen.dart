@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -10,64 +11,57 @@ import 'package:share_learning/widgets/app_drawer.dart';
 import 'package:share_learning/widgets/post.dart';
 
 class HomeScreen extends StatelessWidget {
+  AsyncMemoizer memoizer = AsyncMemoizer();
+
   Books books = new Books();
 
-  Future<List<Book>?> getUserPosts() async {
-    // Future<List<Book>?> getUserPosts(ctx) async {
-    try {
-      // const url = 'http://localhost/ProjectShareBooks/';
-      const url = 'http://localhost/apiforsharelearn/posts/u/1';
-      final response = await http.get(Uri.parse(url), headers: {
-        HttpHeaders.authorizationHeader:
-            'MmJkMjU5MTM5NmNmNTkyNTdmMGEzY2EzOTExY2U2ZWE3YTU0ZDk3NDAxM2ZiMzViMzEzNjMzMzUzNzM3MzEzOTM1MzY='
+  List<Book> booksToShow = [];
+
+  Future<List<Book>?> getUserPosts(ctx) async {
+    Future<dynamic> tempData = this.memoizer.runOnce(() async {
+      try {
+        // const url = 'http://localhost/ProjectShareBooks/';
+        const url = 'http://localhost/apiforsharelearn/posts/u/1';
+        final response = await http.get(Uri.parse(url), headers: {
+          HttpHeaders.authorizationHeader:
+              'MmJkMjU5MTM5NmNmNTkyNTdmMGEzY2EzOTExY2U2ZWE3YTU0ZDk3NDAxM2ZiMzViMzEzNjMzMzUzNzM3MzEzOTM1MzY='
+        }
+            // headers: {
+            //     "Authorization":
+            //         "MmJkMjU5MTM5NmNmNTkyNTdmMGEzY2EzOTExY2U2ZWE3YTU0ZDk3NDAxM2ZiMzViMzEzNjMzMzUzNzM3MzEzOTM1MzY=",
+            //     "Accept": "application/json",
+            //     "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+            // "Access-Control-Allow-Methods": "POST, GET, OPTIONS"
+            //   }
+
+            );
+
+        final responseData = json.decode(response.body);
+        final responsePosts = responseData['data']['posts'];
+
+        List<dynamic> receivedData =
+            responsePosts.map((val) => Book.fromJson(val)).toList();
+
+        List<Book> newBooks = [];
+        for (var i = 0; i < receivedData.length; i++) {
+          newBooks.add(receivedData[i]);
+          booksToShow.add(receivedData[i]);
+        }
+
+        Provider.of<Books>(ctx, listen: false).addPosts(newBooks);
+
+        return newBooks;
+      } catch (e) {
+        print(e);
       }
-          // headers: {
-          //     "Authorization":
-          //         "MmJkMjU5MTM5NmNmNTkyNTdmMGEzY2EzOTExY2U2ZWE3YTU0ZDk3NDAxM2ZiMzViMzEzNjMzMzUzNzM3MzEzOTM1MzY=",
-          //     "Accept": "application/json",
-          //     "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-          // "Access-Control-Allow-Methods": "POST, GET, OPTIONS"
-          //   }
-          );
+    });
 
-      final responseData = json.decode(response.body);
-      final responsePosts = responseData['data']['posts'];
-      print(responsePosts);
-
-      List<dynamic> receivedData =
-          responsePosts.map((val) => Book.fromJson(val)).toList();
-
-      List<Book> newBooks = [];
-      for (var i = 0; i < receivedData.length; i++) {
-        newBooks.add(receivedData[i]);
-      }
-
-      books.addPosts(newBooks);
-
-      return newBooks;
-    } catch (e) {
-      print(e);
-    }
+    return booksToShow;
   }
-  // Future<List<Post>> getPostsList() async {
-  // Future<void> getPostsList() async {
-  //   // const url = 'http://localhost/ProjectShareBooks/';
-  //   const url = 'http://localhost/ProjectShareBooks/posts/u/1';
-  //   final response = await http.get(Uri.parse(url), headers: {
-  //     //  'Content-Type': 'application/json',
-  //     // 'Accept': 'application/json',
-  //     'Access-Control_Allow_Origin': '*',
-  //     'Authorization':
-  //         'MmJkMjU5MTM5NmNmNTkyNTdmMGEzY2EzOTExY2U2ZWE3YTU0ZDk3NDAxM2ZiMzViMzEzNjMzMzUzNzM3MzEzOTM1MzY=',
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
     List<Book> booksToRender = Provider.of<Books>(context).books;
-    // Future<List<dynamic>?> userPosts = getUserPosts();
-    // Future<List<Book>> userPosts = getUserPosts(context) as Future<List<Book>>;
-    // getUserPosts();
     return Scaffold(
       drawer: AppDrawer(),
       appBar: AppBar(
@@ -106,8 +100,9 @@ class HomeScreen extends StatelessWidget {
       //     selling: booksToRender[index].selling,
       //   ),
       // ),
+
       body: FutureBuilder(
-        future: getUserPosts(),
+        future: getUserPosts(context),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
