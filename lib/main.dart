@@ -5,6 +5,9 @@ import 'package:share_learning/providers/comment.dart';
 import 'package:share_learning/providers/user.dart';
 import 'package:share_learning/screens/add_post_screen.dart';
 import 'package:share_learning/screens/edit_post_screen.dart';
+import 'package:share_learning/screens/login_screen.dart';
+import 'package:share_learning/screens/login_signup_screen.dart';
+import 'package:share_learning/screens/signup_screen.dart';
 import 'package:share_learning/screens/single_post_screen.dart';
 import 'package:share_learning/screens/user_posts_screen.dart';
 import 'screens/home_screen.dart';
@@ -25,16 +28,22 @@ class MyApp extends StatelessWidget {
         title: 'Share Your Learning',
         theme: ThemeData(
           primaryColor: Colors.redAccent,
+          primaryColorDark: Color(0xb6030a),
+          primaryColorLight: Color(0xff7f61),
           accentColor: Colors.blueAccent,
           scaffoldBackgroundColor: Colors.grey[100],
         ),
-        home: HomeScreen(),
+        // home: HomeScreen(),
         // home: AddPostScreen(),
+        home: LoginSignupScreen(),
         routes: {
           SinglePostScreen.routeName: (context) => SinglePostScreen(),
           UserPostsScreen.routeName: (context) => UserPostsScreen(),
           AddPostScreen.routeName: (context) => AddPostScreen(),
           EditPostScreen.routeName: (context) => EditPostScreen(),
+          LoginSignupScreen.routeName: (context) => LoginSignupScreen(),
+          LoginScreen.routeName: (context) => LoginScreen(),
+          SignUpScreen.routeName: (context) => SignUpScreen(),
         },
       ),
     );
