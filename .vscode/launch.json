@@ -6,11 +6,12 @@
     "configurations": [
 
 
+
         {
             "name": "Dart & Flutter",
             "request": "launch",
             "type": "dart",
-            "program": "D:\\Diyalo\\Current\\share_learning\\lib\\main.dart"
+            "program": "E:\\Diyalo\\share_learning\\lib\\main.dart",
 
                 }
     ]

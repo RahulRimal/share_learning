@@ -10,12 +10,14 @@ import 'package:share_learning/widgets/app_drawer.dart';
 import 'package:share_learning/widgets/post.dart';
 
 class HomeScreen extends StatelessWidget {
-  Future<List<dynamic>?> getUserPosts() async {
+  Books books = new Books();
+
+  Future<List<Book>?> getUserPosts() async {
+    // Future<List<Book>?> getUserPosts(ctx) async {
     try {
       // const url = 'http://localhost/ProjectShareBooks/';
       const url = 'http://localhost/apiforsharelearn/posts/u/1';
-      final response = await http.get(Uri.parse(url),
-      headers: {
+      final response = await http.get(Uri.parse(url), headers: {
         HttpHeaders.authorizationHeader:
             'MmJkMjU5MTM5NmNmNTkyNTdmMGEzY2EzOTExY2U2ZWE3YTU0ZDk3NDAxM2ZiMzViMzEzNjMzMzUzNzM3MzEzOTM1MzY='
       }
@@ -27,11 +29,22 @@ class HomeScreen extends StatelessWidget {
           // "Access-Control-Allow-Methods": "POST, GET, OPTIONS"
           //   }
           );
-      // print(json.decode(response.body));
+
       final responseData = json.decode(response.body);
       final responsePosts = responseData['data']['posts'];
       print(responsePosts);
-      return responsePosts;
+
+      List<dynamic> receivedData =
+          responsePosts.map((val) => Book.fromJson(val)).toList();
+
+      List<Book> newBooks = [];
+      for (var i = 0; i < receivedData.length; i++) {
+        newBooks.add(receivedData[i]);
+      }
+
+      books.addPosts(newBooks);
+
+      return newBooks;
     } catch (e) {
       print(e);
     }
@@ -52,7 +65,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Book> booksToRender = Provider.of<Books>(context).books;
-    Future<List<dynamic>?> userPosts = getUserPosts();
+    // Future<List<dynamic>?> userPosts = getUserPosts();
+    // Future<List<Book>> userPosts = getUserPosts(context) as Future<List<Book>>;
     // getUserPosts();
     return Scaffold(
       drawer: AppDrawer(),
@@ -79,18 +93,42 @@ class HomeScreen extends StatelessWidget {
       //     selling: Books().books[index].selling,
       //   ),
       // ),
-      body: ListView.builder(
-        itemCount: booksToRender.length,
-        itemBuilder: (context, index) => Post(
-          id: booksToRender[index].id,
-          title: booksToRender[index].title,
-          description: booksToRender[index].description,
-          author: booksToRender[index].author,
-          boughtTime: booksToRender[index].boughtTime,
-          price: booksToRender[index].price,
-          bookCount: booksToRender[index].bookCount,
-          selling: booksToRender[index].selling,
-        ),
+      // body: ListView.builder(
+      //   itemCount: booksToRender.length,
+      //   itemBuilder: (context, index) => Post(
+      //     id: booksToRender[index].id,
+      //     title: booksToRender[index].title,
+      //     description: booksToRender[index].description,
+      //     author: booksToRender[index].author,
+      //     boughtTime: booksToRender[index].boughtTime,
+      //     price: booksToRender[index].price,
+      //     bookCount: booksToRender[index].bookCount,
+      //     selling: booksToRender[index].selling,
+      //   ),
+      // ),
+      body: FutureBuilder(
+        future: getUserPosts(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: booksToRender.length,
+              itemBuilder: (context, index) => Post(
+                id: booksToRender[index].id,
+                title: booksToRender[index].title,
+                description: booksToRender[index].description,
+                author: booksToRender[index].author,
+                boughtTime: booksToRender[index].boughtTime,
+                price: booksToRender[index].price,
+                bookCount: booksToRender[index].bookCount,
+                selling: booksToRender[index].selling,
+              ),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }

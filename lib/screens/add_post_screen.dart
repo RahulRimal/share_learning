@@ -62,11 +62,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
   // }
 
   Future<void> _getPicture() async {
-
-    final imageFiles = await imagePicker.pickMultiImage(
-      maxWidth: 770,
-      imageQuality: 100
-    );
+    final imageFiles =
+        await imagePicker.pickMultiImage(maxWidth: 770, imageQuality: 100);
 
     if (imageFiles == null) return;
 
@@ -88,7 +85,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
     setState(() {
       for (int i = 0; i < _storedImages!.length; i++) {
-        actualImages.add( _storedImages![i].path);
+        actualImages.add(_storedImages![i].path);
       }
     });
   }
