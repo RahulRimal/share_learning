@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/screens/home_screen.dart';
+import 'package:share_learning/templates/screens/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -21,8 +22,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _goNext() {
-    // Navigator.pushReplacementNamed(context, Routes.onBoardingRoute);
-    Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+    Navigator.pushReplacementNamed(context, OnBoardingScreen.routeName);
+    // Navigator.pushReplacementNamed(context, Ob);
   }
 
   @override

@@ -6,6 +6,7 @@ import 'package:share_learning/providers/user.dart';
 import 'package:share_learning/templates/managers/strings_manager.dart';
 import 'package:share_learning/templates/managers/theme_manager.dart';
 import 'package:share_learning/templates/screens/add_post_screen.dart';
+import 'package:share_learning/templates/screens/onboarding_screen.dart';
 import 'package:share_learning/templates/screens/single_post_screen.dart';
 import 'package:share_learning/templates/screens/splash_screen.dart';
 import 'package:share_learning/templates/screens/user_posts_screen.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
           EditPostScreen.routeName: (context) => EditPostScreen(),
           HomeScreen.routeName: (context) => HomeScreen(),
           SplashScreen.routeName: (context) => SplashScreen(),
+          OnBoardingScreen.routeName: (context) => OnBoardingScreen(),
         },
       ),
     );
