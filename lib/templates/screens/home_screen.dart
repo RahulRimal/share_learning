@@ -41,6 +41,8 @@ class HomeScreen extends StatelessWidget {
         final responseData = json.decode(response.body);
         final responsePosts = responseData['data']['posts'];
 
+        print(responseData);
+
         List<dynamic> receivedData =
             responsePosts.map((val) => Book.fromJson(val)).toList();
 
