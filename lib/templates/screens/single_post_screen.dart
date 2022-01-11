@@ -6,11 +6,12 @@ import 'package:share_learning/models/book.dart';
 import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/providers/comment.dart';
 import 'package:share_learning/providers/user.dart';
-import 'package:share_learning/screens/edit_post_screen.dart';
-import 'package:share_learning/screens/user_posts_screen.dart';
-import 'package:share_learning/widgets/app_drawer.dart';
-import 'package:share_learning/widgets/image_gallery.dart';
-import 'package:share_learning/widgets/post_comment.dart';
+import 'package:share_learning/templates/widgets/app_drawer.dart';
+import 'package:share_learning/templates/widgets/image_gallery.dart';
+import 'package:share_learning/templates/widgets/post_comment.dart';
+
+import 'edit_post_screen.dart';
+import 'user_posts_screen.dart';
 
 class SinglePostScreen extends StatelessWidget {
   static const routeName = '/post-details';

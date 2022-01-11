@@ -3,14 +3,15 @@ import 'package:provider/provider.dart';
 import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/providers/comment.dart';
 import 'package:share_learning/providers/user.dart';
-import 'package:share_learning/screens/add_post_screen.dart';
-import 'package:share_learning/screens/edit_post_screen.dart';
-import 'package:share_learning/screens/login_screen.dart';
-import 'package:share_learning/screens/login_signup_screen.dart';
-import 'package:share_learning/screens/signup_screen.dart';
-import 'package:share_learning/screens/single_post_screen.dart';
-import 'package:share_learning/screens/user_posts_screen.dart';
-import 'screens/home_screen.dart';
+import 'package:share_learning/templates/managers/strings_manager.dart';
+import 'package:share_learning/templates/managers/theme_manager.dart';
+import 'package:share_learning/templates/screens/add_post_screen.dart';
+import 'package:share_learning/templates/screens/single_post_screen.dart';
+import 'package:share_learning/templates/screens/splash_screen.dart';
+import 'package:share_learning/templates/screens/user_posts_screen.dart';
+
+import 'templates/screens/edit_post_screen.dart';
+import 'templates/screens/home_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,25 +26,23 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Share Your Learning',
-        theme: ThemeData(
-          primaryColor: Colors.redAccent,
-          primaryColorDark: Color(0xb6030a),
-          primaryColorLight: Color(0xff7f61),
-          accentColor: Colors.blueAccent,
-          scaffoldBackgroundColor: Colors.grey[100],
-        ),
+        title: AppStrings.appTitle,
+        // theme: ThemeData(
+        //   primaryColor: Colors.redAccent,
+        //   accentColor: Colors.blueAccent,
+        //   scaffoldBackgroundColor: Colors.grey[100],
+        // ),
+        theme: getApplicationTheme(),
         // home: HomeScreen(),
+        home: SplashScreen(),
         // home: AddPostScreen(),
-        home: LoginSignupScreen(),
         routes: {
           SinglePostScreen.routeName: (context) => SinglePostScreen(),
           UserPostsScreen.routeName: (context) => UserPostsScreen(),
           AddPostScreen.routeName: (context) => AddPostScreen(),
           EditPostScreen.routeName: (context) => EditPostScreen(),
-          LoginSignupScreen.routeName: (context) => LoginSignupScreen(),
-          LoginScreen.routeName: (context) => LoginScreen(),
-          SignUpScreen.routeName: (context) => SignUpScreen(),
+          HomeScreen.routeName: (context) => HomeScreen(),
+          SplashScreen.routeName: (context) => SplashScreen(),
         },
       ),
     );

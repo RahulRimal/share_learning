@@ -7,11 +7,13 @@
 
 
 
+
         {
             "name": "Dart & Flutter",
             "request": "launch",
             "type": "dart",
-            "program": "E:\\Diyalo\\share_learning\\lib\\main.dart",
+            // "program": "E:\\Diyalo\\share_learning\\lib\\main.dart",
+            "program": "D:\\Flutter\\CurrentlyWorking\\share_learning\\lib\\main.dart",
 
                 }
     ]

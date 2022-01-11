@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:share_learning/screens/login_screen.dart';
-import 'package:share_learning/screens/signup_screen.dart';
-import 'package:share_learning/widgets/app_drawer.dart';
+import 'package:share_learning/templates/screens/login_screen.dart';
+import 'package:share_learning/templates/screens/signup_screen.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({Key? key}) : super(key: key);

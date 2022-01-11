@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:share_learning/widgets/beizer_container.dart';
+import 'package:share_learning/templates/widgets/beizer_container.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key, this.title}) : super(key: key);

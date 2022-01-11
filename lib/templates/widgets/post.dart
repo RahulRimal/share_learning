@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
-import 'package:share_learning/screens/single_post_screen.dart';
+import 'package:share_learning/templates/screens/single_post_screen.dart';
 
 // ignore: must_be_immutable
 class Post extends StatelessWidget {

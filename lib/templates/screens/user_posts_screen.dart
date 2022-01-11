@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/providers/books.dart';
-import 'package:share_learning/widgets/app_drawer.dart';
-import 'package:share_learning/widgets/post.dart';
+import 'package:share_learning/templates/widgets/app_drawer.dart';
+import 'package:share_learning/templates/widgets/post.dart';
 
 class UserPostsScreen extends StatelessWidget {
   static const routeName = '/user-posts';

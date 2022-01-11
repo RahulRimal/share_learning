@@ -7,10 +7,12 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/providers/books.dart';
-import 'package:share_learning/widgets/app_drawer.dart';
-import 'package:share_learning/widgets/post.dart';
+import 'package:share_learning/templates/widgets/app_drawer.dart';
+import 'package:share_learning/templates/widgets/post.dart';
 
 class HomeScreen extends StatelessWidget {
+  static const routeName = '/home';
+
   AsyncMemoizer memoizer = AsyncMemoizer();
 
   Books books = new Books();

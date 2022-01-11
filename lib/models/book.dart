@@ -46,7 +46,7 @@ class Book {
       boughtTime: NepaliDateTime.parse(parsedJson['boughtDate'].toString()),
 
       price: parsedJson['price'],
-      bookCount: parsedJson['bookCount'],
+      bookCount: int.parse(parsedJson['bookCount']),
       isWishlisted:
           parsedJson['isWishlisted'].toString() == 'true' ? true : false,
       selling: parsedJson['selling'].toString() == 'S' ? true : false,

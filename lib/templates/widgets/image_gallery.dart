@@ -4,7 +4,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/providers/books.dart';
-import 'package:share_learning/widgets/custom_image.dart';
+import 'package:share_learning/templates/widgets/custom_image.dart';
 
 // ignore: must_be_immutable
 class ImageGallery extends StatelessWidget {
@@ -17,7 +17,6 @@ class ImageGallery extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     Book? selectedPost = bookId != null
         ? Provider.of<Books>(context).getBookById(bookId!)
         : null;
@@ -59,10 +58,8 @@ class ImageGallery extends StatelessWidget {
                       //   maxScale: PhotoViewComputedScale.covered * 2,
                       // ),
 
-                      child: CustomImage(
-                        selectedPost.pictures![index],
-                        isNetwork
-                      ),
+                      child:
+                          CustomImage(selectedPost.pictures![index], isNetwork),
                     ),
                   ),
                   // Post Image ends Here,
@@ -106,10 +103,9 @@ class ImageGallery extends StatelessWidget {
                       // ),
 
                       child: CustomImage(
-                        // selectedPost.pictures![index],
-                        images![index],
-                        isNetwork
-                      ),
+                          // selectedPost.pictures![index],
+                          images![index],
+                          isNetwork),
                     ),
                   ),
                   // Post Image ends Here,

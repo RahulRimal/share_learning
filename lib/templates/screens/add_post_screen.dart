@@ -11,7 +11,7 @@ import 'package:share_learning/providers/books.dart';
 
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as syspaths;
-import 'package:share_learning/widgets/image_gallery.dart';
+import 'package:share_learning/templates/widgets/image_gallery.dart';
 
 class AddPostScreen extends StatefulWidget {
   static const routeName = '/add-post';
