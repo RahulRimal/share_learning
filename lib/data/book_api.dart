@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:share_learning/models/api_status.dart';
 import 'package:share_learning/models/book.dart';
+import 'package:share_learning/templates/managers/strings_manager.dart';
+import 'package:share_learning/templates/managers/values_manager.dart';
 
 class BookApi {
   static Future<Object> getBooks() async {
@@ -18,11 +20,8 @@ class BookApi {
         },
       );
 
-      print(json.encode(json.decode(response.body)['data']['posts']));
-
-      if (response.statusCode == 200) {
+      if (response.statusCode == ApiStatusCode.responseSuccess) {
         return Success(
-            // code: response.statusCode, response: bookFromJson(response.body));
             code: response.statusCode,
             // response:
             //     bookFromJson(json.decode(response.body)['data']['posts']));
@@ -30,14 +29,22 @@ class BookApi {
                 json.encode(json.decode(response.body)['data']['posts'])));
       }
 
-      return Failure(code: 100, errorResponse: 'Invalid Response');
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          errorResponse: ApiStrings.invalidResponseString);
     } on HttpException {
-      return Failure(code: 101, errorResponse: 'No Internet');
+      return Failure(
+          code: ApiStatusCode.httpError,
+          errorResponse: ApiStrings.noInternetString);
     } on FormatException {
-      return Failure(code: 102, errorResponse: 'Invalid Format');
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          errorResponse: ApiStrings.invalidFormatString);
     } catch (e) {
       // return Failure(code: 103, errorResponse: e.toString());
-      return Failure(code: 103, errorResponse: 'Unknown Error');
+      return Failure(
+          code: ApiStatusCode.unknownError,
+          errorResponse: ApiStrings.unknownErrorString);
     }
   }
 }

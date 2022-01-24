@@ -17,3 +17,10 @@ class AppStrings {
       "Tut app is an awesome flutter application using clean architecture #4";
   static const String skip = "Skip";
 }
+
+class ApiStrings {
+  static const String invalidResponseString = "Invalid Response";
+  static const String noInternetString = "No Internet";
+  static const String invalidFormatString = "Invalid Format";
+  static const String unknownErrorString = "No Internet";
+}
