@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/books.dart';
-import 'package:share_learning/providers/user.dart';
 import 'package:share_learning/templates/screens/user_posts_screen.dart';
 
 class PostComment extends StatelessWidget {

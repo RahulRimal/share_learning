@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/providers/comment.dart';
-import 'package:share_learning/providers/user.dart';
+import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/managers/strings_manager.dart';
 import 'package:share_learning/templates/managers/theme_manager.dart';
 import 'package:share_learning/templates/screens/add_post_screen.dart';

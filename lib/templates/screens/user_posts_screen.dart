@@ -34,13 +34,13 @@ class UserPostsScreen extends StatelessWidget {
               itemCount: _allPosts.length,
               itemBuilder: (context, index) => Post(
                 id: _allPosts[index].id,
-                title: _allPosts[index].title,
+                title: _allPosts[index].bookName,
                 description: _allPosts[index].description,
                 author: _allPosts[index].author,
-                boughtTime: _allPosts[index].boughtTime,
+                boughtTime: _allPosts[index].boughtDate,
                 price: _allPosts[index].price,
                 bookCount: _allPosts[index].bookCount,
-                selling: _allPosts[index].selling,
+                selling: _allPosts[index].postType == 'S' ? true : false,
               ),
             )
           : Center(

@@ -34,10 +34,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
   final _booksCountFocusNode = FocusNode();
   final _descFocusNode = FocusNode();
 
-  List<bool> sellingBuying = [true, false];
-  bool isSelling = true;
+  List<bool> postTypeBuying = [true, false];
+  bool ispostType = true;
 
-  picker.NepaliDateTime? _boughtTime;
+  picker.NepaliDateTime? _boughtDate;
 
   // Future<void> _getPicture() async {
   //   print('getPic');
@@ -114,15 +114,17 @@ class _AddPostScreenState extends State<AddPostScreen> {
   var _edittedBook = Book(
     id: '',
     author: 'Unknown',
-    title: '',
-    uId: '1',
-    selling: false,
-    boughtTime: DateTime.now().toNepaliDateTime(),
+    bookName: '',
+    userId: '1',
+    postType: 'B',
+    boughtDate: DateTime.now().toNepaliDateTime(),
     description: '',
-    isWishlisted: false,
+    wishlisted: false,
     price: 0,
     bookCount: 1,
     pictures: [],
+    postedOn: DateTime.now().toNepaliDateTime(),
+    postRating: '',
   );
 
   final _datePickercontroller = TextEditingController(
@@ -132,7 +134,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   );
 
   Future<void> _showPicker(BuildContext context) async {
-    _boughtTime = await picker.showAdaptiveDatePicker(
+    _boughtDate = await picker.showAdaptiveDatePicker(
       context: context,
       initialDate: picker.NepaliDateTime.now(),
       firstDate: picker.NepaliDateTime(2070),
@@ -141,8 +143,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
     );
 
     _datePickercontroller.text =
-        DateFormat('yyyy-MM-dd').format(_boughtTime as DateTime).toString();
-    // DateFormat('yyyy/MM/dd').format(_boughtTime as DateTime).toString();
+        DateFormat('yyyy-MM-dd').format(_boughtDate as DateTime).toString();
+    // DateFormat('yyyy/MM/dd').format(_boughtDate as DateTime).toString();
   }
 
   bool _savePost() {
@@ -158,9 +160,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
     Navigator.of(context).pop();
 
     return true;
-    // print(_edittedBook.title);
+    // print(_edittedBook.bookName);
     // print(_edittedBook.author);
-    // print(_edittedBook.boughtTime);
+    // print(_edittedBook.boughtDate);
     // print(_edittedBook.price);
     // print(_edittedBook.description);
   }
@@ -193,7 +195,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 TextFormField(
                     cursorColor: Theme.of(context).primaryColor,
                     decoration: InputDecoration(
-                      labelText: 'Title',
+                      labelText: 'bookName',
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.redAccent,
@@ -206,7 +208,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please provide the title';
+                        return 'Please provide the bookName';
                       }
                       return null;
                     },
@@ -214,14 +216,16 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       _edittedBook = Book(
                         id: _edittedBook.id,
                         author: _edittedBook.author,
-                        title: value as String,
-                        uId: _edittedBook.uId,
-                        selling: _edittedBook.selling,
-                        boughtTime: _edittedBook.boughtTime,
+                        bookName: value as String,
+                        userId: _edittedBook.userId,
+                        postType: _edittedBook.postType,
+                        boughtDate: _edittedBook.boughtDate,
                         description: _edittedBook.description,
-                        isWishlisted: _edittedBook.isWishlisted,
+                        wishlisted: _edittedBook.wishlisted,
                         price: _edittedBook.price,
                         bookCount: _edittedBook.bookCount,
+                        postedOn: _edittedBook.postedOn,
+                        postRating: _edittedBook.postRating,
                       );
                     }),
                 Row(
@@ -246,14 +250,16 @@ class _AddPostScreenState extends State<AddPostScreen> {
                               _edittedBook = Book(
                                 id: _edittedBook.id,
                                 author: value!.isEmpty ? 'Unknown' : value,
-                                title: _edittedBook.title,
-                                uId: _edittedBook.uId,
-                                selling: _edittedBook.selling,
-                                boughtTime: _edittedBook.boughtTime,
+                                bookName: _edittedBook.bookName,
+                                userId: _edittedBook.userId,
+                                postType: _edittedBook.postType,
+                                boughtDate: _edittedBook.boughtDate,
                                 description: _edittedBook.description,
-                                isWishlisted: _edittedBook.isWishlisted,
+                                wishlisted: _edittedBook.wishlisted,
                                 price: _edittedBook.price,
                                 bookCount: _edittedBook.bookCount,
+                                postedOn: _edittedBook.postedOn,
+                                postRating: _edittedBook.postRating,
                               );
                             }),
                       ),
@@ -288,7 +294,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 onPressed: () {
                                   _showPicker(context);
 
-                                  // _datePickercontroller.text = _boughtTime.toString();
+                                  // _datePickercontroller.text = _boughtDate.toString();
                                 },
                               ),
                             ),
@@ -309,19 +315,21 @@ class _AddPostScreenState extends State<AddPostScreen> {
                               _edittedBook = Book(
                                 id: _edittedBook.id,
                                 author: _edittedBook.author,
-                                title: _edittedBook.title,
-                                uId: _edittedBook.uId,
-                                selling: _edittedBook.selling,
-                                // boughtTime: (DateFormat("yyyy/MM/dd")
+                                bookName: _edittedBook.bookName,
+                                userId: _edittedBook.userId,
+                                postType: _edittedBook.postType,
+                                // boughtDate: (DateFormat("yyyy/MM/dd")
                                 //         .parse(value as String))
                                 //     .toNepaliDateTime(),
-                                boughtTime:
+                                boughtDate:
                                     NepaliDateTime.parse(value as String),
 
                                 description: _edittedBook.description,
-                                isWishlisted: _edittedBook.isWishlisted,
+                                wishlisted: _edittedBook.wishlisted,
                                 price: _edittedBook.price,
                                 bookCount: _edittedBook.bookCount,
+                                postedOn: _edittedBook.postedOn,
+                                postRating: _edittedBook.postRating,
                               );
                             }),
                       ),
@@ -360,14 +368,16 @@ class _AddPostScreenState extends State<AddPostScreen> {
                               _edittedBook = Book(
                                 id: _edittedBook.id,
                                 author: _edittedBook.author,
-                                title: _edittedBook.title,
-                                uId: _edittedBook.uId,
-                                selling: _edittedBook.selling,
-                                boughtTime: _edittedBook.boughtTime,
+                                bookName: _edittedBook.bookName,
+                                userId: _edittedBook.userId,
+                                postType: _edittedBook.postType,
+                                boughtDate: _edittedBook.boughtDate,
                                 description: _edittedBook.description,
-                                isWishlisted: _edittedBook.isWishlisted,
+                                wishlisted: _edittedBook.wishlisted,
                                 price: double.parse(value as String),
                                 bookCount: _edittedBook.bookCount,
+                                postedOn: _edittedBook.postedOn,
+                                postRating: _edittedBook.postRating,
                               );
                             }),
                       ),
@@ -402,14 +412,16 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             _edittedBook = Book(
                               id: _edittedBook.id,
                               author: _edittedBook.author,
-                              title: _edittedBook.title,
-                              uId: _edittedBook.uId,
-                              selling: isSelling,
-                              boughtTime: _edittedBook.boughtTime,
+                              bookName: _edittedBook.bookName,
+                              userId: _edittedBook.userId,
+                              postType: _edittedBook.postType,
+                              boughtDate: _edittedBook.boughtDate,
                               description: _edittedBook.description,
-                              isWishlisted: _edittedBook.isWishlisted,
+                              wishlisted: _edittedBook.wishlisted,
                               price: _edittedBook.price,
                               bookCount: int.parse(value as String),
+                              postedOn: _edittedBook.postedOn,
+                              postRating: _edittedBook.postRating,
                             );
                           },
                         ),
@@ -443,22 +455,24 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       _edittedBook = Book(
                         id: _edittedBook.id,
                         author: _edittedBook.author,
-                        title: _edittedBook.title,
-                        uId: _edittedBook.uId,
-                        selling: isSelling,
-                        boughtTime: _edittedBook.boughtTime,
+                        bookName: _edittedBook.bookName,
+                        userId: _edittedBook.userId,
+                        postType: _edittedBook.postType,
+                        boughtDate: _edittedBook.boughtDate,
                         description: value as String,
-                        isWishlisted: _edittedBook.isWishlisted,
+                        wishlisted: _edittedBook.wishlisted,
                         price: _edittedBook.price,
                         bookCount: _edittedBook.bookCount,
                         pictures: actualImages,
+                        postedOn: _edittedBook.postedOn,
+                        postRating: _edittedBook.postRating,
                       );
                     },
                   ),
                 ),
                 Container(
                   child: ToggleButtons(
-                    isSelected: sellingBuying,
+                    isSelected: postTypeBuying,
                     color: Colors.grey,
                     selectedColor: Colors.white,
                     fillColor: Theme.of(context).primaryColor,
@@ -467,7 +481,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       Padding(
                         padding: EdgeInsets.all(5),
                         child: Text(
-                          'Selling',
+                          'postType',
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.bold,
@@ -487,13 +501,13 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     ],
                     onPressed: (int index) {
                       setState(() {
-                        for (int i = 0; i < sellingBuying.length; i++) {
+                        for (int i = 0; i < postTypeBuying.length; i++) {
                           if (i == index)
-                            sellingBuying[i] = true;
+                            postTypeBuying[i] = true;
                           else
-                            sellingBuying[i] = false;
+                            postTypeBuying[i] = false;
                         }
-                        isSelling = sellingBuying[0];
+                        ispostType = postTypeBuying[0];
                       });
                     },
                   ),

@@ -3,9 +3,10 @@ import 'package:nepali_date_picker/nepali_date_picker.dart';
 // import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
+import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/providers/comment.dart';
-import 'package:share_learning/providers/user.dart';
+import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/widgets/app_drawer.dart';
 import 'package:share_learning/templates/widgets/image_gallery.dart';
 import 'package:share_learning/templates/widgets/post_comment.dart';
@@ -44,7 +45,7 @@ class SinglePostScreen extends StatelessWidget {
     // }
 
     Duration timeDifference =
-        NepaliDateTime.now().difference(selectedPost.boughtTime);
+        NepaliDateTime.now().difference(selectedPost.boughtDate);
     double duration =
         double.parse((timeDifference.inDays / 365).toStringAsFixed(1));
 
@@ -88,7 +89,7 @@ class SinglePostScreen extends StatelessWidget {
                   bottom: 5,
                 ),
                 child: Text(
-                  selectedPost.title,
+                  selectedPost.bookName,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20,
@@ -106,7 +107,7 @@ class SinglePostScreen extends StatelessWidget {
                       onTap: () => Navigator.of(context).pushNamed(
                         UserPostsScreen.routeName,
                         arguments: {
-                          'uId': selectedPost.uId,
+                          'uId': selectedPost.userId,
                         },
                       ),
                       child: Column(

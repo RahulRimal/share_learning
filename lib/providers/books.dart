@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
+import 'package:share_learning/data/book_api.dart';
+import 'package:share_learning/models/api_status.dart';
 import '../models/book.dart';
 import 'package:collection/collection.dart';
 
@@ -7,8 +9,8 @@ class Books with ChangeNotifier {
   // List<Book> _myBooks = [
   //   // Book(
   //   //   id: '0',
-  //   //   uId: '0',
-  //   //   title: 'C Programming Fundamentals II Edition',
+  //   //   userId: '0',
+  //   //   bookName: 'C Programming Fundamentals II Edition',
   //   //   description:
   //   //       'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
   //   //   author: 'Rahul Rimal',
@@ -27,8 +29,8 @@ class Books with ChangeNotifier {
   //   // ),
   //   // Book(
   //   //   id: '1',
-  //   //   uId: '0',
-  //   //   title: 'Data Structures and Algorithms Revised Edition',
+  //   //   userId: '0',
+  //   //   bookName: 'Data Structures and Algorithms Revised Edition',
   //   //   description:
   //   //       'Not a a a a a Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
   //   //   author: 'Rahul Rimal',
@@ -40,8 +42,8 @@ class Books with ChangeNotifier {
   //   // ),
   //   // Book(
   //   //   id: '2',
-  //   //   uId: '1',
-  //   //   title: 'Mathematics II',
+  //   //   userId: '1',
+  //   //   bookName: 'Mathematics II',
   //   //   description:
   //   //       'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
   //   //   author: 'Surendra Jha',
@@ -59,8 +61,8 @@ class Books with ChangeNotifier {
   //   // ),
   //   // Book(
   //   //   id: '3',
-  //   //   uId: '1',
-  //   //   title: 'Computer Networking',
+  //   //   userId: '1',
+  //   //   bookName: 'Computer Networking',
   //   //   description:
   //   //       'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
   //   //   author: 'Krishna Pd. Rimal',
@@ -79,16 +81,26 @@ class Books with ChangeNotifier {
   // ];
 
   List<Book> _myBooks = [];
+  bool _loading = false;
+  BookError? _bookError;
+
+  Books() {
+    getBooks();
+  }
+
+  bool get loading => _loading;
 
   List<Book> get books {
     return [..._myBooks];
   }
 
+  BookError? get bookError => _bookError;
+
   // factory Books.fromJson(Map<String, dynamic> parsedJson) {
   //   return Book(
-  //     id: parsedJson['id'].toString(),
-  //     uId: parsedJson['userId'].toString(),
-  //     title: parsedJson['bookName'].toString(),
+  //     id: parsedJson['id'].toString(),postm
+  //     userId: parsedJson['userId'].toString(),
+  //     bookName: parsedJson['bookName'].toString(),
   //     description: parsedJson['description'].toString(),
   //     author: parsedJson['author'].toString(),
   //     boughtTime: NepaliDateTime.parse(parsedJson['boughtTime'].toString()),
@@ -99,16 +111,47 @@ class Books with ChangeNotifier {
   //   );
   // }
 
+  setLoading(bool loading) async {
+    _loading = loading;
+    notifyListeners();
+  }
+
+  setBooks(List<Book> books) {
+    _myBooks = books;
+  }
+
+  setBookError(BookError bookError) {
+    _bookError = bookError;
+  }
+
+  getBooks() async {
+    setLoading(true);
+
+    var response = await BookApi.getBooks();
+
+    if (response is Success) {
+      setBooks(response.response as List<Book>);
+    }
+    if (response is Failure) {
+      BookError bookError = BookError(
+        code: response.code,
+        message: response.errorResponse,
+      );
+      setBookError(bookError);
+    }
+    setLoading(false);
+  }
+
   Book getBookById(String bookId) {
     return books.firstWhere((book) => book.id == bookId);
   }
 
-  List<Book> postsByUser(String uId) {
-    return books.where((book) => book.uId == uId).toList();
+  List<Book> postsByUser(String userId) {
+    return books.where((book) => book.userId == userId).toList();
   }
 
-  bool hasPostByUser(String uId) {
-    final userBook = books.firstWhereOrNull((post) => post.uId == uId);
+  bool hasPostByUser(String userId) {
+    final userBook = books.firstWhereOrNull((post) => post.userId == userId);
 
     if (userBook != null)
       return true;
@@ -119,15 +162,17 @@ class Books with ChangeNotifier {
   void addPost(Book receivedInfo) {
     Book newBook = Book(
       id: '4',
-      uId: receivedInfo.uId,
-      title: receivedInfo.title,
+      userId: receivedInfo.userId,
+      bookName: receivedInfo.bookName,
       author: receivedInfo.author,
-      boughtTime: receivedInfo.boughtTime,
+      boughtDate: receivedInfo.boughtDate,
       description: receivedInfo.description,
-      isWishlisted: receivedInfo.isWishlisted,
+      wishlisted: receivedInfo.wishlisted,
       price: receivedInfo.price,
       bookCount: receivedInfo.bookCount,
-      selling: receivedInfo.selling,
+      postType: receivedInfo.postType,
+      postedOn: receivedInfo.postedOn,
+      postRating: receivedInfo.postRating,
     );
 
     _myBooks.add(newBook);
@@ -138,8 +183,8 @@ class Books with ChangeNotifier {
     // for (Book book in receivedInfo) {
     //   Book newBook = Book(
     //     id: book.id,
-    //     uId: book.uId,
-    //     title: book.title,
+    //     userId: book.userId,
+    //     bookName: book.bookName,
     //     author: book.author,
     //     boughtTime: book.boughtTime,
     //     description: book.description,

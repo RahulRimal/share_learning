@@ -22,23 +22,26 @@ class _EditPostScreenState extends State<EditPostScreen> {
   final _booksCountFocusNode = FocusNode();
   final _descFocusNode = FocusNode();
 
-  List<bool> sellingBuying = [true, false];
+  List<bool> postTypeBuying = [true, false];
   var _edittedBook = Book(
     id: '',
     author: '',
-    title: '',
-    uId: '',
-    selling: false,
-    boughtTime: DateTime.now().toNepaliDateTime(),
+    bookName: '',
+    userId: '',
+    // postType: false,
+    postType: 'B',
+    boughtDate: DateTime.now().toNepaliDateTime(),
     description: '',
-    isWishlisted: false,
+    wishlisted: false,
     price: 0,
     bookCount: 1,
+    postedOn: DateTime.now().toNepaliDateTime(),
+    postRating: '',
   );
 
-  bool isSelling = true;
+  bool ispostType = true;
 
-  NepaliDateTime? _boughtTime;
+  NepaliDateTime? _boughtDate;
 
   final _datePickercontroller = TextEditingController(
     text: DateFormat('yyyy-MM-dd').format(NepaliDateTime.now()).toString(),
@@ -51,26 +54,26 @@ class _EditPostScreenState extends State<EditPostScreen> {
       _edittedBook =
           Provider.of<Books>(context, listen: false).getBookById(bookId);
 
-      isSelling = _edittedBook.selling;
-      sellingBuying = [isSelling, !isSelling];
+      ispostType = _edittedBook.postType == 'S' ? true : false;
+      postTypeBuying = [ispostType, !ispostType];
     } else
       print('Book Id Is Empty');
 
     _datePickercontroller.text =
-        DateFormat('yyyy-MM-dd').format(_edittedBook.boughtTime).toString();
+        DateFormat('yyyy-MM-dd').format(_edittedBook.boughtDate).toString();
 
     super.didChangeDependencies();
   }
 
   Future<void> _showPicker(BuildContext context) async {
-    _boughtTime = await picker.showAdaptiveDatePicker(
+    _boughtDate = await picker.showAdaptiveDatePicker(
       context: context,
-      initialDate: _edittedBook.boughtTime,
+      initialDate: _edittedBook.boughtDate,
       firstDate: picker.NepaliDateTime(2070),
       lastDate: picker.NepaliDateTime.now(),
     );
     _datePickercontroller.text =
-        DateFormat('yyyy-MM-dd').format(_boughtTime as DateTime).toString();
+        DateFormat('yyyy-MM-dd').format(_boughtDate as DateTime).toString();
   }
 
   bool _updatePost() {
@@ -130,10 +133,10 @@ class _EditPostScreenState extends State<EditPostScreen> {
             child: ListView(
               children: [
                 TextFormField(
-                    initialValue: _edittedBook.title,
+                    initialValue: _edittedBook.bookName,
                     cursorColor: Theme.of(context).primaryColor,
                     decoration: InputDecoration(
-                      labelText: 'Title',
+                      labelText: 'bookName',
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.redAccent,
@@ -146,7 +149,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please provide the title';
+                        return 'Please provide the bookName';
                       }
                       return null;
                     },
@@ -154,14 +157,16 @@ class _EditPostScreenState extends State<EditPostScreen> {
                       _edittedBook = Book(
                         id: _edittedBook.id,
                         author: _edittedBook.author,
-                        title: value as String,
-                        uId: _edittedBook.uId,
-                        selling: _edittedBook.selling,
-                        boughtTime: _edittedBook.boughtTime,
+                        bookName: value as String,
+                        userId: _edittedBook.userId,
+                        postType: _edittedBook.postType,
+                        boughtDate: _edittedBook.boughtDate,
                         description: _edittedBook.description,
-                        isWishlisted: _edittedBook.isWishlisted,
+                        wishlisted: _edittedBook.wishlisted,
                         price: _edittedBook.price,
                         bookCount: _edittedBook.bookCount,
+                        postedOn: _edittedBook.postedOn,
+                        postRating: _edittedBook.postRating,
                       );
                     }),
                 Row(
@@ -187,14 +192,16 @@ class _EditPostScreenState extends State<EditPostScreen> {
                               _edittedBook = Book(
                                 id: _edittedBook.id,
                                 author: value!.isEmpty ? 'Unknown' : value,
-                                title: _edittedBook.title,
-                                uId: _edittedBook.uId,
-                                selling: _edittedBook.selling,
-                                boughtTime: _edittedBook.boughtTime,
+                                bookName: _edittedBook.bookName,
+                                userId: _edittedBook.userId,
+                                postType: _edittedBook.postType,
+                                boughtDate: _edittedBook.boughtDate,
                                 description: _edittedBook.description,
-                                isWishlisted: _edittedBook.isWishlisted,
+                                wishlisted: _edittedBook.wishlisted,
                                 price: _edittedBook.price,
                                 bookCount: _edittedBook.bookCount,
+                                postedOn: _edittedBook.postedOn,
+                                postRating: _edittedBook.postRating,
                               );
                             }),
                       ),
@@ -203,7 +210,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
-                          // initialValue: _edittedBook.boughtTime.toIso8601String(),
+                          // initialValue: _edittedBook.boughtDate.toIso8601String(),
                           controller: _datePickercontroller,
                           focusNode: _dateFocusNode,
                           // initialValue:
@@ -230,7 +237,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                               onPressed: () {
                                 _showPicker(context);
 
-                                // _datePickercontroller.text = _boughtTime.toString();
+                                // _datePickercontroller.text = _boughtDate.toString();
                               },
                             ),
                           ),
@@ -251,18 +258,20 @@ class _EditPostScreenState extends State<EditPostScreen> {
                             _edittedBook = Book(
                               id: _edittedBook.id,
                               author: _edittedBook.author,
-                              title: _edittedBook.title,
-                              uId: _edittedBook.uId,
-                              selling: _edittedBook.selling,
-                              // boughtTime: (DateFormat("yyyy/MM/dd")
+                              bookName: _edittedBook.bookName,
+                              userId: _edittedBook.userId,
+                              postType: _edittedBook.postType,
+                              // boughtDate: (DateFormat("yyyy/MM/dd")
                               //         .parse(value as String))
                               //     .toNepaliDateTime(),
-                              boughtTime: NepaliDateTime.parse(value as String),
+                              boughtDate: NepaliDateTime.parse(value as String),
 
                               description: _edittedBook.description,
-                              isWishlisted: _edittedBook.isWishlisted,
+                              wishlisted: _edittedBook.wishlisted,
                               price: _edittedBook.price,
                               bookCount: _edittedBook.bookCount,
+                              postedOn: _edittedBook.postedOn,
+                              postRating: _edittedBook.postRating,
                             );
                           },
                         ),
@@ -303,14 +312,16 @@ class _EditPostScreenState extends State<EditPostScreen> {
                               _edittedBook = Book(
                                 id: _edittedBook.id,
                                 author: _edittedBook.author,
-                                title: _edittedBook.title,
-                                uId: _edittedBook.uId,
-                                selling: _edittedBook.selling,
-                                boughtTime: _edittedBook.boughtTime,
+                                bookName: _edittedBook.bookName,
+                                userId: _edittedBook.userId,
+                                postType: _edittedBook.postType,
+                                boughtDate: _edittedBook.boughtDate,
                                 description: _edittedBook.description,
-                                isWishlisted: _edittedBook.isWishlisted,
+                                wishlisted: _edittedBook.wishlisted,
                                 price: double.parse(value as String),
                                 bookCount: _edittedBook.bookCount,
+                                postedOn: _edittedBook.postedOn,
+                                postRating: _edittedBook.postRating,
                               );
                             }),
                       ),
@@ -345,14 +356,16 @@ class _EditPostScreenState extends State<EditPostScreen> {
                             _edittedBook = Book(
                               id: _edittedBook.id,
                               author: _edittedBook.author,
-                              title: _edittedBook.title,
-                              uId: _edittedBook.uId,
-                              selling: isSelling,
-                              boughtTime: _edittedBook.boughtTime,
+                              bookName: _edittedBook.bookName,
+                              userId: _edittedBook.userId,
+                              postType: _edittedBook.postType,
+                              boughtDate: _edittedBook.boughtDate,
                               description: _edittedBook.description,
-                              isWishlisted: _edittedBook.isWishlisted,
+                              wishlisted: _edittedBook.wishlisted,
                               price: _edittedBook.price,
                               bookCount: int.parse(value as String),
+                              postedOn: _edittedBook.postedOn,
+                              postRating: _edittedBook.postRating,
                             );
                           },
                         ),
@@ -387,20 +400,22 @@ class _EditPostScreenState extends State<EditPostScreen> {
                         _edittedBook = Book(
                           id: _edittedBook.id,
                           author: _edittedBook.author,
-                          title: _edittedBook.title,
-                          uId: _edittedBook.uId,
-                          selling: isSelling,
-                          boughtTime: _edittedBook.boughtTime,
+                          bookName: _edittedBook.bookName,
+                          userId: _edittedBook.userId,
+                          postType: _edittedBook.postType,
+                          boughtDate: _edittedBook.boughtDate,
                           description: value as String,
-                          isWishlisted: _edittedBook.isWishlisted,
+                          wishlisted: _edittedBook.wishlisted,
                           price: _edittedBook.price,
                           bookCount: _edittedBook.bookCount,
+                          postedOn: _edittedBook.postedOn,
+                          postRating: _edittedBook.postRating,
                         );
                       }),
                 ),
                 Container(
                   child: ToggleButtons(
-                    isSelected: sellingBuying,
+                    isSelected: postTypeBuying,
                     color: Colors.grey,
                     selectedColor: Colors.white,
                     fillColor: Theme.of(context).primaryColor,
@@ -409,7 +424,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                       Padding(
                         padding: EdgeInsets.all(5),
                         child: Text(
-                          'Selling',
+                          'postType',
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.bold,
@@ -429,13 +444,13 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     ],
                     onPressed: (int index) {
                       setState(() {
-                        for (int i = 0; i < sellingBuying.length; i++) {
+                        for (int i = 0; i < postTypeBuying.length; i++) {
                           if (i == index)
-                            sellingBuying[i] = true;
+                            postTypeBuying[i] = true;
                           else
-                            sellingBuying[i] = false;
+                            postTypeBuying[i] = false;
                         }
-                        isSelling = sellingBuying[0];
+                        ispostType = postTypeBuying[0];
                       });
                     },
                   ),
