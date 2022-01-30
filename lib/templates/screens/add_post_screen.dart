@@ -41,23 +41,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   // Future<void> _getPicture() async {
   //   print('getPic');
-
   //   final imageFile = await imagePicker.pickImage(source: ImageSource.gallery);
-
   //   if (imageFile == null) return;
-
   //   setState(() {
   //     _storedImage = imageFile;
   //   });
-
   //   final appDir = await syspaths.getApplicationDocumentsDirectory();
-
   //     String imageName= path.basename(imageFile.path);
-
   //     await imageFile.saveTo('${appDir.path}/${imageName}');
-
   //   // final imageName = path.basename(imageFile.path);
-
   //   // await imageFile.saveTo('${appDir.path}/$imageName');
   // }
 
@@ -79,7 +71,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
     // for (int i = 0; i < imageFiles.length; i++) {
     //   imagesName[i] = path.basename(imageFiles[i].path);
-
     //   await imageFiles[i].saveTo('${appDir.path}/${imagesName[i]}');
     // }
 
@@ -97,18 +88,13 @@ class _AddPostScreenState extends State<AddPostScreen> {
   //     maxWidth: 150,
   //   );
   //   if (imageFile == null) return;
-
   //   setState(() {
   //     _storedImage = imageFile;
   //   });
-
   //   final appDir = await syspaths.getApplicationDocumentsDirectory();
-
   //   final imageName = path.basename(imageFile.path);
-
   //   await imageFile.saveTo('${appDir.path}/$imageName');
   // }
-
   // List<Xfile>? images = await imagePicker.pickMultiImage();
 
   var _edittedBook = Book(

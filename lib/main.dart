@@ -9,6 +9,7 @@ import 'package:share_learning/templates/screens/add_post_screen.dart';
 import 'package:share_learning/templates/screens/onboarding_screen.dart';
 import 'package:share_learning/templates/screens/single_post_screen.dart';
 import 'package:share_learning/templates/screens/splash_screen.dart';
+import 'package:share_learning/templates/screens/login_screen.dart';
 import 'package:share_learning/templates/screens/user_posts_screen.dart';
 
 import 'templates/screens/edit_post_screen.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
           HomeScreen.routeName: (context) => HomeScreen(),
           SplashScreen.routeName: (context) => SplashScreen(),
           OnBoardingScreen.routeName: (context) => OnBoardingScreen(),
+          LoginScreen.routeName: (context) => LoginScreen(),
         },
       ),
     );

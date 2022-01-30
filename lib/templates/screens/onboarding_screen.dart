@@ -8,6 +8,7 @@ import 'package:share_learning/templates/managers/strings_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/managers/values_manager.dart';
 import 'package:share_learning/templates/screens/home_screen.dart';
+import 'package:share_learning/templates/screens/login_screen.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({Key? key}) : super(key: key);
@@ -67,6 +68,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
+                    // Navigator.pushReplacementNamed(
+                    //     context, LoginScreen.routeName);
                     Navigator.pushReplacementNamed(
                         context, HomeScreen.routeName);
                   },

@@ -71,7 +71,7 @@ class PostComment extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         backgroundImage: NetworkImage(
-                          commentUser.image,
+                          commentUser.image as String,
                         ),
                       ),
                       _shouldFlex(

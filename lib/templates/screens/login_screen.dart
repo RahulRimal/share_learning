@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:share_learning/models/user.dart';
 import 'package:share_learning/templates/widgets/beizer_container.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,6 +15,35 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _form = GlobalKey<FormState>();
+
+  FocusNode _passwordFocusNode = FocusNode();
+
+  // var _user = User(
+  //     id: '',
+  //     firstName: '',
+  //     lastName: '',
+  //     userName: '',
+  //     password: '',
+  //     image: '');
+
+  var usernameOrEmail;
+  var userpassword;
+
+  @override
+  void dispose() {
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _saveForm() {
+    final isValid = _form.currentState!.validate();
+
+    if (isValid) {
+      _form.currentState!.save();
+    }
+  }
+
   Widget _backButton() {
     return InkWell(
       onTap: () {
@@ -48,8 +79,13 @@ class _LoginScreenState extends State<LoginScreen> {
           SizedBox(
             height: 10,
           ),
-          TextField(
+          TextFormField(
             obscureText: isPassword,
+            focusNode: isPassword ? _passwordFocusNode : null,
+            textInputAction:
+                isPassword ? TextInputAction.done : TextInputAction.next,
+            keyboardType:
+                isPassword ? TextInputType.number : TextInputType.text,
             decoration: new InputDecoration(
               enabledBorder: const OutlineInputBorder(
                 borderSide: const BorderSide(color: Colors.black, width: 1.0),
@@ -57,6 +93,20 @@ class _LoginScreenState extends State<LoginScreen> {
               border: const OutlineInputBorder(),
               labelStyle: new TextStyle(color: Colors.green),
             ),
+            onFieldSubmitted: (_) {
+              if (!isPassword)
+                FocusScope.of(context).requestFocus(_passwordFocusNode);
+              else {
+                _saveForm();
+              }
+            },
+            onSaved: (value) {
+              if (isPassword) {
+                userpassword = value;
+              } else {
+                usernameOrEmail = value;
+              }
+            },
           ),
         ],
       ),
@@ -64,31 +114,34 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _submitButton() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.symmetric(vertical: 15),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(5)),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-              color: Colors.grey.shade200,
-              offset: Offset(2, 4),
-              blurRadius: 5,
-              spreadRadius: 2)
-        ],
-        gradient: LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-            // colors: [Color(0xfffbb448), Color(0xfff7892b)],
-            colors: [
-              Theme.of(context).primaryColor.withAlpha(200),
-              Theme.of(context).primaryColorDark.withAlpha(200),
-            ]),
-      ),
-      child: Text(
-        'Login',
-        style: TextStyle(fontSize: 20, color: Colors.white),
+    return GestureDetector(
+      onTap: _saveForm,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.symmetric(vertical: 15),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: Colors.grey.shade200,
+                offset: Offset(2, 4),
+                blurRadius: 5,
+                spreadRadius: 2)
+          ],
+          gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              // colors: [Color(0xfffbb448), Color(0xfff7892b)],
+              colors: [
+                Theme.of(context).primaryColor.withAlpha(200),
+                Theme.of(context).primaryColorDark.withAlpha(200),
+              ]),
+        ),
+        child: Text(
+          'Login',
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
       ),
     );
   }
@@ -238,6 +291,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _emailPasswordWidget() {
     return Column(
+      // return ListView(
       children: <Widget>[
         _entryField("Email id"),
         _entryField("Password", isPassword: true),
@@ -267,7 +321,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(height: height * .2),
                     _title(),
                     SizedBox(height: 50),
-                    _emailPasswordWidget(),
+                    // _emailPasswordWidget(),
+                    Form(
+                      key: _form,
+                      child: _emailPasswordWidget(),
+                    ),
                     SizedBox(height: 20),
                     _submitButton(),
                     Container(
