@@ -107,7 +107,7 @@ class Book {
         //     ? null
         //     : DateTime.parse(json["boughtDate"]),
         boughtDate: NepaliDateTime.parse(json["boughtDate"].toString()),
-        price: json["price"] == null ? null : json["price"],
+        price: json["price"] == null ? null : json["price"].toDouble(),
         // bookCount: json["bookCount"] == null ? null : int.parse(json["bookCount"]),
         bookCount: int.parse(json["bookCount"]),
         // wishlisted: json["wishlisted"] == null ? null : json["wishlisted"],

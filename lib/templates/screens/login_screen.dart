@@ -1,6 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/user.dart';
+import 'package:share_learning/providers/sessions.dart';
+import 'package:share_learning/templates/managers/color_manager.dart';
+import 'package:share_learning/templates/screens/home_screen.dart';
+import 'package:share_learning/templates/screens/user_profile_screen.dart';
 import 'package:share_learning/templates/widgets/beizer_container.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -29,6 +35,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   var usernameOrEmail;
   var userpassword;
+  bool visible = false;
+  var showSpinner = false;
 
   @override
   void dispose() {
@@ -36,11 +44,26 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _saveForm() {
+  void _saveForm() async {
     final isValid = _form.currentState!.validate();
 
     if (isValid) {
       _form.currentState!.save();
+      SessionProvider user = new SessionProvider();
+      if (await user.createSession(usernameOrEmail, userpassword) == true) {
+        setState(() {
+          showSpinner = false;
+        });
+
+        Navigator.of(context)
+            .pushReplacementNamed(HomeScreen.routeName, arguments: {
+          'authSession': user.session,
+        });
+      } else {
+        setState(() {
+          showSpinner = true;
+        });
+      }
     }
   }
 
@@ -80,13 +103,24 @@ class _LoginScreenState extends State<LoginScreen> {
             height: 10,
           ),
           TextFormField(
-            obscureText: isPassword,
+            // obscureText: isPassword,
+            obscureText: isPassword ? !visible : false,
             focusNode: isPassword ? _passwordFocusNode : null,
             textInputAction:
                 isPassword ? TextInputAction.done : TextInputAction.next,
             keyboardType:
                 isPassword ? TextInputType.number : TextInputType.text,
             decoration: new InputDecoration(
+              suffix: isPassword
+                  ? IconButton(
+                      icon: Icon(
+                          visible ? Icons.visibility : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          visible = !visible;
+                        });
+                      })
+                  : null,
               enabledBorder: const OutlineInputBorder(
                 borderSide: const BorderSide(color: Colors.black, width: 1.0),
               ),
@@ -320,13 +354,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: <Widget>[
                     SizedBox(height: height * .2),
                     _title(),
-                    SizedBox(height: 50),
                     // _emailPasswordWidget(),
                     Form(
                       key: _form,
                       child: _emailPasswordWidget(),
                     ),
                     SizedBox(height: 20),
+                    showSpinner
+                        ? Padding(
+                            padding: const EdgeInsets.only(bottom: 30.0),
+                            child: CircularProgressIndicator(
+                              color: ColorManager.primary,
+                            ),
+                          )
+                        // : SizedBox(height: 1),
+                        : Container(),
                     _submitButton(),
                     Container(
                       padding: EdgeInsets.symmetric(vertical: 10),

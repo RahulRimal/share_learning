@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:share_learning/data/book_api.dart';
 import 'package:share_learning/models/api_status.dart';
+import 'package:share_learning/models/session.dart';
 import '../models/book.dart';
 import 'package:collection/collection.dart';
 
@@ -84,9 +85,13 @@ class Books with ChangeNotifier {
   bool _loading = false;
   BookError? _bookError;
 
-  Books() {
-    getBooks();
-  }
+  // final Session authenticatedSession;
+
+  // Books(this.authenticatedSession);
+
+  // Books() {
+  //   getBooks();
+  // }
 
   bool get loading => _loading;
 
@@ -113,7 +118,7 @@ class Books with ChangeNotifier {
 
   setLoading(bool loading) async {
     _loading = loading;
-    notifyListeners();
+    // notifyListeners();
   }
 
   setBooks(List<Book> books) {
@@ -124,10 +129,10 @@ class Books with ChangeNotifier {
     _bookError = bookError;
   }
 
-  getBooks() async {
+  getBooks(String uId) async {
     setLoading(true);
 
-    var response = await BookApi.getBooks();
+    var response = await BookApi.getBooks(uId);
 
     if (response is Success) {
       setBooks(response.response as List<Book>);

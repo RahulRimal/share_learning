@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/screens/home_screen.dart';
+import 'package:share_learning/templates/screens/login_screen.dart';
 import 'package:share_learning/templates/screens/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -23,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   _goNext() {
     Navigator.pushReplacementNamed(context, OnBoardingScreen.routeName);
-    // Navigator.pushReplacementNamed(context, Ob);
+    // Navigator.pushReplacementNamed(context, LoginScreen.routeName);
   }
 
   @override

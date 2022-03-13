@@ -68,10 +68,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
-                    // Navigator.pushReplacementNamed(
-                    //     context, LoginScreen.routeName);
                     Navigator.pushReplacementNamed(
-                        context, HomeScreen.routeName);
+                        context, LoginScreen.routeName);
+                    // Navigator.pushReplacementNamed(
+                    //     context, HomeScreen.routeName);
                   },
                   child: Text(
                     AppStrings.skip,
