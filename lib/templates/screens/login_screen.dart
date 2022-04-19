@@ -1,11 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/sessions.dart';
+import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/screens/home_screen.dart';
+import 'package:share_learning/templates/screens/signup_screen.dart';
 import 'package:share_learning/templates/screens/user_profile_screen.dart';
 import 'package:share_learning/templates/widgets/beizer_container.dart';
 
@@ -49,15 +52,29 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (isValid) {
       _form.currentState!.save();
-      SessionProvider user = new SessionProvider();
-      if (await user.createSession(usernameOrEmail, userpassword) == true) {
+      // User logginedUser = new User(
+      //     id: 'tempUser',
+      //     firstName: 'temp',
+      //     lastName: 'Name',
+      //     username: 'tempN',
+      //     email: 'temp@mail.com',
+      //     description: 'This is a temp user',
+      //     userClass: 'tempClass',
+      //     followers: '',
+      //     createdDate: NepaliDateTime.now());
+      // Users loggedInUser = Users();
+      SessionProvider userSession = new SessionProvider();
+      if (await userSession.createSession(usernameOrEmail, userpassword) ==
+          true) {
         setState(() {
-          showSpinner = false;
+          if (mounted) {
+            showSpinner = false;
+          }
         });
 
         Navigator.of(context)
             .pushReplacementNamed(HomeScreen.routeName, arguments: {
-          'authSession': user.session,
+          'authSession': userSession.session,
         });
       } else {
         setState(() {
@@ -269,9 +286,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _createAccountLabel() {
     return InkWell(
+      splashColor: ColorManager.primary,
       onTap: () {
         // Navigator.push(
         //     context, MaterialPageRoute(builder: (context) => SignUpPage()));
+        Navigator.pushNamed(context, SignUpScreen.routeName);
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20),

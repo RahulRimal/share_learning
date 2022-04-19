@@ -58,7 +58,8 @@ class SessionApi {
       }
       return Failure(
           code: ApiStatusCode.invalidResponse,
-          errorResponse: ApiStrings.invalidResponseString);
+          // errorResponse: ApiStrings.invalidResponseString
+          errorResponse: response.body);
     } on HttpException {
       return Failure(
           code: ApiStatusCode.httpError,

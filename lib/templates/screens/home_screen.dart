@@ -8,145 +8,38 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/models/session.dart';
+import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/books.dart';
+import 'package:share_learning/providers/users.dart';
+import 'package:share_learning/templates/managers/color_manager.dart';
+import 'package:share_learning/templates/managers/font_manager.dart';
+import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/widgets/app_drawer.dart';
 import 'package:share_learning/templates/widgets/post.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   // AsyncMemoizer memoizer = AsyncMemoizer();
-  // Books books = new Books();
-  // List<Book> booksToShow = [];
 
-  // Future<List<Book>?> getUserPosts(ctx) async {
-  //   Future<dynamic> tempData = this.memoizer.runOnce(() async {
-  //     try {
-  //       // const url = 'http://localhost/ProjectShareBooks/';
-  //       const url = 'http://localhost/apiforsharelearn/posts/u/1';
-  //       final response = await http.get(Uri.parse(url), headers: {
-  //         HttpHeaders.authorizationHeader:
-  //             'Mzk0YTM2ZWZhZGQ1ZjY2MDQwZmMxMWZkNGE4MzRjMmM2M2FhMTNhY2M1ZDhlYTEyMzEzNjM0MzIzOTM1MzAzMjM1MzA='
-  //       }
-  //           // headers: {
-  //           //     "Authorization":
-  //           //         "MmJkMjU5MTM5NmNmNTkyNTdmMGEzY2EzOTExY2U2ZWE3YTU0ZDk3NDAxM2ZiMzViMzEzNjMzMzUzNzM3MzEzOTM1MzY=",
-  //           //     "Accept": "application/json",
-  //           //     "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-  //           // "Access-Control-Allow-Methods": "POST, GET, OPTIONS"
-  //           //   }
-  //           );
-  //       final responseData = json.decode(response.body);
-  //       final responsePosts = responseData['data']['posts'];
-  //       print(responseData);
-  //       List<dynamic> receivedData =
-  //           responsePosts.map((val) => Book.fromJson(val)).toList();
-  //       List<Book> newBooks = [];
-  //       for (var i = 0; i < receivedData.length; i++) {
-  //         newBooks.add(receivedData[i]);
-  //         booksToShow.add(receivedData[i]);
-  //       }
-  //       Provider.of<Books>(ctx, listen: false).addPosts(newBooks);
-  //       return newBooks;
-  //     } catch (e) {
-  //       print(e);
-  //     }
-  //   });
-  //   return booksToShow;
-  // }
+  User user = new User(
+      id: "0",
+      firstName: 'firstName',
+      lastName: 'lastName',
+      username: 'username',
+      email: 'email',
+      description: 'description',
+      userClass: 'userClass',
+      followers: 'followers',
+      createdDate: DateTime.now());
 
-  _homeUI(Books books, Session session, List<Book> booksToRender) async {
-    // await books.getBooks(session.accessToken);
-    // if (_isLoading) {
-    //   return Center(
-    //     child: CircularProgressIndicator(),
-    //   );
-    // }
-
-    if (books.loading) {
-      return Container(
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
-    if (books.bookError != null) {
-      return Container(
-        child: Center(
-          child: Text(
-            books.bookError!.message.toString(),
-          ),
-          // ),
-        ),
-      );
-    }
-    // books.getBooks(session.accessToken);
-
-    // FutureBuilder(
-    //   future: books.getBooks(session.accessToken),
-    //   builder: (ctx, snapshot) {
-    //     if (snapshot.connectionState == ConnectionState.waiting) {
-    //       return Center(
-    //         child: CircularProgressIndicator(),
-    //       );
-    //     } else {
-    //       if (snapshot.hasError) {
-    //         return Center(
-    //           child: Text('Error'),
-    //         );
-    //       } else {
-    //         return Consumer<Books>(
-    //           builder: (ctx, books, child) {
-    //             return ListView.builder(
-    //               itemCount: books.books.length,
-    //               itemBuilder: (ctx, index) {
-    //                 return Post(
-    //                   id: books.books[index].id,
-    //                   title: books.books[index].bookName,
-    //                   description: books.books[index].description,
-    //                   author: books.books[index].author,
-    //                   boughtTime: books.books[index].boughtDate,
-    //                   price: books.books[index].price,
-    //                   selling:
-    //                       books.books[index].postType == 'S' ? true : false,
-    //                   bookCount: books.books[index].bookCount,
-    //                 );
-    //               },
-    //             );
-    //           },
-    //         );
-    //       }
-    //     }
-    //   },
-    // );
-
-    // return ListView.builder(
-    //   itemCount: books.books.length,
-    //   itemBuilder: (context, index) => Post(
-    //     id: books.books[index].id,
-    //     title: books.books[index].bookName,
-    //     description: books.books[index].description,
-    //     author: books.books[index].author,
-    //     boughtTime: books.books[index].boughtDate,
-    //     price: books.books[index].price,
-    //     selling: books.books[index].postType == 'S' ? true : false,
-    //     bookCount: books.books[index].bookCount,
-    //   ),
-    // );
-
-    return ListView.builder(
-      itemCount: booksToRender.length,
-      itemBuilder: (context, index) => Post(
-        id: booksToRender[index].id,
-        title: booksToRender[index].bookName,
-        description: booksToRender[index].description,
-        author: booksToRender[index].author,
-        boughtTime: booksToRender[index].boughtDate,
-        price: booksToRender[index].price,
-        selling: booksToRender[index].postType == 'S' ? true : false,
-        bookCount: booksToRender[index].bookCount,
-      ),
-    );
+  _setUserValue(User user) {
+    user = user;
   }
 
   @override
@@ -156,16 +49,24 @@ class HomeScreen extends StatelessWidget {
     final args = ModalRoute.of(context)!.settings.arguments as Map;
     final Session authenticatedSession = args['authSession'] as Session;
 
+    Users users = context.watch<Users>();
     Books books = context.watch<Books>();
+
+    users.getUserByToken(authenticatedSession.accessToken);
 
     Provider.of<Books>(context, listen: false)
         .getBooks(authenticatedSession.userId);
+
     List<Book> booksToRender = Provider.of<Books>(context).books;
 
-    // Future.delayed(Duration(seconds: 5), () {
-    //   books.getBooks(authenticatedSession.accessToken);
-    // });
-    // books.getBooks(authenticatedSession.accessToken);
+    // User user;
+
+    Future.delayed(Duration(seconds: 1), () {
+      user = users.user;
+      _setUserValue(user);
+    });
+
+    // User user = users.user;
 
     return Scaffold(
       drawer: AppDrawer(),
@@ -180,66 +81,16 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      // body: ListView.builder(
-      //   itemCount: Books().books.length,
-      //   itemBuilder: (context, index) => Post(
-      //     id: Books().books[index].id,
-      //     title: Books().books[index].title,
-      //     description: Books().books[index].description,
-      //     author: Books().books[index].author,
-      //     boughtTime: Books().books[index].boughtTime,
-      //     price: Books().books[index].price,
-      //     selling: Books().books[index].selling,
-      //   ),
-      // ),
-      // body: ListView.builder(
-      //   itemCount: booksToRender.length,
-      //   itemBuilder: (context, index) => Post(
-      //     id: booksToRender[index].id,
-      //     title: booksToRender[index].title,
-      //     description: booksToRender[index].description,
-      //     author: booksToRender[index].author,
-      //     boughtTime: booksToRender[index].boughtTime,
-      //     price: booksToRender[index].price,
-      //     bookCount: booksToRender[index].bookCount,
-      //     selling: booksToRender[index].selling,
-      //   ),
-      // ),
-
-      // body: FutureBuilder(
-      //   future: getUserPosts(context),
-      //   builder: (context, snapshot) {
-      //     if (snapshot.hasData) {
-      //       return ListView.builder(
-      //         itemCount: booksToRender.length,
-      //         itemBuilder: (context, index) => Post(
-      //           id: booksToRender[index].id,
-      //           title: booksToRender[index].bookName,
-      //           description: booksToRender[index].description,
-      //           author: booksToRender[index].author,
-      //           boughtTime: booksToRender[index].boughtDate,
-      //           price: booksToRender[index].price,
-      //           bookCount: booksToRender[index].bookCount,
-      //           selling: booksToRender[index].postType == 'S' ? true : false,
-      //         ),
-      //       );
-      //     } else {
-      //       return Center(
-      //         child: CircularProgressIndicator(),
-      //       );
-      //     }
-      //   },
-      // ),
-
       body: Container(
-        // child: _homeUI(books, authenticatedSession, booksToRender),
         child: Container(
           child: FutureBuilder(
             future: books.getBooks(authenticatedSession.userId),
             builder: (ctx, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                    color: ColorManager.primary,
+                  ),
                 );
               } else {
                 if (snapshot.hasError) {
@@ -249,74 +100,38 @@ class HomeScreen extends StatelessWidget {
                 } else {
                   return Consumer<Books>(
                     builder: (ctx, books, child) {
-                      return ListView.builder(
-                        itemCount: books.books.length,
-                        itemBuilder: (ctx, index) {
-                          return Post(
-                            id: books.books[index].id,
-                            title: books.books[index].bookName,
-                            description: books.books[index].description,
-                            author: books.books[index].author,
-                            boughtTime: books.books[index].boughtDate,
-                            price: books.books[index].price,
-                            selling: books.books[index].postType == 'S'
-                                ? true
-                                : false,
-                            bookCount: books.books[index].bookCount,
-                          );
-                        },
-                      );
+                      return books.books.length <= 0
+                          ? Center(
+                              child: Text(
+                                'No books found',
+                                style: getBoldStyle(
+                                    fontSize: FontSize.s20,
+                                    color: ColorManager.primary),
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: books.books.length,
+                              itemBuilder: (ctx, index) {
+                                return Post(
+                                  id: books.books[index].id,
+                                  title: books.books[index].bookName,
+                                  description: books.books[index].description,
+                                  author: books.books[index].author,
+                                  boughtTime: books.books[index].boughtDate,
+                                  price: books.books[index].price,
+                                  selling: books.books[index].postType == 'S'
+                                      ? true
+                                      : false,
+                                  bookCount: books.books[index].bookCount,
+                                );
+                              },
+                            );
                     },
                   );
                 }
               }
             },
           ),
-
-          //   // child: FutureProvider(
-          //   //   initialData: [
-          //   //     Center(
-          //   //       child: Container(
-          //   //         child: Text('Hellll'),
-          //   //       ),
-          //   //     ),
-          //   //   ],
-          //   //   create: (context) =>
-          //   //       books.getBooks(authenticatedSession.accessToken),
-          //   //   child: Consumer<Books>(builder: (context, books, child) {
-          //   //     if (books.loading) {
-          //   //       return Center(
-          //   //         child: CircularProgressIndicator(),
-          //   //       );
-          //   //     } else {
-          //   //       if (books.bookError != null) {
-          //   //         return Center(
-          //   //           child: Text(
-          //   //             books.bookError!.message.toString(),
-          //   //           ),
-          //   //         );
-          //   //       } else {
-          //   //         return ListView.builder(
-          //   //           itemCount: books.books.length,
-          //   //           itemBuilder: (context, index) {
-          //   //             return Post(
-          //   //               id: books.books[index].id,
-          //   //               title: books.books[index].bookName,
-          //   //               description: books.books[index].description,
-          //   //               author: books.books[index].author,
-          //   //               boughtTime: books.books[index].boughtDate,
-          //   //               price: books.books[index].price,
-          //   //               selling:
-          //   //                   books.books[index].postType == 'S' ? true : false,
-          //   //               bookCount: books.books[index].bookCount,
-          //   //             );
-          //   //           },
-          //   //         );
-          //   //       }
-          //   //     }
-          //   //   }),
-          //   // ),
-          // ),
         ),
       ),
     );

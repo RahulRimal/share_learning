@@ -35,6 +35,7 @@ class SessionProvider with ChangeNotifier {
     if (response is Success) {
       // setSession(response.response as Session);
       setSession(response.response as Session);
+
       setLoading(false);
       return true;
     }

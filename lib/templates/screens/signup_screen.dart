@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:share_learning/providers/sessions.dart';
+import 'package:share_learning/templates/screens/home_screen.dart';
+import 'package:share_learning/templates/screens/login_screen.dart';
 import 'package:share_learning/templates/widgets/beizer_container.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -13,6 +16,50 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final _form = GlobalKey<FormState>();
+  FocusNode _passwordFocusNode = FocusNode();
+  var usernameOrEmail;
+  var userpassword;
+  bool visible = false;
+  var showSpinner = false;
+
+  void _saveForm() async {
+    final isValid = _form.currentState!.validate();
+
+    if (isValid) {
+      _form.currentState!.save();
+      // User logginedUser = new User(
+      //     id: 'tempUser',
+      //     firstName: 'temp',
+      //     lastName: 'Name',
+      //     username: 'tempN',
+      //     email: 'temp@mail.com',
+      //     description: 'This is a temp user',
+      //     userClass: 'tempClass',
+      //     followers: '',
+      //     createdDate: NepaliDateTime.now());
+      // Users loggedInUser = Users();
+      SessionProvider userSession = new SessionProvider();
+      if (await userSession.createSession(usernameOrEmail, userpassword) ==
+          true) {
+        setState(() {
+          if (mounted) {
+            showSpinner = false;
+          }
+        });
+
+        Navigator.of(context)
+            .pushReplacementNamed(HomeScreen.routeName, arguments: {
+          'authSession': userSession.session,
+        });
+      } else {
+        setState(() {
+          showSpinner = true;
+        });
+      }
+    }
+  }
+
   Widget _backButton() {
     return InkWell(
       onTap: () {
@@ -34,8 +81,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  // Widget _entryField(String title, {bool isPassword = false}) {
+  //   return Container(
+  //     margin: EdgeInsets.symmetric(vertical: 10),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: <Widget>[
+  //         Text(
+  //           title,
+  //           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+  //         ),
+  //         SizedBox(
+  //           height: 10,
+  //         ),
+  //         TextField(
+  //           obscureText: isPassword,
+  //           decoration: new InputDecoration(
+  //             enabledBorder: const OutlineInputBorder(
+  //               borderSide: const BorderSide(color: Colors.black, width: 1.0),
+  //             ),
+  //             border: const OutlineInputBorder(),
+  //             labelStyle: new TextStyle(color: Colors.green),
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
+
   Widget _entryField(String title, {bool isPassword = false}) {
     return Container(
+      width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,16 +123,46 @@ class _SignUpScreenState extends State<SignUpScreen> {
           SizedBox(
             height: 10,
           ),
-          TextField(
-            obscureText: isPassword,
+          TextFormField(
+            // obscureText: isPassword,
+            obscureText: isPassword ? !visible : false,
+            focusNode: isPassword ? _passwordFocusNode : null,
+            textInputAction:
+                isPassword ? TextInputAction.done : TextInputAction.next,
+            keyboardType:
+                isPassword ? TextInputType.number : TextInputType.text,
             decoration: new InputDecoration(
+              suffix: isPassword
+                  ? IconButton(
+                      icon: Icon(
+                          visible ? Icons.visibility : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          visible = !visible;
+                        });
+                      })
+                  : null,
               enabledBorder: const OutlineInputBorder(
                 borderSide: const BorderSide(color: Colors.black, width: 1.0),
               ),
               border: const OutlineInputBorder(),
               labelStyle: new TextStyle(color: Colors.green),
             ),
-          )
+            onFieldSubmitted: (_) {
+              if (!isPassword)
+                FocusScope.of(context).requestFocus(_passwordFocusNode);
+              else {
+                _saveForm();
+              }
+            },
+            onSaved: (value) {
+              if (isPassword) {
+                userpassword = value;
+              } else {
+                usernameOrEmail = value;
+              }
+            },
+          ),
         ],
       ),
     );
@@ -96,29 +202,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // Navigator.push(
         //     context, MaterialPageRoute(builder: (context) => LoginPage()));
       },
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 20),
-        padding: EdgeInsets.all(15),
-        alignment: Alignment.bottomCenter,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Already have an account ?',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              'Login',
-              style: TextStyle(
-                  // color: Color(0xfff79c4f),
-                  color: Theme.of(context).primaryColor,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold),
-            ),
-          ],
+      child: GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, LoginScreen.routeName);
+        },
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 20),
+          padding: EdgeInsets.all(15),
+          alignment: Alignment.bottomCenter,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Already have an account ?',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                'Login',
+                style: TextStyle(
+                    // color: Color(0xfff79c4f),
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
         ),
       ),
     );

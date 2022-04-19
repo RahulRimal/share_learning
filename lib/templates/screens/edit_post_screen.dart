@@ -424,7 +424,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                       Padding(
                         padding: EdgeInsets.all(5),
                         child: Text(
-                          'postType',
+                          'Selling',
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.bold,

@@ -22,8 +22,10 @@
 
 import 'dart:convert';
 
-List<User> userFromJson(String str) =>
-    List<User>.from(json.decode(str).map((x) => User.fromJson(x)));
+// List<User> userFromJson(String str) =>
+//     List<User>.from(json.decode(str).map((x) => User.fromJson(x)));
+
+User userFromJson(String str) => User.fromJson(json.decode(str));
 
 String userToJson(List<User> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -78,4 +80,11 @@ class User {
         "createdDate":
             createdDate == null ? null : createdDate.toIso8601String(),
       };
+}
+
+class UserError {
+  int code;
+  Object message;
+
+  UserError({required this.code, required this.message});
 }

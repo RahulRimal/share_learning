@@ -207,6 +207,8 @@ class Books with ChangeNotifier {
 
   void updatePost(String id, Book edittedPost) {
     final postIndex = _myBooks.indexWhere((element) => element.id == id);
+    print(edittedPost.bookName);
+    print(edittedPost.description);
 
     _myBooks[postIndex] = edittedPost;
 
