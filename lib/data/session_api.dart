@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:share_learning/models/api_status.dart';
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/models/session.dart';
+import 'package:share_learning/templates/managers/api_values_manager.dart';
 import 'package:share_learning/templates/managers/strings_manager.dart';
 import 'package:share_learning/templates/managers/values_manager.dart';
 
@@ -16,7 +17,7 @@ class SessionApi {
         "password": password
       };
       // var url = Uri.parse('http://localhost/apiforsharelearn/sessions');
-      var url = Uri.parse('http://10.0.2.2/apiforsharelearn/sessions');
+      var url = Uri.parse(RemoteManager.BASE_URI + '/sessions');
 
       // Map<String, String> postHeaders = {
       // "Content-Type": "application/json; charset=utf-8",

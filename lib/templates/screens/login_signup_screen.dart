@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/screens/login_screen.dart';
 import 'package:share_learning/templates/screens/signup_screen.dart';
 
@@ -105,7 +106,8 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         TextSpan(
           text: 'Books',
           style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
+              // color: Theme.of(context).colorScheme.secondary,
+              color: ColorManager.black,
               fontWeight: FontWeight.w700,
               fontSize: 30),
         ),
@@ -135,7 +137,8 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   // colors: [Color(0xfffbb448), Color(0xffe46b10)])),
                   colors: [
                     Theme.of(context).primaryColor,
-                    Theme.of(context).colorScheme.secondary,
+                    // Theme.of(context).colorScheme.secondary,
+                    ColorManager.secondary,
                   ])),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

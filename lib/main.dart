@@ -54,9 +54,9 @@ class MyApp extends StatelessWidget {
         // home: SplashScreen(),
         // home: OnBoardingScreen(),
         // home: AddPostScreen(),
-        // home: LoginSignupScreen(),
+        home: LoginSignupScreen(),
         // home: LoginScreen(),
-        home: SignUpScreen(),
+        // home: SignUpScreen(),
         routes: {
           SinglePostScreen.routeName: (context) => SinglePostScreen(),
           UserPostsScreen.routeName: (context) => UserPostsScreen(),

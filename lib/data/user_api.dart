@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:share_learning/models/api_status.dart';
 import 'package:share_learning/models/user.dart';
+import 'package:share_learning/templates/managers/api_values_manager.dart';
 import 'package:share_learning/templates/managers/strings_manager.dart';
 import 'package:share_learning/templates/managers/values_manager.dart';
 
@@ -77,7 +78,8 @@ class UserApi {
   static Future<Object> getUserFromToken(String accessToken) async {
     try {
       // var url = Uri.parse('http://localhost/apiforsharelearn/users/me');
-      var url = Uri.parse('http://10.0.2.2/apiforsharelearn/users');
+      // var url = Uri.parse('http://10.0.2.2/apiforsharelearn/users');
+      var url = Uri.parse(RemoteManager.BASE_URI + '/users');
 
       var response = await http.get(url, headers: {
         HttpHeaders.authorizationHeader: accessToken,
