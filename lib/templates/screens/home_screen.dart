@@ -49,10 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
     final args = ModalRoute.of(context)!.settings.arguments as Map;
     final Session authenticatedSession = args['authSession'] as Session;
 
-    Users users = context.watch<Users>();
+    // Users users = context.watch<Users>();
     Books books = context.watch<Books>();
 
-    users.getUserByToken(authenticatedSession.accessToken);
+    // User _user = users.getUserByToken(authenticatedSession.accessToken);
 
     Provider.of<Books>(context, listen: false)
         .getBooks(authenticatedSession.userId);
@@ -61,15 +61,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // User user;
 
-    Future.delayed(Duration(seconds: 1), () {
-      user = users.user;
-      _setUserValue(user);
-    });
+    // Future.delayed(Duration(seconds: 1), () {
+    //   user = users.user;
+    //   _setUserValue(user);
+    // });
 
     // User user = users.user;
 
     return Scaffold(
-      drawer: AppDrawer(),
       appBar: AppBar(
         actions: [
           Padding(
@@ -113,6 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               itemCount: books.books.length,
                               itemBuilder: (ctx, index) {
                                 return Post(
+                                  loggedInUserSession: authenticatedSession,
                                   id: books.books[index].id,
                                   title: books.books[index].bookName,
                                   description: books.books[index].description,
@@ -134,6 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+      drawer: AppDrawer(authenticatedSession.accessToken),
     );
   }
 }

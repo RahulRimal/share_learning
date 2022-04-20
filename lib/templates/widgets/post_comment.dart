@@ -71,17 +71,22 @@ class PostComment extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         backgroundImage: NetworkImage(
-                          commentUser.image as String,
+                          // commentUser.image as String,
+                          commentUser.image != null
+                              ? commentUser.image as String
+                              : 'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
                         ),
                       ),
                       _shouldFlex(
-                              '${commentUser.firstName} ${commentUser.lastName}')
+                              // '${commentUser.firstName} ${commentUser.lastName}')
+                              '${commentUser.firstName}')
                           ? Flexible(
                               child: Container(
                                 width: 100,
                                 padding: EdgeInsets.all(10),
                                 child: Text(
-                                  '${commentUser.firstName} ${commentUser.lastName}',
+                                  // '${commentUser.firstName} ${commentUser.lastName}',
+                                  '${commentUser.firstName}',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.black,

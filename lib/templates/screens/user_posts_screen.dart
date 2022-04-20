@@ -13,11 +13,12 @@ class UserPostsScreen extends StatelessWidget {
     final args = ModalRoute.of(context)!.settings.arguments as Map;
 
     final String userId = args['uId'];
+    var loggedInUserSession = args['loggedInUserSession'];
 
     List<Book> _allPosts = Provider.of<Books>(context).postsByUser(userId);
 
     return Scaffold(
-      drawer: AppDrawer(),
+      drawer: AppDrawer(loggedInUserSession),
       appBar: AppBar(
         actions: [
           Padding(
@@ -33,6 +34,7 @@ class UserPostsScreen extends StatelessWidget {
           ? ListView.builder(
               itemCount: _allPosts.length,
               itemBuilder: (context, index) => Post(
+                loggedInUserSession: loggedInUserSession,
                 id: _allPosts[index].id,
                 title: _allPosts[index].bookName,
                 description: _allPosts[index].description,

@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:share_learning/data/user_api.dart';
 import 'package:share_learning/models/api_status.dart';
+import 'package:share_learning/models/session.dart';
 import 'package:share_learning/models/user.dart';
+import 'package:share_learning/providers/sessions.dart';
 
 class Users with ChangeNotifier {
+  Users(this._session);
   // List<User> _users = [
   //   User(
   //     id: '0',
@@ -36,6 +39,8 @@ class Users with ChangeNotifier {
 
   List<User> _users = [];
 
+  final Session _session;
+
   late User _user;
   // User? _user;
   bool _loading = false;
@@ -45,6 +50,10 @@ class Users with ChangeNotifier {
 
   User get user {
     return _user;
+  }
+
+  Session get session {
+    return _session;
   }
 
   UserError? get userError {
@@ -57,17 +66,12 @@ class Users with ChangeNotifier {
 
   void setLoading(bool loading) {
     _loading = loading;
-    //notifyListeners();
+    // notifyListeners();
   }
 
   void setUserError(UserError? userError) {
     _userError = userError;
   }
-
-  // bool registerUser()
-  // {
-
-  // }
 
   getUserByToken(String accessToken) async {
     setLoading(true);
@@ -92,7 +96,7 @@ class Users with ChangeNotifier {
     return [..._users];
   }
 
-  User getUser(String uId) {
+  User getUserById(String uId) {
     return users.firstWhere((user) => user.id == uId);
   }
 }

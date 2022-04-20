@@ -3,10 +3,12 @@ import 'package:nepali_date_picker/nepali_date_picker.dart';
 // import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
+import 'package:share_learning/models/session.dart';
 import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/providers/comment.dart';
 import 'package:share_learning/providers/users.dart';
+import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/widgets/app_drawer.dart';
 import 'package:share_learning/templates/widgets/image_gallery.dart';
 import 'package:share_learning/templates/widgets/post_comment.dart';
@@ -17,7 +19,36 @@ import 'user_posts_screen.dart';
 class SinglePostScreen extends StatelessWidget {
   static const routeName = '/post-details';
 
+  Users users = new Users(
+    Session(
+      id: '0',
+      userId: '0',
+      accessToken: 'abc',
+      accessTokenExpiry: DateTime(2050),
+      refreshToken: 'abc',
+      refreshTokenExpiry: DateTime(2050),
+    ),
+  );
+
+  User loggedInUser = new User(
+    id: '0',
+    firstName: 'temp',
+    lastName: 'Name',
+    email: '',
+    username: 'temp',
+    description: '',
+    userClass: '',
+    followers: '',
+    createdDate: DateTime(2050),
+  );
+
   var bookId;
+  // var loggedInUserSession;
+
+  Future<void> _getSessionUser(String accessToken) async {
+    await users.getUserByToken(accessToken);
+    loggedInUser = users.user;
+  }
 
   TextEditingController commentController = new TextEditingController();
 
@@ -26,14 +57,19 @@ class SinglePostScreen extends StatelessWidget {
     final args = ModalRoute.of(context)!.settings.arguments as Map;
 
     // if (args != null) {
-    if (true) {
-      bookId = args['id'];
-    }
+    // if (true) {
+    bookId = args['id'];
+    final Session loggedInUserSession = args['loggedInUserSession'] as Session;
+
+    users.getUserByToken(loggedInUserSession.accessToken);
+    // final User loggedInUser = _getSessionUser(loggedInUserSession.accessToken);
+    // }
 
     Book selectedPost = Provider.of<Books>(
       context,
       listen: false,
     ).getBookById(bookId);
+
     List<Comment> postComments = Provider.of<Comments>(
       context,
       listen: false,
@@ -50,7 +86,7 @@ class SinglePostScreen extends StatelessWidget {
         double.parse((timeDifference.inDays / 365).toStringAsFixed(1));
 
     return Scaffold(
-      drawer: AppDrawer(),
+      drawer: AppDrawer(loggedInUserSession.accessToken),
       appBar: AppBar(
         actions: [
           Padding(
@@ -108,6 +144,7 @@ class SinglePostScreen extends StatelessWidget {
                         UserPostsScreen.routeName,
                         arguments: {
                           'uId': selectedPost.userId,
+                          'loggedInUserSession': loggedInUserSession,
                         },
                       ),
                       child: Column(
@@ -281,14 +318,36 @@ class SinglePostScreen extends StatelessWidget {
                       child: ListView.builder(
                           itemCount: postComments.length,
                           itemBuilder: (context, index) {
-                            User commentUser = Provider.of<Users>(context)
-                                .getUser(postComments[index].uId);
+                            // User commentUser = Provider.of<Users>(context)
+                            //     .getUserById(postComments[index].uId);
 
                             // Comment Post Starts Here
 
-                            return PostComment(
-                              commentUser,
-                              postComments[index].commentBody,
+                            return FutureBuilder(
+                              future: _getSessionUser(
+                                  loggedInUserSession.accessToken),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      color: ColorManager.primary,
+                                    ),
+                                  );
+                                } else {
+                                  if (snapshot.hasError) {
+                                    return Center(
+                                      // child: Text('Error fetching data please restart the app'),
+                                      child: Text(snapshot.error.toString()),
+                                    );
+                                  } else {
+                                    return PostComment(
+                                      loggedInUser,
+                                      postComments[index].commentBody,
+                                    );
+                                  }
+                                }
+                              },
                             );
 
                             // Comment Post Ends Here

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
+import 'package:share_learning/models/session.dart';
+import 'package:share_learning/models/user.dart';
 import 'package:share_learning/templates/screens/single_post_screen.dart';
 
 // ignore: must_be_immutable
@@ -12,6 +14,7 @@ class Post extends StatelessWidget {
   final double price;
   final int bookCount;
   final bool selling;
+  final Session loggedInUserSession;
 
   Post({
     required this.id,
@@ -22,6 +25,7 @@ class Post extends StatelessWidget {
     required this.price,
     required this.bookCount,
     required this.selling,
+    required this.loggedInUserSession,
   });
 
   bool flexAuthorName = false;
@@ -55,7 +59,10 @@ class Post extends StatelessWidget {
             child: GestureDetector(
               onTap: () => Navigator.of(context).pushNamed(
                 SinglePostScreen.routeName,
-                arguments: {'id': this.id},
+                arguments: {
+                  'id': this.id,
+                  'loggedInUserSession': this.loggedInUserSession
+                },
               ),
               child: ListTile(
                 contentPadding: EdgeInsets.only(
