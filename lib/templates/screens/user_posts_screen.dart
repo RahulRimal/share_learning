@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
+import 'package:share_learning/models/session.dart';
 import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/templates/widgets/app_drawer.dart';
 import 'package:share_learning/templates/widgets/post.dart';
@@ -13,12 +14,12 @@ class UserPostsScreen extends StatelessWidget {
     final args = ModalRoute.of(context)!.settings.arguments as Map;
 
     final String userId = args['uId'];
-    var loggedInUserSession = args['loggedInUserSession'];
+    var loggedInUserSession = args['loggedInUserSession'] as Session;
 
     List<Book> _allPosts = Provider.of<Books>(context).postsByUser(userId);
 
     return Scaffold(
-      drawer: AppDrawer(loggedInUserSession),
+      drawer: AppDrawer(loggedInUserSession.accessToken),
       appBar: AppBar(
         actions: [
           Padding(

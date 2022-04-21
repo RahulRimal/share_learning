@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/session.dart';
 import 'package:share_learning/models/user.dart';
+import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/providers/sessions.dart';
 import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/managers/font_manager.dart';
 import 'package:share_learning/templates/screens/add_post_screen.dart';
 import 'package:share_learning/templates/screens/login_screen.dart';
+import 'package:share_learning/templates/screens/user_posts_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   // User user;
@@ -113,15 +115,22 @@ class AppDrawer extends StatelessWidget {
                           color: Colors.white,
                         ),
                         title: Text(
-                          'Profile',
+                          'Your Posts',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: FontSize.s18,
                           ),
                         ),
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
+                        // onTap: () {
+                        //   Navigator.pop(context);
+                        // },
+                        onTap: () => Navigator.of(context).pushNamed(
+                          UserPostsScreen.routeName,
+                          arguments: {
+                            'uId': users.user.id,
+                            'loggedInUserSession': users.session,
+                          },
+                        ),
                       ),
                       ListTile(
                         leading: Icon(
@@ -153,6 +162,10 @@ class AppDrawer extends StatelessWidget {
                         ),
                         onTap: () {
                           // Navigator.pop(context);
+
+                          // Provider.of(context, listen: false)
+                          //     .logout(accessToken);
+
                           Navigator.pushReplacementNamed(
                               context, LoginScreen.routeName);
                         },

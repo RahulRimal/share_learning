@@ -4,6 +4,7 @@ import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
+import 'package:share_learning/models/session.dart';
 import 'package:share_learning/providers/books.dart';
 
 class EditPostScreen extends StatefulWidget {
@@ -23,6 +24,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
   final _descFocusNode = FocusNode();
 
   List<bool> postTypeBuying = [true, false];
+
   var _edittedBook = Book(
     id: '',
     author: '',
@@ -49,7 +51,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
 
   @override
   void didChangeDependencies() {
-    final bookId = ModalRoute.of(context)!.settings.arguments as String;
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    String bookId = args['bookId'];
     if (bookId.isNotEmpty) {
       _edittedBook =
           Provider.of<Books>(context, listen: false).getBookById(bookId);
@@ -76,7 +79,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
         DateFormat('yyyy-MM-dd').format(_boughtDate as DateTime).toString();
   }
 
-  bool _updatePost() {
+  bool _updatePost(Session loggedInUserSession, Book edittedBook) {
     final isValid = _form.currentState!.validate();
 
     if (!isValid) {
@@ -84,9 +87,11 @@ class _EditPostScreenState extends State<EditPostScreen> {
     }
     _form.currentState!.save();
     Provider.of<Books>(context, listen: false)
-        .updatePost(_edittedBook.id, _edittedBook);
+        // .updatePost(_edittedBook.id, _edittedBook);
+        .updatePost(loggedInUserSession, _edittedBook);
     Navigator.of(context).pop();
     Navigator.of(context).pop();
+    // showUpdateSnackbar(context);
 
     return true;
   }
@@ -107,15 +112,21 @@ class _EditPostScreenState extends State<EditPostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    // String bookId = args['id'];
+    final Session loggedInUserSession = args['loggedInUserSession'] as Session;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add New Post'),
+        title: Text('Edit Post'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
             onPressed: () {
-              if (_updatePost()) showUpdateSnackbar(context);
+              if (_updatePost(loggedInUserSession, _edittedBook))
+                showUpdateSnackbar(context);
             },
+            // onPressed: _updatePost,
           ),
         ],
       ),
@@ -464,7 +475,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     ),
                     // onPressed: _savePost,
                     onPressed: () {
-                      if (_updatePost()) showUpdateSnackbar(context);
+                      if (_updatePost(loggedInUserSession, _edittedBook))
+                        showUpdateSnackbar(context);
                     },
                     child: Text(
                       'Update Post',

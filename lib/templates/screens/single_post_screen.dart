@@ -94,8 +94,11 @@ class SinglePostScreen extends StatelessWidget {
             child: IconButton(
               icon: Icon(Icons.edit),
               onPressed: () {
-                Navigator.of(context)
-                    .pushNamed(EditPostScreen.routeName, arguments: bookId);
+                Navigator.of(context).pushNamed(EditPostScreen.routeName,
+                    arguments: {
+                      'bookId': bookId,
+                      'loggedInUserSession': loggedInUserSession
+                    });
               },
             ),
           ),

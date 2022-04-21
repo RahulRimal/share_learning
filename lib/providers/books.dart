@@ -205,10 +205,20 @@ class Books with ChangeNotifier {
     notifyListeners();
   }
 
-  void updatePost(String id, Book edittedPost) {
-    final postIndex = _myBooks.indexWhere((element) => element.id == id);
-    print(edittedPost.bookName);
-    print(edittedPost.description);
+  // void updatePost(String id, Book edittedPost){
+
+  //   final postIndex = _myBooks.indexWhere((element) => element.id == id);
+
+  //   _myBooks[postIndex] = edittedPost;
+
+  //   notifyListeners();
+  // }
+
+  void updatePost(Session currentSession, Book edittedPost) async {
+    var response = await BookApi.updatePost(currentSession, edittedPost);
+
+    final postIndex =
+        _myBooks.indexWhere((element) => element.id == edittedPost.id);
 
     _myBooks[postIndex] = edittedPost;
 

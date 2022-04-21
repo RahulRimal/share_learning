@@ -11,7 +11,6 @@ import 'package:share_learning/templates/managers/values_manager.dart';
 
 class BookApi {
   static Future<Object> getBooks(String uId) async {
-    // static Future<Object> getBooks() async {
     try {
       // var url = Uri.parse('http://localhost/apiforsharelearn/posts/u/1');
       // var url = Uri.parse('http://10.0.2.2/apiforsharelearn/posts/u/' + uId);
@@ -21,7 +20,7 @@ class BookApi {
         url,
         headers: {
           HttpHeaders.authorizationHeader:
-              'Mzk0YTM2ZWZhZGQ1ZjY2MDQwZmMxMWZkNGE4MzRjMmM2M2FhMTNhY2M1ZDhlYTEyMzEzNjM0MzIzOTM1MzAzMjM1MzA='
+              'NDkxYzgxZjNmYTA4NjlhMWRlY2Y3ZTMzNjdhZWFmZjZkMTRjOGZhODBhN2U1M2ZlMzEzNjM1MzAzNTMxMzczMzM2MzY='
         },
       );
 
@@ -52,6 +51,63 @@ class BookApi {
         code: ApiStatusCode.unknownError,
         errorResponse: ApiStrings.unknownErrorString,
       );
+    }
+  }
+
+  static Future<Object> updatePost(
+      Session currentSession, Book updatedPost) async {
+    try {
+      Map<String, String> postBody = {
+        "userId": updatedPost.userId,
+        "bookName": updatedPost.bookName,
+        "author": updatedPost.author,
+        "description": updatedPost.description,
+        "boughtDate": updatedPost.boughtDate.toIso8601String(),
+        "price": updatedPost.price.toString(),
+        "bookCount": updatedPost.bookCount.toString(),
+        "wishlisted": updatedPost.wishlisted.toString(),
+        "postType": updatedPost.postType,
+        "postRating": updatedPost.postRating,
+        // "postedOn": updatedPost.postedOn.toIso8601String()
+      };
+      var url =
+          Uri.parse(RemoteManager.BASE_URI + '/posts/p/' + updatedPost.id);
+
+      var response = await http.patch(
+        url,
+        headers: {
+          HttpHeaders.authorizationHeader: currentSession.accessToken,
+          "Accept": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin":
+              "*", // Required for CORS support to work
+          "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+          HttpHeaders.contentTypeHeader: "application/json",
+        },
+        body: json.encode(postBody),
+      );
+
+      if (response.statusCode == ApiStatusCode.responseSuccess) {
+        return Success(
+            code: response.statusCode,
+            response: sessionFromJson(json
+                .encode(json.decode(response.body)['data']['sessions'][0])));
+      }
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          errorResponse: ApiStrings.invalidResponseString);
+    } on HttpException {
+      return Failure(
+          code: ApiStatusCode.httpError,
+          errorResponse: ApiStrings.noInternetString);
+    } on FormatException {
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          errorResponse: ApiStrings.invalidFormatString);
+    } catch (e) {
+      // return Failure(code: 103, errorResponse: e.toString());
+      return Failure(
+          code: ApiStatusCode.unknownError,
+          errorResponse: ApiStrings.unknownErrorString);
     }
   }
 }
