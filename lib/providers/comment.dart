@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
+import 'package:share_learning/data/comment_api.dart';
+import 'package:share_learning/models/api_status.dart';
 
 // class Comment {
 //   late String id;
@@ -45,7 +47,7 @@ class Comment {
         id: json["id"] == null ? null : json["id"],
         userId: json["userId"] == null ? null : json["userId"],
         postId: json["postId"] == null ? null : json["postId"],
-        commentBody: json["commentBody"] == null ? null : json["commentBody"],
+        commentBody: json["body"] == null ? null : json["body"],
         createdDate: NepaliDateTime.parse(json["createdDate"].toString()),
       );
 
@@ -104,11 +106,55 @@ class Comments with ChangeNotifier {
     ),
   ];
 
+  bool _loading = false;
+
+  CommentError? _commentError;
+
   List<Comment> get comments {
     return [..._comments];
   }
 
-  List<Comment> getPostComments(String postId) {
+  bool get loading => _loading;
+
+  CommentError? get commentError => _commentError;
+
+  setLoading(bool loading) async {
+    _loading = loading;
+    // notifyListeners();
+  }
+
+  setComments(List<Comment> comments) {
+    _comments = comments;
+  }
+
+  setCommentError(CommentError commentError) {
+    _commentError = commentError;
+  }
+
+  Future<List<Comment>> getComments(String postId) async {
+    // await CommentApi.getPostComments(postId).then((value) {
+    //   _comments = value;
+    //   notifyListeners();
+    // });
+    // await CommentApi.getPostComments(postId);
     return comments.where((comment) => comment.postId == postId).toList();
+  }
+
+  getPostComments(String postId) async {
+    setLoading(true);
+
+    var response = await CommentApi.getPostComments(postId);
+
+    if (response is Success) {
+      setComments(response.response as List<Comment>);
+    }
+    if (response is Failure) {
+      CommentError commentError = CommentError(
+        code: response.code,
+        message: response.errorResponse,
+      );
+      setCommentError(commentError);
+    }
+    setLoading(false);
   }
 }

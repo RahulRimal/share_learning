@@ -120,14 +120,16 @@ class _EditPostScreenState extends State<EditPostScreen> {
       appBar: AppBar(
         title: Text('Edit Post'),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.save),
-            onPressed: () {
-              if (_updatePost(loggedInUserSession, _edittedBook))
-                showUpdateSnackbar(context);
-            },
-            // onPressed: _updatePost,
-          ),
+          loggedInUserSession.userId == _edittedBook.userId
+              ? IconButton(
+                  icon: Icon(Icons.save),
+                  onPressed: () {
+                    if (_updatePost(loggedInUserSession, _edittedBook))
+                      showUpdateSnackbar(context);
+                  },
+                  // onPressed: _updatePost,
+                )
+              : Container(),
         ],
       ),
       body: Padding(

@@ -54,10 +54,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // User _user = users.getUserByToken(authenticatedSession.accessToken);
 
-    Provider.of<Books>(context, listen: false)
-        .getBooks(authenticatedSession.userId);
+    // Provider.of<Books>(context, listen: false)
+    //     .getBooks(authenticatedSession.userId);
 
-    List<Book> booksToRender = Provider.of<Books>(context).books;
+    // List<Book> booksToRender = Provider.of<Books>(context).books;
 
     // User user;
 

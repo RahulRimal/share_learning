@@ -52,6 +52,8 @@ class Users with ChangeNotifier {
     return _user;
   }
 
+  List<User> get users => [..._users];
+
   Session get session {
     return _session;
   }
@@ -62,6 +64,10 @@ class Users with ChangeNotifier {
 
   void setUser(User user) {
     _user = user;
+  }
+
+  void setUsers(List<User> users) {
+    _users = users;
   }
 
   void setLoading(bool loading) {
@@ -92,11 +98,47 @@ class Users with ChangeNotifier {
     // notifyListeners();
   }
 
-  List<User> get users {
-    return [..._users];
-  }
+  Future<User> getUserByIdAndSession(Session loggedInUser, String uId) async {
+    if (users.contains((user) => user.id == uId)) {
+      // return users.firstWhere((user) => user.id == uId);
+      return user;
+    }
 
-  User getUserById(String uId) {
-    return users.firstWhere((user) => user.id == uId);
+    var response = await UserApi.getUserFromToken(loggedInUser.accessToken);
+    if (response is Success) {
+      // setUser(response.response as User);
+      return response.response as User;
+    }
+
+    if (response is Failure) {
+      UserError userError = UserError(
+        code: response.code,
+        message: response.errorResponse,
+      );
+      setUserError(userError);
+      return User(
+        id: '0',
+        firstName: '',
+        lastName: '',
+        username: '',
+        email: '',
+        description: '',
+        userClass: '',
+        followers: '',
+        createdDate: DateTime.now(),
+      );
+    }
+
+    return User(
+      id: '0',
+      firstName: '',
+      lastName: '',
+      username: '',
+      email: '',
+      description: '',
+      userClass: '',
+      followers: '',
+      createdDate: DateTime.now(),
+    );
   }
 }

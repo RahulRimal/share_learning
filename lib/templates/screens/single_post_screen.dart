@@ -70,10 +70,12 @@ class SinglePostScreen extends StatelessWidget {
       listen: false,
     ).getBookById(bookId);
 
-    List<Comment> postComments = Provider.of<Comments>(
-      context,
-      listen: false,
-    ).getPostComments(bookId);
+    // List<Comment> postComments = Provider.of<Comments>(
+    //   context,
+    //   listen: false,
+    // ).getPostComments(bookId);
+
+    Comments comments = context.watch<Comments>();
 
     // bool _shouldFlex(String testString) {
     //   if (testString.length > 11) return true;
@@ -303,59 +305,98 @@ class SinglePostScreen extends StatelessWidget {
                 ),
               ),
 
-              postComments.isEmpty
-                  ? Container(
-                      child: Center(
-                        child: Text(
-                          'No Comments Yet',
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+              // postComments.isEmpty
+              //     ? Container(
+              //         child: Center(
+              //           child: Text(
+              //             'No Comments Yet',
+              //             style: TextStyle(
+              //               color: Theme.of(context).primaryColor,
+              //               fontWeight: FontWeight.bold,
+              //               fontSize: 16,
+              //             ),
+              //           ),
+              //         ),
+              //       )
+              // :
+              Container(
+                height: 200,
+                // child: ListView.builder(
+                //     itemCount: postComments.length,
+                //     itemBuilder: (context, index) {
+                //       // User commentUser = Provider.of<Users>(context)
+                //       //     .getUserById(postComments[index].uId);
+
+                //       // Comment Post Starts Here
+
+                //       return FutureBuilder(
+                //         future: _getSessionUser(
+                //             loggedInUserSession.accessToken),
+                //         builder: (context, snapshot) {
+                //           if (snapshot.connectionState ==
+                //               ConnectionState.waiting) {
+                //             return Center(
+                //               child: CircularProgressIndicator(
+                //                 color: ColorManager.primary,
+                //               ),
+                //             );
+                //           } else {
+                //             if (snapshot.hasError) {
+                //               return Center(
+                //                 // child: Text('Error fetching data please restart the app'),
+                //                 child: Text(snapshot.error.toString()),
+                //               );
+                //             } else {
+                //               return PostComment(
+                //                 loggedInUser,
+                //                 postComments[index].commentBody,
+                //               );
+                //             }
+                //           }
+                //         },
+                //       );
+
+                //       // Comment Post Ends Here
+                //     }),
+                child: FutureBuilder(
+                  future: comments.getPostComments(bookId),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: ColorManager.primary,
                         ),
-                      ),
-                    )
-                  : Container(
-                      height: 200,
-                      child: ListView.builder(
-                          itemCount: postComments.length,
+                      );
+                    } else {
+                      if (snapshot.hasError) {
+                        return Center(
+                          // child: Text('Error fetching data please restart the app'),
+                          child: Text(snapshot.error.toString()),
+                        );
+                      } else {
+                        return ListView.builder(
+                          // itemCount: snapshot.data.length,
+                          itemCount: comments.comments.length,
                           itemBuilder: (context, index) {
-                            // User commentUser = Provider.of<Users>(context)
-                            //     .getUserById(postComments[index].uId);
-
-                            // Comment Post Starts Here
-
-                            return FutureBuilder(
-                              future: _getSessionUser(
-                                  loggedInUserSession.accessToken),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return Center(
-                                    child: CircularProgressIndicator(
-                                      color: ColorManager.primary,
-                                    ),
-                                  );
-                                } else {
-                                  if (snapshot.hasError) {
-                                    return Center(
-                                      // child: Text('Error fetching data please restart the app'),
-                                      child: Text(snapshot.error.toString()),
-                                    );
-                                  } else {
-                                    return PostComment(
-                                      loggedInUser,
-                                      postComments[index].commentBody,
-                                    );
-                                  }
-                                }
-                              },
+                            // Future<User> commentUser =
+                            //     Provider.of<Users>(context)
+                            //         .getUserByIdAndSession(loggedInUserSession,
+                            //             comments.comments[index].userId);
+                            return PostComment(
+                              // snapshot.data[index].user,
+                              // snapshot.data[index].commentBody,
+                              // comments.comments[index].user,
+                              loggedInUserSession,
+                              comments.comments[index],
                             );
-
-                            // Comment Post Ends Here
-                          }),
-                    ),
+                            // return Text('Comment will be here');
+                          },
+                        );
+                      }
+                    }
+                  },
+                ),
+              ),
               // Comments Ends here
 
               // Add your comment starts here !!

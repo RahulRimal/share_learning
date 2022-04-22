@@ -64,8 +64,8 @@ class AppDrawer extends StatelessWidget {
             } else {
               if (snapshot.hasError) {
                 return Center(
-                  // child: Text('Error fetching data please restart the app'),
-                  child: Text(snapshot.error.toString()),
+                  child: Text('Error fetching data please restart the app'),
+                  // child: Text(snapshot.error.toString()),
                 );
               } else {
                 return Container(
