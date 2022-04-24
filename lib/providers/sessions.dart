@@ -7,12 +7,13 @@ import 'package:share_learning/models/session.dart';
 class SessionProvider with ChangeNotifier {
   // List<Session> _sessions = [];
   bool _loading = false;
-  late Session _session;
+  // late Session _session;
+  Session? _session;
   CustomSessionError? _sessionError;
 
   bool get loading => _loading;
 
-  Session get session => _session;
+  Session? get session => _session;
 
   CustomSessionError? get sessionError => _sessionError;
 
@@ -23,6 +24,7 @@ class SessionProvider with ChangeNotifier {
 
   setSession(Session session) {
     _session = session;
+    notifyListeners();
   }
 
   setSessionError(CustomSessionError sessionError) {

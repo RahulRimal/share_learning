@@ -25,19 +25,31 @@ class AppDrawer extends StatelessWidget {
   // }
 
   Users users = new Users(
-    Session(
-      id: '0',
-      userId: '0',
-      accessToken: 'abc',
-      accessTokenExpiry: DateTime(2050),
-      refreshToken: 'abc',
-      refreshTokenExpiry: DateTime(2050),
-    ),
+    // Session(
+    //   id: '0',
+    //   userId: '0',
+    //   accessToken: 'abc',
+    //   accessTokenExpiry: DateTime(2050),
+    //   refreshToken: 'abc',
+    //   refreshTokenExpiry: DateTime(2050),
+    // ),
+    null,
   );
 
-  Future<User> _getSessionUser() async {
-    await users.getUserByToken(accessToken);
-    return users.user;
+  Future<User?> _getSessionUser() async {
+    // await users.getUserByToken(accessToken);
+    await users.getUserByToken(accessToken).then((value) {
+      return users.user;
+    });
+    if (users.user != null)
+      return users.user;
+    else {
+      // await users.getUserByToken(accessToken);
+      await users.getUserByToken(accessToken).then((value) {
+        return users.user;
+      });
+      return users.user;
+    }
   }
 
   @override
@@ -64,10 +76,10 @@ class AppDrawer extends StatelessWidget {
             } else {
               if (snapshot.hasError) {
                 return Center(
-                  child: Text('Error fetching data please restart the app'),
-                  // child: Text(snapshot.error.toString()),
+                  // child: Text('Error fetching data please restart the app'),
+                  child: Text(snapshot.error.toString()),
                 );
-              } else {
+              } else if (snapshot.hasData) {
                 return Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,7 +93,7 @@ class AppDrawer extends StatelessWidget {
                                   'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg'),
                             ),
                             Text(
-                              users.user.firstName,
+                              users.user!.firstName,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: FontSize.s18,
@@ -127,7 +139,7 @@ class AppDrawer extends StatelessWidget {
                         onTap: () => Navigator.of(context).pushNamed(
                           UserPostsScreen.routeName,
                           arguments: {
-                            'uId': users.user.id,
+                            'uId': users.user!.id,
                             'loggedInUserSession': users.session,
                           },
                         ),
@@ -173,10 +185,16 @@ class AppDrawer extends StatelessWidget {
                     ],
                   ),
                 );
+              } else {
+                return Center(
+                  child: Text(
+                    // 'Error fetching data please restart the app',
+                    'Something went wrong',
+                    // snapshot.data.toString(),
+                  ),
+                );
               }
             }
-            ;
-
             // child: Container(
             //   child: Column(
             //     crossAxisAlignment: CrossAxisAlignment.start,

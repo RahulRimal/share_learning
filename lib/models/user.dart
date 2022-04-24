@@ -46,12 +46,18 @@ class User {
   String id;
   String firstName;
   String lastName;
-  String username;
-  String email;
-  String description;
+  // String username;
+  String? username;
+  // String email;
+  String? email;
+  // String description;
+  String? description;
   String? image;
-  String userClass;
-  String followers;
+  // String userClass;
+  String? userClass;
+  // String followers;
+  String? followers;
+
   DateTime createdDate;
 
   factory User.fromJson(Map<String, dynamic> json) => User(

@@ -100,6 +100,7 @@ class UserApi {
             response: userFromJson(
                 json.encode(json.decode(response.body)['data']['user'][0])));
       }
+
       return Failure(
           code: ApiStatusCode.invalidResponse,
           errorResponse: ApiStrings.invalidResponseString);

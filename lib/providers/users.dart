@@ -39,22 +39,24 @@ class Users with ChangeNotifier {
 
   List<User> _users = [];
 
-  final Session _session;
+  // final Session _session;
 
-  late User _user;
-  // User? _user;
+  Session? _session;
+
+  // late User _user;
+  User? _user;
   bool _loading = false;
   UserError? _userError;
 
   bool get loading => _loading;
 
-  User get user {
+  User? get user {
     return _user;
   }
 
   List<User> get users => [..._users];
 
-  Session get session {
+  Session? get session {
     return _session;
   }
 
@@ -83,7 +85,6 @@ class Users with ChangeNotifier {
     setLoading(true);
 
     var response = await UserApi.getUserFromToken(accessToken);
-
     if (response is Success) {
       setUser(response.response as User);
     }
@@ -98,7 +99,7 @@ class Users with ChangeNotifier {
     // notifyListeners();
   }
 
-  Future<User> getUserByIdAndSession(Session loggedInUser, String uId) async {
+  Future<User?> getUserByIdAndSession(Session loggedInUser, String uId) async {
     if (users.contains((user) => user.id == uId)) {
       // return users.firstWhere((user) => user.id == uId);
       return user;

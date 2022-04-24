@@ -165,6 +165,7 @@ class PostComment extends StatelessWidget {
                     child: Text('Error'),
                   );
                 } else if (snapshot.hasData) {
+                  _commentUser = snapshot.data as User;
                   return Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
@@ -175,7 +176,7 @@ class PostComment extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            _commentUser = snapshot.data as User;
+                            // _commentUser = snapshot.data as User;
                             if (Provider.of<Books>(
                               context,
                               listen: false,
@@ -242,7 +243,8 @@ class PostComment extends StatelessWidget {
                                       width: 100,
                                       padding: EdgeInsets.all(10),
                                       child: Text(
-                                        '${_commentUser.firstName} ${_commentUser.lastName}',
+                                        // '${_commentUser.firstName} ${_commentUser.lastName}',
+                                        '${_commentUser.firstName}',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           color: Colors.black,

@@ -21,7 +21,6 @@ class CommentApi {
       );
 
       if (response.statusCode == ApiStatusCode.responseSuccess) {
-        print(json.decode(response.body)['data']['replies']);
         return Success(
             code: response.statusCode,
             response: commentFromJson(

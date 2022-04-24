@@ -20,14 +20,15 @@ class SinglePostScreen extends StatelessWidget {
   static const routeName = '/post-details';
 
   Users users = new Users(
-    Session(
-      id: '0',
-      userId: '0',
-      accessToken: 'abc',
-      accessTokenExpiry: DateTime(2050),
-      refreshToken: 'abc',
-      refreshTokenExpiry: DateTime(2050),
-    ),
+    // Session(
+    //   id: '0',
+    //   userId: '0',
+    //   accessToken: 'abc',
+    //   accessTokenExpiry: DateTime(2050),
+    //   refreshToken: 'abc',
+    //   refreshTokenExpiry: DateTime(2050),
+    // ),
+    null,
   );
 
   User loggedInUser = new User(
@@ -47,7 +48,12 @@ class SinglePostScreen extends StatelessWidget {
 
   Future<void> _getSessionUser(String accessToken) async {
     await users.getUserByToken(accessToken);
-    loggedInUser = users.user;
+    if (users.user != null)
+      loggedInUser = users.user!;
+    else {
+      await users.getUserByToken(accessToken);
+      loggedInUser = users.user!;
+    }
   }
 
   TextEditingController commentController = new TextEditingController();
@@ -378,10 +384,6 @@ class SinglePostScreen extends StatelessWidget {
                           // itemCount: snapshot.data.length,
                           itemCount: comments.comments.length,
                           itemBuilder: (context, index) {
-                            // Future<User> commentUser =
-                            //     Provider.of<Users>(context)
-                            //         .getUserByIdAndSession(loggedInUserSession,
-                            //             comments.comments[index].userId);
                             return PostComment(
                               // snapshot.data[index].user,
                               // snapshot.data[index].commentBody,

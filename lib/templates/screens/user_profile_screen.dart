@@ -33,11 +33,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       );
     }
 
-    Session userSessionData = userSession.session;
+    Session? userSessionData = userSession.session;
     return Container(
       child: Column(
         children: [
-          Text(userSessionData.id),
+          Text(userSessionData!.id),
           Text(userSessionData.accessToken),
           Text(userSessionData.accessTokenExpiry.toString()),
         ],
