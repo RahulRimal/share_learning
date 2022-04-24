@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      drawer: AppDrawer(authenticatedSession.accessToken),
+      drawer: AppDrawer(authenticatedSession),
     );
   }
 }

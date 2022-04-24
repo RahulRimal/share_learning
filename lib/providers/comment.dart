@@ -145,10 +145,14 @@ class Comments with ChangeNotifier {
 
     var response = await CommentApi.getPostComments(postId);
 
+    print(response);
+
     if (response is Success) {
+      print(response.response);
       setComments(response.response as List<Comment>);
     }
     if (response is Failure) {
+      print(response.errorResponse);
       CommentError commentError = CommentError(
         code: response.code,
         message: response.errorResponse,

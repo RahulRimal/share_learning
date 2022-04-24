@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:share_learning/data/session_api.dart';
 import 'package:share_learning/data/user_api.dart';
 import 'package:share_learning/models/api_status.dart';
 import 'package:share_learning/models/session.dart';
@@ -141,5 +142,13 @@ class Users with ChangeNotifier {
       followers: '',
       createdDate: DateTime.now(),
     );
+  }
+
+  logoutUser(String sessionId) async {
+    await SessionApi.deleteSession(sessionId);
+    _session = null;
+    _user = null;
+    setUsers([]);
+    notifyListeners();
   }
 }

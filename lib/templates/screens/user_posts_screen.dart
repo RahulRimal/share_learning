@@ -19,7 +19,7 @@ class UserPostsScreen extends StatelessWidget {
     List<Book> _allPosts = Provider.of<Books>(context).postsByUser(userId);
 
     return Scaffold(
-      drawer: AppDrawer(loggedInUserSession.accessToken),
+      drawer: AppDrawer(loggedInUserSession),
       appBar: AppBar(
         actions: [
           Padding(

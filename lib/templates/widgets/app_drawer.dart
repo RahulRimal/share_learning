@@ -13,9 +13,10 @@ import 'package:share_learning/templates/screens/user_posts_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   // User user;
-  AppDrawer(this.accessToken);
+  AppDrawer(this.loggedInSession);
 
-  final String accessToken;
+  // final String accessToken;
+  final Session loggedInSession;
 
   // AppDrawer({required this.user});
 
@@ -38,14 +39,14 @@ class AppDrawer extends StatelessWidget {
 
   Future<User?> _getSessionUser() async {
     // await users.getUserByToken(accessToken);
-    await users.getUserByToken(accessToken).then((value) {
+    await users.getUserByToken(loggedInSession.accessToken).then((value) {
       return users.user;
     });
     if (users.user != null)
       return users.user;
     else {
       // await users.getUserByToken(accessToken);
-      await users.getUserByToken(accessToken).then((value) {
+      await users.getUserByToken(loggedInSession.accessToken).then((value) {
         return users.user;
       });
       return users.user;
@@ -173,11 +174,10 @@ class AppDrawer extends StatelessWidget {
                           ),
                         ),
                         onTap: () {
-                          // Navigator.pop(context);
-
-                          // Provider.of(context, listen: false)
+                          Provider.of<Books>(context, listen: false)
+                              .setBooks([]);
+                          users.logoutUser(loggedInSession.id);
                           //     .logout(accessToken);
-
                           Navigator.pushReplacementNamed(
                               context, LoginScreen.routeName);
                         },

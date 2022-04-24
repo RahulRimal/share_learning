@@ -94,7 +94,7 @@ class SinglePostScreen extends StatelessWidget {
         double.parse((timeDifference.inDays / 365).toStringAsFixed(1));
 
     return Scaffold(
-      drawer: AppDrawer(loggedInUserSession.accessToken),
+      drawer: AppDrawer(loggedInUserSession),
       appBar: AppBar(
         actions: [
           Padding(
@@ -376,8 +376,9 @@ class SinglePostScreen extends StatelessWidget {
                     } else {
                       if (snapshot.hasError) {
                         return Center(
-                          // child: Text('Error fetching data please restart the app'),
-                          child: Text(snapshot.error.toString()),
+                          child: Text(
+                              'Error fetching data please restart the app'),
+                          // child: Text(snapshot.error.toString()),
                         );
                       } else {
                         return ListView.builder(

@@ -76,4 +76,48 @@ class SessionApi {
           errorResponse: ApiStrings.unknownErrorString);
     }
   }
+
+  static Future<Object> deleteSession(String sessionId) async {
+    try {
+      var url = Uri.parse(RemoteManager.BASE_URI + '/sessions/' + sessionId);
+
+      var response = await http.delete(
+        url,
+        headers: {
+          "Accept": "application/json; charset=utf-8",
+
+          "Access-Control-Allow-Origin":
+              "*", // Required for CORS support to work
+          "Access-Control-Allow-Methods": "POST, GET, OPTIONS, DELETE",
+          HttpHeaders.contentTypeHeader: "application/json",
+        },
+      );
+
+      if (response.statusCode == ApiStatusCode.responseSuccess) {
+        // print(response.body);
+        return Success(
+          code: response.statusCode,
+          response: response.body,
+        );
+      }
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          errorResponse: ApiStrings.invalidResponseString
+          // errorResponse: response.body
+          );
+    } on HttpException {
+      return Failure(
+          code: ApiStatusCode.httpError,
+          errorResponse: ApiStrings.noInternetString);
+    } on FormatException {
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          errorResponse: ApiStrings.invalidFormatString);
+    } catch (e) {
+      // return Failure(code: 103, errorResponse: e.toString());
+      return Failure(
+          code: ApiStatusCode.unknownError,
+          errorResponse: ApiStrings.unknownErrorString);
+    }
+  }
 }
