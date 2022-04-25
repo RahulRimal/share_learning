@@ -123,9 +123,7 @@ class UserApi {
   static Future<Object> getUserFromId(
       Session loggedInSession, String userId) async {
     try {
-      // var url = Uri.parse('http://localhost/apiforsharelearn/users/me');
-      // var url = Uri.parse('http://10.0.2.2/apiforsharelearn/users');
-      var url = Uri.parse(RemoteManager.BASE_URI + '/usersP/' + userId);
+      var url = Uri.parse(RemoteManager.BASE_URI + '/userP/' + userId);
 
       var response = await http.get(url, headers: {
         HttpHeaders.authorizationHeader: loggedInSession.accessToken,
@@ -138,7 +136,6 @@ class UserApi {
       // print(json.encode(json.decode(response.body)['data']['user'][0]));
 
       if (response.statusCode == ApiStatusCode.responseSuccess) {
-        print(json.decode(response.body)['data']['user'][0]);
         return Success(
             code: response.statusCode,
             // response: userFromJson(

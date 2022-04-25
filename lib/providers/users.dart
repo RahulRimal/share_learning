@@ -106,7 +106,8 @@ class Users with ChangeNotifier {
       return user;
     }
 
-    var response = await UserApi.getUserFromToken(loggedInUser.accessToken);
+    // var response = await UserApi.getUserFromToken(loggedInUser.accessToken);
+    var response = await UserApi.getUserFromId(loggedInUser, uId);
     if (response is Success) {
       // setUser(response.response as User);
       return response.response as User;

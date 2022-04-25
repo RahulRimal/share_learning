@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:share_learning/models/session.dart';
 import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/books.dart';
+import 'package:share_learning/providers/comment.dart';
 import 'package:share_learning/providers/sessions.dart';
 import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
@@ -140,8 +141,8 @@ class AppDrawer extends StatelessWidget {
                         onTap: () => Navigator.of(context).pushNamed(
                           UserPostsScreen.routeName,
                           arguments: {
-                            'uId': users.user!.id,
-                            'loggedInUserSession': users.session,
+                            'uId': loggedInSession.userId,
+                            'loggedInUserSession': loggedInSession,
                           },
                         ),
                       ),
@@ -177,6 +178,10 @@ class AppDrawer extends StatelessWidget {
                           Provider.of<Books>(context, listen: false)
                               .setBooks([]);
                           users.logoutUser(loggedInSession.id);
+
+                          Provider.of<Comments>(context, listen: false)
+                              .setComments([]);
+
                           //     .logout(accessToken);
                           Navigator.pushReplacementNamed(
                               context, LoginScreen.routeName);

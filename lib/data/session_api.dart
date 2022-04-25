@@ -116,8 +116,9 @@ class SessionApi {
     } catch (e) {
       // return Failure(code: 103, errorResponse: e.toString());
       return Failure(
-          code: ApiStatusCode.unknownError,
-          errorResponse: ApiStrings.unknownErrorString);
+        code: ApiStatusCode.unknownError,
+        errorResponse: ApiStrings.unknownErrorString,
+      );
     }
   }
 }
