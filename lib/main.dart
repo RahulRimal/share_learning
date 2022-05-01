@@ -11,6 +11,7 @@ import 'package:share_learning/templates/managers/theme_manager.dart';
 import 'package:share_learning/templates/screens/add_post_screen.dart';
 import 'package:share_learning/templates/screens/login_signup_screen.dart';
 import 'package:share_learning/templates/screens/onboarding_screen.dart';
+import 'package:share_learning/templates/screens/order_list_screen.dart';
 import 'package:share_learning/templates/screens/signup_screen.dart';
 import 'package:share_learning/templates/screens/single_post_screen.dart';
 import 'package:share_learning/templates/screens/splash_screen.dart';
@@ -72,6 +73,7 @@ class MyApp extends StatelessWidget {
         // home: AddPostScreen(),
         // home: LoginSignupScreen(),
         home: LoginScreen(),
+        // home: OrderListScreen(),
         // home: SignUpScreen(),
         routes: {
           SinglePostScreen.routeName: (context) => SinglePostScreen(),
@@ -85,6 +87,7 @@ class MyApp extends StatelessWidget {
           SignUpScreen.routeName: (context) => SignUpScreen(),
           LoginSignupScreen.routeName: (context) => LoginSignupScreen(),
           UserProfileScreen.routeName: (context) => UserProfileScreen(),
+          OrderListScreen.routeName: (context) => OrderListScreen(),
         },
       ),
     );

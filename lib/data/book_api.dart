@@ -10,17 +10,55 @@ import 'package:share_learning/templates/managers/strings_manager.dart';
 import 'package:share_learning/templates/managers/values_manager.dart';
 
 class BookApi {
-  static Future<Object> getBooks(String uId) async {
+  // static Future<Object> getBooks(Session loggedInUser, String uId) async {
+  static Future<Object> getBooks(Session loggedInUser) async {
     try {
-      // var url = Uri.parse('http://localhost/apiforsharelearn/posts/u/1');
-      // var url = Uri.parse('http://10.0.2.2/apiforsharelearn/posts/u/' + uId);
-      var url = Uri.parse(RemoteManager.BASE_URI + '/posts/u/' + uId);
+      var url =
+          Uri.parse(RemoteManager.BASE_URI + '/posts/u/' + loggedInUser.userId);
+
+      var response = await http.get(
+        url,
+        headers: {HttpHeaders.authorizationHeader: loggedInUser.accessToken},
+      );
+
+      if (response.statusCode == ApiStatusCode.responseSuccess) {
+        return Success(
+            code: response.statusCode,
+            response: bookFromJson(
+                json.encode(json.decode(response.body)['data']['posts'])));
+      }
+
+      return Failure(
+        code: ApiStatusCode.invalidResponse,
+        errorResponse: ApiStrings.invalidResponseString,
+      );
+    } on HttpException {
+      return Failure(
+        code: ApiStatusCode.httpError,
+        errorResponse: ApiStrings.noInternetString,
+      );
+    } on FormatException {
+      return Failure(
+        code: ApiStatusCode.invalidResponse,
+        errorResponse: ApiStrings.invalidFormatString,
+      );
+    } catch (e) {
+      // return Failure(code: 103, errorResponse: e.toString());
+      return Failure(
+        code: ApiStatusCode.unknownError,
+        errorResponse: ApiStrings.unknownErrorString,
+      );
+    }
+  }
+
+  static Future<Object> getAnnonimusPosts(Session loggedInUser) async {
+    try {
+      var url = Uri.parse(RemoteManager.BASE_URI + '/posts');
 
       var response = await http.get(
         url,
         headers: {
-          HttpHeaders.authorizationHeader:
-              'NDkxYzgxZjNmYTA4NjlhMWRlY2Y3ZTMzNjdhZWFmZjZkMTRjOGZhODBhN2U1M2ZlMzEzNjM1MzAzNTMxMzczMzM2MzY='
+          HttpHeaders.authorizationHeader: loggedInUser.accessToken,
         },
       );
 

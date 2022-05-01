@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/session.dart';
 import 'package:share_learning/models/user.dart';
@@ -43,6 +45,49 @@ class PostComments extends StatelessWidget {
   final _form = GlobalKey<FormState>();
   TextEditingController commentController = new TextEditingController();
   final _commentFocusNode = FocusNode();
+
+  Comment _edittedComment = Comment(
+    id: '',
+    userId: '',
+    postId: '',
+    commentBody: '',
+    createdDate: NepaliDateTime.now(),
+  );
+
+  bool _updateComment(
+      BuildContext context, Session loggedInUserSession, Comment comment) {
+    final isValid = _form.currentState!.validate();
+
+    if (!isValid) {
+      return false;
+    }
+    _form.currentState!.save();
+
+    Provider.of<Comments>(context, listen: false)
+        .updateComment(loggedInUserSession, _edittedComment);
+
+    // Provider.of<Books>(context, listen: false)
+    // .updatePost(_edittedBook.id, _edittedBook);
+    //     .updatePost(loggedInUserSession, _edittedBook);
+    Navigator.of(context).pop();
+    _showUpdateSnackbar(context);
+
+    return true;
+  }
+
+  void _showUpdateSnackbar(BuildContext context) {
+    final snackBar = SnackBar(
+      content: Text(
+        'Reply Updated Successfully',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,137 +160,168 @@ class PostComments extends StatelessWidget {
                                         ),
                                         child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                // _commentUser = snapshot.data as User;
-                                                if (Provider.of<Books>(
-                                                  context,
-                                                  listen: false,
-                                                ).hasPostByUser(
-                                                    _commentUser.id)) {
-                                                  Navigator.of(context)
-                                                      .pushNamed(
-                                                    UserPostsScreen.routeName,
-                                                    arguments: {
-                                                      'uId': _commentUser.id,
-                                                    },
-                                                  );
-                                                } else {
-                                                  ScaffoldMessenger.of(context)
-                                                      .hideCurrentSnackBar();
-                                                  final snackBar = SnackBar(
-                                                    content: Text(
-                                                      'No posts by ${_commentUser.firstName}',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        fontSize: 13,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                    // action: SnackBarAction(
-                                                    //   label: 'Close',
-                                                    //   textColor: Theme.of(context).primaryColor,
-                                                    //   onPressed: () => print('Pressed'),
-                                                    // ),
-                                                  );
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(snackBar);
-                                                }
-                                              },
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
+                                            Flexible(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
                                                 children: [
-                                                  CircleAvatar(
-                                                    backgroundImage:
-                                                        NetworkImage(
-                                                      // commentUser.image as String,
-                                                      _commentUser.image != null
-                                                          ? _commentUser.image
-                                                              as String
-                                                          : 'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
-                                                    ),
-                                                  ),
-                                                  _shouldFlex(
-                                                          // '${commentUser.firstName} ${commentUser.lastName}')
-                                                          '${_commentUser.firstName}')
-                                                      ? Flexible(
-                                                          child: Container(
-                                                            width: 100,
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    10),
-                                                            child: Text(
-                                                              // '${commentUser.firstName} ${commentUser.lastName}',
-                                                              '${_commentUser.firstName}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                fontStyle:
-                                                                    FontStyle
-                                                                        .italic,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        )
-                                                      : Container(
-                                                          width: 100,
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  10),
-                                                          child: Text(
-                                                            // '${_commentUser.firstName} ${_commentUser.lastName}',
-                                                            '${_commentUser.firstName}',
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      // _commentUser = snapshot.data as User;
+                                                      if (Provider.of<Books>(
+                                                        context,
+                                                        listen: false,
+                                                      ).hasPostByUser(
+                                                          _commentUser.id)) {
+                                                        Navigator.of(context)
+                                                            .pushNamed(
+                                                          UserPostsScreen
+                                                              .routeName,
+                                                          arguments: {
+                                                            'uId':
+                                                                _commentUser.id,
+                                                          },
+                                                        );
+                                                      } else {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .hideCurrentSnackBar();
+                                                        final snackBar =
+                                                            SnackBar(
+                                                          content: Text(
+                                                            'No posts by ${_commentUser.firstName}',
                                                             textAlign: TextAlign
                                                                 .center,
                                                             style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
+                                                              fontSize: 13,
                                                               fontWeight:
                                                                   FontWeight
-                                                                      .w600,
-                                                              fontStyle:
-                                                                  FontStyle
-                                                                      .italic,
+                                                                      .bold,
                                                             ),
                                                           ),
+                                                          // action: SnackBarAction(
+                                                          //   label: 'Close',
+                                                          //   textColor: Theme.of(context).primaryColor,
+                                                          //   onPressed: () => print('Pressed'),
+                                                          // ),
+                                                        );
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                                snackBar);
+                                                      }
+                                                    },
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        CircleAvatar(
+                                                          backgroundImage:
+                                                              NetworkImage(
+                                                            // commentUser.image as String,
+                                                            _commentUser.image !=
+                                                                    null
+                                                                ? _commentUser
+                                                                        .image
+                                                                    as String
+                                                                : 'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
+                                                          ),
                                                         ),
+                                                        _shouldFlex(
+                                                                // '${commentUser.firstName} ${commentUser.lastName}')
+                                                                '${_commentUser.firstName}')
+                                                            ? Flexible(
+                                                                child:
+                                                                    Container(
+                                                                  width: 100,
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              10),
+                                                                  child: Text(
+                                                                    // '${commentUser.firstName} ${commentUser.lastName}',
+                                                                    '${_commentUser.firstName}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontStyle:
+                                                                          FontStyle
+                                                                              .italic,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            : Container(
+                                                                width: 100,
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(
+                                                                            10),
+                                                                child: Text(
+                                                                  // '${_commentUser.firstName} ${_commentUser.lastName}',
+                                                                  '${_commentUser.firstName}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontStyle:
+                                                                        FontStyle
+                                                                            .italic,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    child: Flexible(
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                          top: 5,
+                                                          bottom: 20,
+                                                        ),
+                                                        child: Text(
+                                                          comments
+                                                              .comments[index]
+                                                              .commentBody,
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ],
-                                              ),
-                                            ),
-                                            Container(
-                                              child: Flexible(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                    top: 5,
-                                                    bottom: 20,
-                                                  ),
-                                                  child: Text(
-                                                    comments.comments[index]
-                                                        .commentBody,
-                                                    textAlign: TextAlign.left,
-                                                  ),
-                                                ),
                                               ),
                                             ),
                                             _commentUser.id ==
                                                     loggedInUser.userId
                                                 ? IconButton(
                                                     onPressed: () {
+                                                      _edittedComment = comments
+                                                          .comments[index];
+
                                                       commentController.text =
                                                           comments
                                                               .comments[index]
                                                               .commentBody;
+
                                                       FocusScope.of(context)
                                                           .requestFocus(
                                                               _commentFocusNode);
@@ -302,10 +378,14 @@ class PostComments extends StatelessWidget {
                             focusNode: _commentFocusNode,
                             controller: commentController,
                             cursorColor: Theme.of(context).primaryColor,
+                            onSaved: (value) {
+                              _edittedComment.commentBody = value.toString();
+                            },
                             decoration: InputDecoration(
                               suffixIcon: IconButton(
                                 onPressed: () {
-                                  print(commentController.text);
+                                  _updateComment(
+                                      context, loggedInUser, _edittedComment);
                                 },
                                 icon: Icon(
                                   Icons.send,

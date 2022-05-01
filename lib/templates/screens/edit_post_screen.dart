@@ -96,7 +96,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
     return true;
   }
 
-  void showUpdateSnackbar(BuildContext context) {
+  void _showUpdateSnackbar(BuildContext context) {
     final snackBar = SnackBar(
       content: Text(
         'Posted Updated Successfully',
@@ -125,7 +125,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                   icon: Icon(Icons.save),
                   onPressed: () {
                     if (_updatePost(loggedInUserSession, _edittedBook))
-                      showUpdateSnackbar(context);
+                      _showUpdateSnackbar(context);
                   },
                   // onPressed: _updatePost,
                 )
@@ -478,7 +478,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     // onPressed: _savePost,
                     onPressed: () {
                       if (_updatePost(loggedInUserSession, _edittedBook))
-                        showUpdateSnackbar(context);
+                        _showUpdateSnackbar(context);
                     },
                     child: Text(
                       'Update Post',

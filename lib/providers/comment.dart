@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:share_learning/data/comment_api.dart';
 import 'package:share_learning/models/api_status.dart';
+import 'package:share_learning/models/session.dart';
 
 // class Comment {
 //   late String id;
@@ -158,5 +159,24 @@ class Comments with ChangeNotifier {
       setCommentError(commentError);
     }
     setLoading(false);
+  }
+
+  Future<bool> updateComment(
+      Session currentSession, Comment edittedComment) async {
+    var response =
+        await CommentApi.updateComment(currentSession, edittedComment);
+
+    if (response is Success) {
+      final postIndex =
+          _comments.indexWhere((element) => element.id == edittedComment.id);
+
+      _comments[postIndex] = edittedComment;
+
+      notifyListeners();
+
+      return true;
+    }
+
+    return false;
   }
 }

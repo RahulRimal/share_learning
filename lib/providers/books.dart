@@ -129,10 +129,31 @@ class Books with ChangeNotifier {
     _bookError = bookError;
   }
 
-  getBooks(String uId) async {
+  // getBooks(String uId) async {
+  getBooks(Session loggedInSession) async {
     setLoading(true);
 
-    var response = await BookApi.getBooks(uId);
+    // var response = await BookApi.getBooks(uId);
+    var response = await BookApi.getBooks(loggedInSession);
+
+    if (response is Success) {
+      setBooks(response.response as List<Book>);
+    }
+    if (response is Failure) {
+      BookError bookError = BookError(
+        code: response.code,
+        message: response.errorResponse,
+      );
+      setBookError(bookError);
+    }
+    setLoading(false);
+  }
+
+  getBooksAnnonimusly(Session loggedInSession) async {
+    setLoading(true);
+
+    // var response = await BookApi.getBooks(uId);
+    var response = await BookApi.getAnnonimusPosts(loggedInSession);
 
     if (response is Success) {
       setBooks(response.response as List<Book>);

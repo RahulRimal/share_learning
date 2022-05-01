@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:share_learning/models/api_status.dart';
 import 'package:share_learning/models/book.dart';
+import 'package:share_learning/models/session.dart';
 import 'package:share_learning/providers/comment.dart';
 import 'package:share_learning/templates/managers/api_values_manager.dart';
 import 'package:http/http.dart' as http;
@@ -47,6 +48,57 @@ class CommentApi {
         code: ApiStatusCode.unknownError,
         errorResponse: ApiStrings.unknownErrorString,
       );
+    }
+  }
+
+  static Future<Object> updateComment(
+      Session currentSession, Comment updatedComment) async {
+    try {
+      Map<String, String> postBody = {
+        "id": updatedComment.id,
+        "userId": currentSession.userId,
+        "postId": updatedComment.postId,
+        "body": updatedComment.commentBody,
+        "createdDate": updatedComment.createdDate.toIso8601String(),
+      };
+      var url =
+          Uri.parse(RemoteManager.BASE_URI + '/replies/' + updatedComment.id);
+
+      var response = await http.patch(
+        url,
+        headers: {
+          HttpHeaders.authorizationHeader: currentSession.accessToken,
+          "Accept": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin":
+              "*", // Required for CORS support to work
+          "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+          HttpHeaders.contentTypeHeader: "application/json",
+        },
+        body: json.encode(postBody),
+      );
+
+      if (response.statusCode == ApiStatusCode.responseSuccess) {
+        return Success(
+            code: response.statusCode,
+            response: commentFromJson(json
+                .encode(json.decode(response.body)['data']['sessions'][0])));
+      }
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          errorResponse: ApiStrings.invalidResponseString);
+    } on HttpException {
+      return Failure(
+          code: ApiStatusCode.httpError,
+          errorResponse: ApiStrings.noInternetString);
+    } on FormatException {
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          errorResponse: ApiStrings.invalidFormatString);
+    } catch (e) {
+      // return Failure(code: 103, errorResponse: e.toString());
+      return Failure(
+          code: ApiStatusCode.unknownError,
+          errorResponse: ApiStrings.unknownErrorString);
     }
   }
 }

@@ -25,13 +25,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   int _currentIndex = 0;
 
   List<SliderObject> _getSliderData() => [
-        SliderObject(AppStrings.onBoardingSubTitle1,
+        SliderObject(AppStrings.onBoardingTitle1,
             AppStrings.onBoardingSubTitle1, ImageAssets.onboardingLogo1),
-        SliderObject(AppStrings.onBoardingSubTitle2,
+        SliderObject(AppStrings.onBoardingTitle2,
             AppStrings.onBoardingSubTitle2, ImageAssets.onboardingLogo2),
-        SliderObject(AppStrings.onBoardingSubTitle3,
+        SliderObject(AppStrings.onBoardingTitle3,
             AppStrings.onBoardingSubTitle3, ImageAssets.onboardingLogo3),
-        SliderObject(AppStrings.onBoardingSubTitle4,
+        SliderObject(AppStrings.onBoardingTitle4,
             AppStrings.onBoardingSubTitle4, ImageAssets.onboardingLogo4)
       ];
 
@@ -95,7 +95,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         children: [
           // left arrow
           Padding(
-            padding: EdgeInsets.all(AppPadding.p14),
+            padding: EdgeInsets.all(AppPadding.p12),
             child: GestureDetector(
               child: SizedBox(
                 height: AppSize.s20,
@@ -180,7 +180,7 @@ class OnBoardingPage extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        SizedBox(height: AppSize.s40),
+        SizedBox(height: AppSize.s20),
         Padding(
           padding: const EdgeInsets.all(AppPadding.p8),
           child: Text(

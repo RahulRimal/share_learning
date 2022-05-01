@@ -50,7 +50,7 @@ class SessionApi {
 
       // print(json.encode(json.decode(response.body)['data']['sessions']));
       // print(json.encode(json.decode(response.body)['data']['sessions'][0]));
-      // print(json.encode(json.decode(response.body)));
+      print(json.encode(json.decode(response.body)));
       if (response.statusCode == ApiStatusCode.responseCreated) {
         return Success(
             code: response.statusCode,
@@ -71,9 +71,9 @@ class SessionApi {
           errorResponse: ApiStrings.invalidFormatString);
     } catch (e) {
       return Failure(code: 103, errorResponse: e.toString());
-      return Failure(
-          code: ApiStatusCode.unknownError,
-          errorResponse: ApiStrings.unknownErrorString);
+      // return Failure(
+      //     code: ApiStatusCode.unknownError,
+      //     errorResponse: ApiStrings.unknownErrorString);
     }
   }
 
