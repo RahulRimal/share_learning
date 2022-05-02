@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'color_manager.dart';
@@ -90,4 +91,17 @@ ThemeData getApplicationTheme() {
                 BorderSide(color: ColorManager.primary, width: AppSize.s1_5),
             borderRadius: BorderRadius.all(Radius.circular(AppSize.s8))),
       ));
+}
+
+CupertinoThemeData getCupertinoApplicationTheme() {
+  return CupertinoThemeData(
+    primaryColor: ColorManager.primary,
+    primaryContrastingColor: ColorManager.white,
+    scaffoldBackgroundColor: ColorManager.white,
+    barBackgroundColor: ColorManager.primary,
+    textTheme: CupertinoTextThemeData(
+      primaryColor: ColorManager.primary,
+      textStyle: getRegularStyle(color: ColorManager.primary),
+    ),
+  );
 }

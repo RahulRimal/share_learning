@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:async/async.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 
@@ -68,74 +69,154 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // User user = users.user;
 
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg'),
-            ),
-          ),
-        ],
-      ),
-      body: Container(
-        child: Container(
-          child: FutureBuilder(
-            // future: books.getBooks(authenticatedSession),
-            future: books.getBooksAnnonimusly(authenticatedSession),
-            builder: (ctx, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(
-                    color: ColorManager.primary,
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              trailing: Row(children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg'),
                   ),
-                );
-              } else {
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error'),
-                  );
-                } else {
-                  return Consumer<Books>(
-                    builder: (ctx, books, child) {
-                      return books.books.length <= 0
-                          ? Center(
-                              child: Text(
-                                'No books found',
-                                style: getBoldStyle(
-                                    fontSize: FontSize.s20,
-                                    color: ColorManager.primary),
-                              ),
-                            )
-                          : ListView.builder(
-                              itemCount: books.books.length,
-                              itemBuilder: (ctx, index) {
-                                return Post(
-                                  loggedInUserSession: authenticatedSession,
-                                  id: books.books[index].id,
-                                  title: books.books[index].bookName,
-                                  description: books.books[index].description,
-                                  author: books.books[index].author,
-                                  boughtTime: books.books[index].boughtDate,
-                                  price: books.books[index].price,
-                                  selling: books.books[index].postType == 'S'
-                                      ? true
-                                      : false,
-                                  bookCount: books.books[index].bookCount,
-                                );
-                              },
-                            );
-                    },
-                  );
-                }
-              }
-            },
-          ),
-        ),
-      ),
-      drawer: AppDrawer(authenticatedSession),
-    );
+                ),
+              ]),
+              middle: Text('Home',
+                  style: getBoldStyle(color: ColorManager.primary)),
+              backgroundColor: ColorManager.primary,
+            ),
+            child: Container(
+              child: Container(
+                child: FutureBuilder(
+                  // future: books.getBooks(authenticatedSession),
+                  future: books.getBooksAnnonimusly(authenticatedSession),
+                  builder: (ctx, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: ColorManager.primary,
+                        ),
+                      );
+                    } else {
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text('Error'),
+                        );
+                      } else {
+                        return Consumer<Books>(
+                          builder: (ctx, books, child) {
+                            return books.books.length <= 0
+                                ? Center(
+                                    child: Text(
+                                      'No books found',
+                                      style: getBoldStyle(
+                                          fontSize: FontSize.s20,
+                                          color: ColorManager.primary),
+                                    ),
+                                  )
+                                : ListView.builder(
+                                    itemCount: books.books.length,
+                                    itemBuilder: (ctx, index) {
+                                      return Post(
+                                        loggedInUserSession:
+                                            authenticatedSession,
+                                        id: books.books[index].id,
+                                        title: books.books[index].bookName,
+                                        description:
+                                            books.books[index].description,
+                                        author: books.books[index].author,
+                                        boughtTime:
+                                            books.books[index].boughtDate,
+                                        price: books.books[index].price,
+                                        selling:
+                                            books.books[index].postType == 'S'
+                                                ? true
+                                                : false,
+                                        bookCount: books.books[index].bookCount,
+                                      );
+                                    },
+                                  );
+                          },
+                        );
+                      }
+                    }
+                  },
+                ),
+              ),
+            ),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg'),
+                  ),
+                ),
+              ],
+            ),
+            body: Container(
+              child: Container(
+                child: FutureBuilder(
+                  // future: books.getBooks(authenticatedSession),
+                  future: books.getBooksAnnonimusly(authenticatedSession),
+                  builder: (ctx, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: ColorManager.primary,
+                        ),
+                      );
+                    } else {
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text('Error'),
+                        );
+                      } else {
+                        return Consumer<Books>(
+                          builder: (ctx, books, child) {
+                            return books.books.length <= 0
+                                ? Center(
+                                    child: Text(
+                                      'No books found',
+                                      style: getBoldStyle(
+                                          fontSize: FontSize.s20,
+                                          color: ColorManager.primary),
+                                    ),
+                                  )
+                                : ListView.builder(
+                                    itemCount: books.books.length,
+                                    itemBuilder: (ctx, index) {
+                                      return Post(
+                                        loggedInUserSession:
+                                            authenticatedSession,
+                                        id: books.books[index].id,
+                                        title: books.books[index].bookName,
+                                        description:
+                                            books.books[index].description,
+                                        author: books.books[index].author,
+                                        boughtTime:
+                                            books.books[index].boughtDate,
+                                        price: books.books[index].price,
+                                        selling:
+                                            books.books[index].postType == 'S'
+                                                ? true
+                                                : false,
+                                        bookCount: books.books[index].bookCount,
+                                      );
+                                    },
+                                  );
+                          },
+                        );
+                      }
+                    }
+                  },
+                ),
+              ),
+            ),
+            drawer: AppDrawer(authenticatedSession),
+          );
   }
 }
