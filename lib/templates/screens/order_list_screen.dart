@@ -3,8 +3,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:share_learning/templates/managers/assets_manager.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/managers/font_manager.dart';
+
 import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/managers/values_manager.dart';
+import 'package:share_learning/templates/widgets/order_item.dart';
 
 class OrderListScreen extends StatefulWidget {
   const OrderListScreen({Key? key}) : super(key: key);
@@ -94,6 +96,13 @@ class _OrderListScreenState extends State<OrderListScreen> {
                     )
                   ],
                 ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      return OrderItem();
+                    }),
               ),
             ],
           ),

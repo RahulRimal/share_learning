@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:path/path.dart';
@@ -70,24 +71,31 @@ class PostComments extends StatelessWidget {
     // .updatePost(_edittedBook.id, _edittedBook);
     //     .updatePost(loggedInUserSession, _edittedBook);
     Navigator.of(context).pop();
-    _showUpdateSnackbar(context);
+
+    BotToast.showSimpleNotification(
+      title: 'Reply updated successfully',
+      duration: Duration(seconds: 3),
+      backgroundColor: ColorManager.primary,
+      titleStyle: getBoldStyle(color: ColorManager.white),
+      align: Alignment(1, 1),
+    );
 
     return true;
   }
 
-  void _showUpdateSnackbar(BuildContext context) {
-    final snackBar = SnackBar(
-      content: Text(
-        'Reply Updated Successfully',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
+  // void _showUpdateSnackbar(BuildContext context) {
+  //   final snackBar = SnackBar(
+  //     content: Text(
+  //       'Reply Updated Successfully',
+  //       textAlign: TextAlign.center,
+  //       style: TextStyle(
+  //         fontSize: 13,
+  //         fontWeight: FontWeight.bold,
+  //       ),
+  //     ),
+  //   );
+  //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  // }
 
   @override
   Widget build(BuildContext context) {

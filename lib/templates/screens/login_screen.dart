@@ -66,16 +66,21 @@ class _LoginScreenState extends State<LoginScreen> {
       SessionProvider userSession = new SessionProvider();
       if (await userSession.createSession(usernameOrEmail, userpassword) ==
           true) {
-        setState(() {
-          if (mounted) {
+        if (mounted) {
+          setState(() {
             showSpinner = false;
-          }
-        });
+          });
+          // setState(() {
+          //   if (mounted) {
+          //     showSpinner = false;
+          //   }
+          // });
 
-        Navigator.of(context)
-            .pushReplacementNamed(HomeScreen.routeName, arguments: {
-          'authSession': userSession.session,
-        });
+          Navigator.of(context)
+              .pushReplacementNamed(HomeScreen.routeName, arguments: {
+            'authSession': userSession.session,
+          });
+        }
       } else {
         setState(() {
           showSpinner = true;

@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
@@ -6,6 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/models/session.dart';
 import 'package:share_learning/providers/books.dart';
+import 'package:share_learning/templates/managers/color_manager.dart';
+import 'package:share_learning/templates/managers/style_manager.dart';
 
 class EditPostScreen extends StatefulWidget {
   static const routeName = '/edit-post';
@@ -96,19 +99,19 @@ class _EditPostScreenState extends State<EditPostScreen> {
     return true;
   }
 
-  void _showUpdateSnackbar(BuildContext context) {
-    final snackBar = SnackBar(
-      content: Text(
-        'Posted Updated Successfully',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
+  // void _showUpdateSnackbar(BuildContext context) {
+  //   final snackBar = SnackBar(
+  //     content: Text(
+  //       'Posted Updated Successfully',
+  //       textAlign: TextAlign.center,
+  //       style: TextStyle(
+  //         fontSize: 13,
+  //         fontWeight: FontWeight.bold,
+  //       ),
+  //     ),
+  //   );
+  //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +128,26 @@ class _EditPostScreenState extends State<EditPostScreen> {
                   icon: Icon(Icons.save),
                   onPressed: () {
                     if (_updatePost(loggedInUserSession, _edittedBook))
-                      _showUpdateSnackbar(context);
+                      // _showUpdateSnackbar(context);
+                      BotToast.showSimpleNotification(
+                        title: 'Posted Updated Successfully',
+                        duration: Duration(seconds: 3),
+                        backgroundColor: ColorManager.primary,
+                        titleStyle: getBoldStyle(color: ColorManager.white),
+                        align: Alignment(0, 1),
+                        hideCloseButton: true,
+                      );
+
+                    // BotToast.showCustomNotification(
+                    //   toastBuilder: (c) => Center(
+                    //     child: Text(
+                    //       'Posted Updated Successfully',
+                    //       style: getBoldStyle(color: ColorManager.white),
+                    //     ),
+                    //   ),
+                    //   duration: Duration(seconds: 5),
+                    //   align: Alignment(1, 1),
+                    // );
                   },
                   // onPressed: _updatePost,
                 )
@@ -478,7 +500,14 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     // onPressed: _savePost,
                     onPressed: () {
                       if (_updatePost(loggedInUserSession, _edittedBook))
-                        _showUpdateSnackbar(context);
+                        // _showUpdateSnackbar(context);
+                        BotToast.showSimpleNotification(
+                          title: 'Posted Updated Successfully',
+                          duration: Duration(seconds: 3),
+                          backgroundColor: ColorManager.primary,
+                          titleStyle: getBoldStyle(color: ColorManager.white),
+                          align: Alignment(1, 1),
+                        );
                     },
                     child: Text(
                       'Update Post',

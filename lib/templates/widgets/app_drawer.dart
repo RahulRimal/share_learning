@@ -8,7 +8,9 @@ import 'package:share_learning/providers/sessions.dart';
 import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/managers/font_manager.dart';
+import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/screens/add_post_screen.dart';
+import 'package:share_learning/templates/screens/home_screen.dart';
 import 'package:share_learning/templates/screens/login_screen.dart';
 import 'package:share_learning/templates/screens/user_posts_screen.dart';
 
@@ -37,6 +39,59 @@ class AppDrawer extends StatelessWidget {
     // ),
     null,
   );
+
+  List<DrawerItem> _drawerItems = [
+    DrawerItem(
+      icon: Icons.home,
+      title: 'Home',
+      route: HomeScreen.routeName,
+    ),
+    DrawerItem(
+      icon: Icons.add_circle,
+      title: 'Add Post',
+      route: AddPostScreen.routeName,
+    ),
+    DrawerItem(
+      icon: Icons.person,
+      title: 'Profile',
+      route: UserPostsScreen.routeName,
+    ),
+    // DrawerItem(
+    //   icon: Icons.exit_to_app,
+    //   title: 'Logout',
+    //   route: LoginScreen.routeName,
+    // ),
+  ];
+
+  Widget getDrawerItem(BuildContext context, DrawerItem item) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: ListTile(
+          title: Text(
+            item.title,
+            style: getBoldStyle(
+              color: ColorManager.black,
+              fontSize: FontSize.s18,
+            ),
+          ),
+          leading: Icon(
+            item.icon,
+            color: Colors.white,
+          ),
+          onTap: () {
+            if (item.route == HomeScreen.routeName)
+              Navigator.pushNamed(context, item.route,
+                  arguments: {'authSession': loggedInSession});
+            if (item.route == AddPostScreen.routeName)
+              Navigator.pushNamed(context, item.route);
+            if (item.route == UserPostsScreen.routeName)
+              Navigator.pushNamed(context, item.route, arguments: {
+                'uId': loggedInSession.userId,
+                'loggedInUserSession': loggedInSession
+              });
+          }),
+    );
+  }
 
   Future<User?> _getSessionUser() async {
     // await users.getUserByToken(accessToken);
@@ -104,73 +159,114 @@ class AppDrawer extends StatelessWidget {
                           ],
                         ),
                       ),
+                      // SizedBox(
+                      //   height: 40,
+                      // ),
+                      // ListTile(
+                      //   leading: Icon(
+                      //     Icons.account_circle,
+                      //     color: Colors.white,
+                      //   ),
+                      //   title: Text(
+                      //     'Profile',
+                      //     style: TextStyle(
+                      //       color: Colors.white,
+                      //       fontSize: FontSize.s18,
+                      //     ),
+                      //   ),
+                      //   onTap: () {
+                      //     Navigator.pop(context);
+                      //   },
+                      // ),
+                      // ListTile(
+                      //   leading: Icon(
+                      //     Icons.home,
+                      //     color: Colors.white,
+                      //   ),
+                      //   title: Text(
+                      //     'Your Posts',
+                      //     style: TextStyle(
+                      //       color: Colors.white,
+                      //       fontSize: FontSize.s18,
+                      //     ),
+                      //   ),
+                      //   // onTap: () {
+                      //   //   Navigator.pop(context);
+                      //   // },
+                      //   onTap: () => Navigator.of(context).pushNamed(
+                      //     UserPostsScreen.routeName,
+                      //     arguments: {
+                      //       'uId': loggedInSession.userId,
+                      //       'loggedInUserSession': loggedInSession,
+                      //     },
+                      //   ),
+                      // ),
+                      // ListTile(
+                      //   leading: Icon(
+                      //     Icons.home,
+                      //     color: Colors.white,
+                      //   ),
+                      //   title: Text(
+                      //     'Home',
+                      //     style: TextStyle(
+                      //       color: Colors.white,
+                      //       fontSize: FontSize.s18,
+                      //     ),
+                      //   ),
+                      //   onTap: () {
+                      //     Navigator.pop(context);
+                      //   },
+                      // ),
+                      // ListTile(
+                      //   leading: Icon(
+                      //     Icons.logout,
+                      //     color: Colors.white,
+                      //   ),
+                      //   title: Text(
+                      //     'Log out',
+                      //     style: TextStyle(
+                      //       color: Colors.white,
+                      //       fontSize: FontSize.s18,
+                      //     ),
+                      //   ),
+                      //   onTap: () {
+                      //     Provider.of<Books>(context, listen: false)
+                      //         .setBooks([]);
+                      //     users.logoutUser(loggedInSession.id);
+
+                      //     Provider.of<Comments>(context, listen: false)
+                      //         .setComments([]);
+
+                      //     //     .logout(accessToken);
+                      //     Navigator.pushReplacementNamed(
+                      //         context, LoginScreen.routeName);
+                      //   },
+                      // ),
+
                       SizedBox(
-                        height: 40,
+                        height: 20,
                       ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.account_circle,
-                          color: Colors.white,
-                        ),
-                        title: Text(
-                          'Profile',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: FontSize.s18,
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
+                      Expanded(
+                        child: ListView.builder(
+                            itemBuilder: (context, index) {
+                              return getDrawerItem(
+                                  context, _drawerItems[index]);
+                            },
+                            itemCount: _drawerItems.length),
                       ),
+
+                      Spacer(),
+
                       ListTile(
-                        leading: Icon(
-                          Icons.home,
-                          color: Colors.white,
-                        ),
-                        title: Text(
-                          'Your Posts',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: FontSize.s18,
-                          ),
-                        ),
-                        // onTap: () {
-                        //   Navigator.pop(context);
-                        // },
-                        onTap: () => Navigator.of(context).pushNamed(
-                          UserPostsScreen.routeName,
-                          arguments: {
-                            'uId': loggedInSession.userId,
-                            'loggedInUserSession': loggedInSession,
-                          },
-                        ),
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.home,
-                          color: Colors.white,
-                        ),
-                        title: Text(
-                          'Home',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: FontSize.s18,
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ListTile(
+                        tileColor: ColorManager.white,
                         leading: Icon(
                           Icons.logout,
-                          color: Colors.white,
+                          color: ColorManager.primary,
                         ),
                         title: Text(
                           'Log out',
-                          style: TextStyle(
-                            color: Colors.white,
+                          style: getBoldStyle(
+                            color: ColorManager.primary,
                             fontSize: FontSize.s18,
                           ),
                         ),
@@ -181,12 +277,10 @@ class AppDrawer extends StatelessWidget {
 
                           Provider.of<Comments>(context, listen: false)
                               .setComments([]);
-
-                          //     .logout(accessToken);
                           Navigator.pushReplacementNamed(
                               context, LoginScreen.routeName);
                         },
-                      ),
+                      )
                     ],
                   ),
                 );
@@ -196,6 +290,7 @@ class AppDrawer extends StatelessWidget {
                     // 'Error fetching data please restart the app',
                     'Something went wrong',
                     // snapshot.data.toString(),
+                    style: getBoldStyle(color: ColorManager.white),
                   ),
                 );
               }
@@ -334,4 +429,11 @@ class AppDrawer extends StatelessWidget {
       ),
     );
   }
+}
+
+class DrawerItem {
+  String title;
+  IconData icon;
+  String route;
+  DrawerItem({required this.title, required this.icon, required this.route});
 }

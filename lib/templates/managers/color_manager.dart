@@ -18,6 +18,9 @@ class ColorManager {
   static Color white = HexColor.fromHex("#FFFFFF");
   static Color black = HexColor.fromHex("#000000");
   static Color error = HexColor.fromHex("#e61f34"); // red color
+
+  static Color primaryColorWithOpacity = Color.fromARGB(89, 229, 99, 999);
+  static Color blackWithOpacity = Color.fromARGB(89, 0, 0, 0);
 }
 
 extension HexColor on Color {

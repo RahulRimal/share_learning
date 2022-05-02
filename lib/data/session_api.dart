@@ -50,7 +50,6 @@ class SessionApi {
 
       // print(json.encode(json.decode(response.body)['data']['sessions']));
       // print(json.encode(json.decode(response.body)['data']['sessions'][0]));
-      print(json.encode(json.decode(response.body)));
       if (response.statusCode == ApiStatusCode.responseCreated) {
         return Success(
             code: response.statusCode,

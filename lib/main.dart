@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/session.dart';
@@ -39,8 +40,6 @@ class MyApp extends StatelessWidget {
         // ),
 
         ChangeNotifierProxyProvider<SessionProvider, Users>(
-          // create: (context) => Users(
-          //     Provider.of<SessionProvider>(context, listen: false).session),
           create: (context) => Users(
             Session(
               id: '0',
@@ -53,26 +52,21 @@ class MyApp extends StatelessWidget {
           ),
           update: (context, session, previousUser) => Users(session.session),
         ),
-        // ChangeNotifierProvider.value(value: Users()),
         ChangeNotifierProvider(create: (_) => Books()),
         ChangeNotifierProvider(create: (_) => Comments()),
-        // ChangeNotifierProvider.value(value: AppDrawer()),
       ],
       child: MaterialApp(
+        builder: BotToastInit(),
+        navigatorObservers: [BotToastNavigatorObserver()],
         debugShowCheckedModeBanner: false,
         title: AppStrings.appTitle,
-        // theme: ThemeData(
-        //   primaryColor: Colors.redAccent,
-        //   accentColor: Colors.blueAccent,
-        //   scaffoldBackgroundColor: Colors.grey[100],
-        // ),
         theme: getApplicationTheme(),
         // home: HomeScreen(),
-        // home: SplashScreen(),
+        home: SplashScreen(),
         // home: OnBoardingScreen(),
         // home: AddPostScreen(),
         // home: LoginSignupScreen(),
-        home: LoginScreen(),
+        // home: LoginScreen(),
         // home: OrderListScreen(),
         // home: SignUpScreen(),
         routes: {
