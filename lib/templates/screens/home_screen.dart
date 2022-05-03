@@ -10,11 +10,14 @@ import 'package:http/http.dart' as http;
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/models/session.dart';
 import 'package:share_learning/models/user.dart';
+import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/providers/users.dart';
+import 'package:share_learning/templates/managers/api_values_manager.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/managers/font_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';
+import 'package:share_learning/templates/utils/user_helper.dart';
 import 'package:share_learning/templates/widgets/app_drawer.dart';
 import 'package:share_learning/templates/widgets/post.dart';
 
@@ -34,12 +37,14 @@ class _HomeScreenState extends State<HomeScreen> {
       lastName: 'lastName',
       username: 'username',
       email: 'email',
+      image: null,
       description: 'description',
       userClass: 'userClass',
       followers: 'followers',
       createdDate: DateTime.now());
 
   _setUserValue(User user) {
+    // this.user = user;
     user = user;
   }
 
@@ -51,7 +56,14 @@ class _HomeScreenState extends State<HomeScreen> {
     final Session authenticatedSession = args['authSession'] as Session;
 
     // Users users = context.watch<Users>();
+
+    Users users = context.watch<Users>();
     Books books = context.watch<Books>();
+
+    // var loggedUser = users.getUserByIdAndSession(
+    //     authenticatedSession, authenticatedSession.userId) as User;
+
+    // _setUserValue(loggedUser);
 
     // User _user = users.getUserByToken(authenticatedSession.accessToken);
 
@@ -150,9 +162,30 @@ class _HomeScreenState extends State<HomeScreen> {
               actions: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg'),
+                  child: FutureBuilder(
+                    future: users.getUserByIdAndSession(
+                        authenticatedSession, authenticatedSession.userId),
+                    builder: (ctx, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator(
+                          color: ColorManager.secondary,
+                        );
+                      } else {
+                        if (snapshot.hasError) {
+                          return CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                'https://ojasfilms.org/assets/img/ojas-logo.png'),
+                          );
+                        } else {
+                          return CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                // ((snapshot.data as User).image) as String),
+                                (UserHelper.userProfileImage(
+                                    snapshot.data as User))),
+                          );
+                        }
+                      }
+                    },
                   ),
                 ),
               ],

@@ -38,6 +38,7 @@ class SinglePostScreen extends StatelessWidget {
     firstName: 'temp',
     lastName: 'Name',
     email: '',
+    image: null,
     username: 'temp',
     description: '',
     userClass: '',

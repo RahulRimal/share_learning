@@ -43,12 +43,14 @@ class SessionApi {
           // "Content-Type": "application/json",
           // HttpHeaders.contentTypeHeader: "application/json; charset=utf-8",
           HttpHeaders.contentTypeHeader: "application/json",
+          // HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded",
         },
         body: json.encode(postBody),
         // body: postBody,
       );
 
       // print(json.encode(json.decode(response.body)['data']['sessions']));
+      // print(response.body);
       // print(json.encode(json.decode(response.body)['data']['sessions'][0]));
       if (response.statusCode == ApiStatusCode.responseCreated) {
         return Success(

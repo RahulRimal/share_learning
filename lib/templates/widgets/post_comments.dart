@@ -13,6 +13,7 @@ import 'package:share_learning/templates/managers/font_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/screens/single_post_screen.dart';
 import 'package:share_learning/templates/screens/user_posts_screen.dart';
+import 'package:share_learning/templates/utils/user_helper.dart';
 
 class PostComments extends StatelessWidget {
   // final Book selectedPost;
@@ -36,6 +37,7 @@ class PostComments extends StatelessWidget {
     firstName: 'temp',
     lastName: 'Name',
     email: '',
+    image: null,
     username: 'temp',
     description: '',
     userClass: '',
@@ -228,13 +230,16 @@ class PostComments extends StatelessWidget {
                                                         CircleAvatar(
                                                           backgroundImage:
                                                               NetworkImage(
+                                                            UserHelper
+                                                                .userProfileImage(
+                                                                    _commentUser),
                                                             // commentUser.image as String,
-                                                            _commentUser.image !=
-                                                                    null
-                                                                ? _commentUser
-                                                                        .image
-                                                                    as String
-                                                                : 'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
+                                                            // _commentUser.image !=
+                                                            //         null
+                                                            //     ? _commentUser
+                                                            //             .image
+                                                            //         as String
+                                                            //     : 'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
                                                           ),
                                                         ),
                                                         _shouldFlex(
@@ -250,7 +255,10 @@ class PostComments extends StatelessWidget {
                                                                               10),
                                                                   child: Text(
                                                                     // '${commentUser.firstName} ${commentUser.lastName}',
-                                                                    '${_commentUser.firstName}',
+                                                                    // '${_commentUser.firstName}',
+                                                                    UserHelper
+                                                                        .userDisplayName(
+                                                                            _commentUser),
                                                                     textAlign:
                                                                         TextAlign
                                                                             .center,
@@ -275,8 +283,10 @@ class PostComments extends StatelessWidget {
                                                                         .all(
                                                                             10),
                                                                 child: Text(
-                                                                  // '${_commentUser.firstName} ${_commentUser.lastName}',
-                                                                  '${_commentUser.firstName}',
+                                                                  // '${_commentUser.firstName}',
+                                                                  UserHelper
+                                                                      .userDisplayName(
+                                                                          _commentUser),
                                                                   textAlign:
                                                                       TextAlign
                                                                           .center,

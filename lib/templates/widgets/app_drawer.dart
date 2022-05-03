@@ -13,6 +13,7 @@ import 'package:share_learning/templates/screens/add_post_screen.dart';
 import 'package:share_learning/templates/screens/home_screen.dart';
 import 'package:share_learning/templates/screens/login_screen.dart';
 import 'package:share_learning/templates/screens/user_posts_screen.dart';
+import 'package:share_learning/templates/utils/user_helper.dart';
 
 class AppDrawer extends StatelessWidget {
   // User user;
@@ -141,22 +142,31 @@ class AppDrawer extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
-                        child: Column(
-                          children: [
-                            CircleAvatar(
-                              radius: 70,
-                              backgroundImage: NetworkImage(
-                                  'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg'),
-                            ),
-                            Text(
-                              users.user!.firstName,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: FontSize.s18,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20.0),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                radius: 70,
+                                backgroundImage: NetworkImage(
+                                  UserHelper.userProfileImage(
+                                      users.user as User),
+                                ),
                               ),
-                            ),
-                          ],
+                              SizedBox(height: 10),
+                              Text(
+                                users.user!.firstName,
+                                style: getBoldStyle(
+                                    color: ColorManager.black,
+                                    fontSize: FontSize.s18),
+                                // style: TextStyle(
+                                //   color: Colors.white,
+                                //   fontSize: FontSize.s18,
+                                // ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       // SizedBox(

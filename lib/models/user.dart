@@ -41,7 +41,7 @@ class User {
       required this.userClass,
       required this.followers,
       required this.createdDate,
-      this.image});
+      required this.image});
 
   String id;
   String firstName;
@@ -52,6 +52,7 @@ class User {
   String? email;
   // String description;
   String? description;
+
   String? image;
   // String userClass;
   String? userClass;
@@ -62,10 +63,11 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"] == null ? null : json["id"],
-        firstName: json["name"] == null ? null : json["name"],
-        lastName: json["name"] == null ? null : json["name"],
+        firstName: json["firstName"] == null ? null : json["firstName"],
+        lastName: json["lastName"] == null ? null : json["lastName"],
         username: json["username"] == null ? null : json["username"],
         email: json["email"] == null ? null : json["email"],
+        image: json["picture"] == null ? null : json["picture"],
         description: json["description"] == null ? null : json["description"],
         userClass: json["class"] == null ? null : json["class"],
         followers: json["followers"] == null ? null : json["followers"],
