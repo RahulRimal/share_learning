@@ -113,7 +113,7 @@ class Book {
         // wishlisted: json["wishlisted"] == null ? null : json["wishlisted"],
         wishlisted: json["wishlisted"] == '1' ? true : false,
         postType: json["postType"] == null ? null : json["postType"],
-        postRating: json["postRating"] == null ? null : json["postRating"],
+        postRating: json["postRating"] == null ? '' : json["postRating"],
         // postedOn:
         //     json["postedOn"] == null ? null : DateTime.parse(json["postedOn"]),
         postedOn: NepaliDateTime.parse(json["postedOn"].toString()),

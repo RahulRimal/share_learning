@@ -26,7 +26,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
   final _booksCountFocusNode = FocusNode();
   final _descFocusNode = FocusNode();
 
-  List<bool> postTypeBuying = [true, false];
+  List<bool> postTypeSelling = [true, false];
 
   var _edittedBook = Book(
     id: '',
@@ -61,7 +61,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
           Provider.of<Books>(context, listen: false).getBookById(bookId);
 
       ispostType = _edittedBook.postType == 'S' ? true : false;
-      postTypeBuying = [ispostType, !ispostType];
+      postTypeSelling = [ispostType, !ispostType];
     } else
       print('Book Id Is Empty');
 
@@ -89,6 +89,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
       return false;
     }
     _form.currentState!.save();
+    _edittedBook.postType = ispostType ? 'S' : 'B';
     Provider.of<Books>(context, listen: false)
         // .updatePost(_edittedBook.id, _edittedBook);
         .updatePost(loggedInUserSession, _edittedBook);
@@ -450,7 +451,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                 ),
                 Container(
                   child: ToggleButtons(
-                    isSelected: postTypeBuying,
+                    isSelected: postTypeSelling,
                     color: Colors.grey,
                     selectedColor: Colors.white,
                     fillColor: Theme.of(context).primaryColor,
@@ -479,13 +480,13 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     ],
                     onPressed: (int index) {
                       setState(() {
-                        for (int i = 0; i < postTypeBuying.length; i++) {
+                        for (int i = 0; i < postTypeSelling.length; i++) {
                           if (i == index)
-                            postTypeBuying[i] = true;
+                            postTypeSelling[i] = true;
                           else
-                            postTypeBuying[i] = false;
+                            postTypeSelling[i] = false;
                         }
-                        ispostType = postTypeBuying[0];
+                        ispostType = postTypeSelling[0];
                       });
                     },
                   ),

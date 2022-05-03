@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,10 +8,13 @@ import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
+import 'package:share_learning/models/session.dart';
 import 'package:share_learning/providers/books.dart';
 
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as syspaths;
+import 'package:share_learning/templates/managers/color_manager.dart';
+import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/widgets/image_gallery.dart';
 
 class AddPostScreen extends StatefulWidget {
@@ -133,7 +137,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
     // DateFormat('yyyy/MM/dd').format(_boughtDate as DateTime).toString();
   }
 
-  bool _savePost() {
+  bool _savePost(Session loggedInUser) {
     final isValid = _form.currentState!.validate();
 
     if (!isValid) {
@@ -141,27 +145,41 @@ class _AddPostScreenState extends State<AddPostScreen> {
     }
     _form.currentState!.save();
     // _edittedBook.pictures = actualImages;
-    Provider.of<Books>(context, listen: false).addPost(_edittedBook);
+    // Provider.of<Books>(context, listen: false).addPost(_edittedBook);
+    Provider.of<Books>(context, listen: false)
+        .createPost(loggedInUser, _edittedBook);
     Navigator.of(context).pop();
     Navigator.of(context).pop();
 
     return true;
-    // print(_edittedBook.bookName);
-    // print(_edittedBook.author);
-    // print(_edittedBook.boughtDate);
-    // print(_edittedBook.price);
-    // print(_edittedBook.description);
   }
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    final Session loggedInUserSession = args['loggedInUserSession'] as Session;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Add New Post'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: () {},
+            onPressed: () {
+              if (_savePost(loggedInUserSession)) {
+                final snackBar = SnackBar(
+                  content: Text(
+                    'Posted Successfully',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            },
           ),
         ],
       ),
@@ -467,7 +485,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       Padding(
                         padding: EdgeInsets.all(5),
                         child: Text(
-                          'postType',
+                          'Selling',
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.bold,
@@ -557,18 +575,26 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           Theme.of(context).primaryColor),
                     ),
                     onPressed: () {
-                      if (_savePost()) {
-                        final snackBar = SnackBar(
-                          content: Text(
-                            'Posted Successfully',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                      if (_savePost(loggedInUserSession)) {
+                        // final snackBar = SnackBar(
+                        //   content: Text(
+                        //     'Posted Successfully',
+                        //     textAlign: TextAlign.center,
+                        //     style: TextStyle(
+                        //       fontSize: 13,
+                        //       fontWeight: FontWeight.bold,
+                        //     ),
+                        //   ),
+                        // );
+                        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                        BotToast.showSimpleNotification(
+                          title: 'Your book has been posted!!',
+                          duration: Duration(seconds: 3),
+                          backgroundColor: ColorManager.primary,
+                          titleStyle: getBoldStyle(color: ColorManager.white),
+                          align: Alignment(1, 1),
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
                     },
                     child: Text(

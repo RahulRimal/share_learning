@@ -192,6 +192,8 @@ class PostComments extends StatelessWidget {
                                                           arguments: {
                                                             'uId':
                                                                 _commentUser.id,
+                                                            'loggedInUserSession':
+                                                                loggedInUser,
                                                           },
                                                         );
                                                       } else {
@@ -233,17 +235,9 @@ class PostComments extends StatelessWidget {
                                                             UserHelper
                                                                 .userProfileImage(
                                                                     _commentUser),
-                                                            // commentUser.image as String,
-                                                            // _commentUser.image !=
-                                                            //         null
-                                                            //     ? _commentUser
-                                                            //             .image
-                                                            //         as String
-                                                            //     : 'https://cdn.pixabay.com/photo/2017/02/04/12/25/man-2037255_960_720.jpg',
                                                           ),
                                                         ),
                                                         _shouldFlex(
-                                                                // '${commentUser.firstName} ${commentUser.lastName}')
                                                                 '${_commentUser.firstName}')
                                                             ? Flexible(
                                                                 child:
@@ -254,8 +248,6 @@ class PostComments extends StatelessWidget {
                                                                           .all(
                                                                               10),
                                                                   child: Text(
-                                                                    // '${commentUser.firstName} ${commentUser.lastName}',
-                                                                    // '${_commentUser.firstName}',
                                                                     UserHelper
                                                                         .userDisplayName(
                                                                             _commentUser),

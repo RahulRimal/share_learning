@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 // import 'package:photo_view/photo_view.dart';
@@ -9,7 +10,6 @@ import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/providers/comment.dart';
 import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
-import 'package:share_learning/templates/managers/font_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/widgets/app_drawer.dart';
 import 'package:share_learning/templates/widgets/image_gallery.dart';
@@ -68,6 +68,7 @@ class SinglePostScreen extends StatelessWidget {
 
     // if (args != null) {
     // if (true) {
+    // bookId = args['id'] != null ? args['id'] : 1;
     bookId = args['id'];
     final Session loggedInUserSession = args['loggedInUserSession'] as Session;
 
@@ -92,6 +93,8 @@ class SinglePostScreen extends StatelessWidget {
 
     Comments comments = context.watch<Comments>();
 
+    Books books = context.watch<Books>();
+
     // bool _shouldFlex(String testString) {
     //   if (testString.length > 11) return true;
     //   return false;
@@ -107,7 +110,42 @@ class SinglePostScreen extends StatelessWidget {
         appBar: AppBar(
           actions: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(0),
+              child: loggedInUserSession.userId == selectedPost.userId
+                  ? IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () async {
+                        // Navigator.of(context)
+                        //     .pushNamed(EditPostScreen.routeName, arguments: {
+                        //   'bookId': bookId,
+                        //   'loggedInUserSession': loggedInUserSession
+                        // });
+
+                        if (await books.deletePost(
+                            loggedInUserSession, bookId)) {
+                          Navigator.pop(context);
+                          BotToast.showSimpleNotification(
+                            title: 'Post deleted successfully',
+                            duration: Duration(seconds: 3),
+                            backgroundColor: ColorManager.primary,
+                            titleStyle: getBoldStyle(color: ColorManager.white),
+                            align: Alignment(1, 1),
+                          );
+                        } else {
+                          BotToast.showSimpleNotification(
+                            title: 'Colubn\'t delete post!!',
+                            duration: Duration(seconds: 3),
+                            backgroundColor: ColorManager.primary,
+                            titleStyle: getBoldStyle(color: ColorManager.white),
+                            align: Alignment(1, 1),
+                          );
+                        }
+                      },
+                    )
+                  : null,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(0),
               child: loggedInUserSession.userId == selectedPost.userId
                   ? IconButton(
                       icon: Icon(Icons.edit),

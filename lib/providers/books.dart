@@ -186,22 +186,22 @@ class Books with ChangeNotifier {
   }
 
   void addPost(Book receivedInfo) {
-    Book newBook = Book(
-      id: '4',
-      userId: receivedInfo.userId,
-      bookName: receivedInfo.bookName,
-      author: receivedInfo.author,
-      boughtDate: receivedInfo.boughtDate,
-      description: receivedInfo.description,
-      wishlisted: receivedInfo.wishlisted,
-      price: receivedInfo.price,
-      bookCount: receivedInfo.bookCount,
-      postType: receivedInfo.postType,
-      postedOn: receivedInfo.postedOn,
-      postRating: receivedInfo.postRating,
-    );
+    // Book newBook = Book(
+    //   id: receivedInfo.id,
+    //   userId: receivedInfo.userId,
+    //   bookName: receivedInfo.bookName,
+    //   author: receivedInfo.author,
+    //   boughtDate: receivedInfo.boughtDate,
+    //   description: receivedInfo.description,
+    //   wishlisted: receivedInfo.wishlisted,
+    //   price: receivedInfo.price,
+    //   bookCount: receivedInfo.bookCount,
+    //   postType: receivedInfo.postType,
+    //   postedOn: receivedInfo.postedOn,
+    //   postRating: receivedInfo.postRating,
+    // );
 
-    _myBooks.add(newBook);
+    _myBooks.add(receivedInfo);
     notifyListeners();
   }
 
@@ -235,14 +235,66 @@ class Books with ChangeNotifier {
   //   notifyListeners();
   // }
 
+  void createPost(Session currentSession, Book receivedInfo) async {
+    var response = await BookApi.createPost(currentSession, receivedInfo);
+
+    if (response is Success) {
+      addPost(response.response as Book);
+    }
+    if (response is Failure) {
+      BookError bookError = BookError(
+        code: response.code,
+        message: response.errorResponse,
+      );
+      setBookError(bookError);
+    }
+    notifyListeners();
+  }
+
   void updatePost(Session currentSession, Book edittedPost) async {
     var response = await BookApi.updatePost(currentSession, edittedPost);
 
-    final postIndex =
-        _myBooks.indexWhere((element) => element.id == edittedPost.id);
+    // final postIndex =
+    //     _myBooks.indexWhere((element) => element.id == edittedPost.id);
 
-    _myBooks[postIndex] = edittedPost;
+    // _myBooks[postIndex] = edittedPost;
+
+    if (response is Success) {
+      final postIndex =
+          _myBooks.indexWhere((element) => element.id == edittedPost.id);
+      _myBooks[postIndex] = response as Book;
+    }
+
+    if (response is Failure) {
+      BookError bookError = BookError(
+        code: response.code,
+        message: response.errorResponse,
+      );
+      setBookError(bookError);
+    }
 
     notifyListeners();
+  }
+
+  Future<bool> deletePost(Session currentSession, String postId) async {
+    var response = await BookApi.deletePost(currentSession, postId);
+
+    if (response is Success) {
+      final postIndex = _myBooks.indexWhere((element) => element.id == postId);
+      _myBooks.removeAt(postIndex);
+      notifyListeners();
+      return true;
+    }
+    if (response is Failure) {
+      BookError bookError = BookError(
+        code: response.code,
+        message: response.errorResponse,
+      );
+      setBookError(bookError);
+      // notifyListeners();
+      return false;
+    }
+    notifyListeners();
+    return false;
   }
 }

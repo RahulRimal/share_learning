@@ -63,10 +63,13 @@ class BookApi {
       );
 
       if (response.statusCode == ApiStatusCode.responseSuccess) {
+        // print(json.encode(json.decode(response.body)['data']['posts']));
         return Success(
-            code: response.statusCode,
-            response: bookFromJson(
-                json.encode(json.decode(response.body)['data']['posts'])));
+          code: response.statusCode,
+          response: bookFromJson(
+            json.encode(json.decode(response.body)['data']['posts']),
+          ),
+        );
       }
 
       return Failure(
@@ -84,11 +87,11 @@ class BookApi {
         errorResponse: ApiStrings.invalidFormatString,
       );
     } catch (e) {
-      // return Failure(code: 103, errorResponse: e.toString());
-      return Failure(
-        code: ApiStatusCode.unknownError,
-        errorResponse: ApiStrings.unknownErrorString,
-      );
+      return Failure(code: 103, errorResponse: e.toString());
+      // return Failure(
+      //   code: ApiStatusCode.unknownError,
+      //   errorResponse: ApiStrings.unknownErrorString,
+      // );
     }
   }
 
@@ -124,11 +127,114 @@ class BookApi {
         body: json.encode(postBody),
       );
 
+      // print(json.encode(json.decode(response.body)['data']['posts'][0]));
+
       if (response.statusCode == ApiStatusCode.responseSuccess) {
         return Success(
             code: response.statusCode,
-            response: sessionFromJson(json
-                .encode(json.decode(response.body)['data']['sessions'][0])));
+            response: sessionFromJson(
+                json.encode(json.decode(response.body)['data']['posts'][0])));
+      }
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          errorResponse: ApiStrings.invalidResponseString);
+    } on HttpException {
+      return Failure(
+          code: ApiStatusCode.httpError,
+          errorResponse: ApiStrings.noInternetString);
+    } on FormatException {
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          errorResponse: ApiStrings.invalidFormatString);
+    } catch (e) {
+      // return Failure(code: 103, errorResponse: e.toString());
+      return Failure(
+          code: ApiStatusCode.unknownError,
+          errorResponse: ApiStrings.unknownErrorString);
+    }
+  }
+
+  static Future<Object> createPost(Session currentSession, Book newPost) async {
+    try {
+      Map<String, String> postBody = {
+        "userId": newPost.userId,
+        "bookName": newPost.bookName,
+        "author": newPost.author,
+        "description": newPost.description,
+        "boughtDate": newPost.boughtDate.toIso8601String(),
+        "price": newPost.price.toString(),
+        "bookCount": newPost.bookCount.toString(),
+        "wishlisted": newPost.wishlisted ? '2' : '1',
+        "postType": newPost.postType,
+        "postRating": newPost.postRating,
+        "postedOn": newPost.postedOn.toIso8601String()
+      };
+      var url = Uri.parse(RemoteManager.BASE_URI + '/posts');
+
+      var response = await http.post(
+        url,
+        headers: {
+          HttpHeaders.authorizationHeader: currentSession.accessToken,
+          "Accept": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin":
+              "*", // Required for CORS support to work
+          "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+          HttpHeaders.contentTypeHeader: "application/json",
+        },
+        body: json.encode(postBody),
+      );
+
+      // print(json.encode(json.decode(response.body)['data']['posts'][0]));
+      if (response.statusCode == ApiStatusCode.responseSuccess) {
+        return Success(
+            code: response.statusCode,
+            response: sessionFromJson(
+                json.encode(json.decode(response.body)['data']['posts'][0])));
+      }
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          errorResponse: ApiStrings.invalidResponseString);
+    } on HttpException {
+      return Failure(
+          code: ApiStatusCode.httpError,
+          errorResponse: ApiStrings.noInternetString);
+    } on FormatException {
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          errorResponse: ApiStrings.invalidFormatString);
+    } catch (e) {
+      // return Failure(code: 103, errorResponse: e.toString());
+      return Failure(
+          code: ApiStatusCode.unknownError,
+          errorResponse: ApiStrings.unknownErrorString);
+    }
+  }
+
+  static Future<Object> deletePost(
+      Session currentSession, String postId) async {
+    try {
+      var url = Uri.parse(RemoteManager.BASE_URI + '/posts/p/' + postId);
+
+      var response = await http.delete(
+        url,
+        headers: {
+          HttpHeaders.authorizationHeader: currentSession.accessToken,
+          "Accept": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin":
+              "*", // Required for CORS support to work
+          "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+          HttpHeaders.contentTypeHeader: "application/json",
+        },
+      );
+
+      // print(json.encode(json.decode(response.body)['data']['posts'][0]));
+      // print(response.body);
+      if (response.statusCode == ApiStatusCode.responseSuccess) {
+        return Success(
+            code: response.statusCode,
+            // response: sessionFromJson(
+            //     json.encode(json.decode(response.body)['data']['posts'][0])));
+            response: "Post deleted successfully");
       }
       return Failure(
           code: ApiStatusCode.invalidResponse,
