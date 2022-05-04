@@ -11,6 +11,7 @@ import 'package:share_learning/providers/comment.dart';
 import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';
+import 'package:share_learning/templates/screens/home_screen.dart';
 import 'package:share_learning/templates/widgets/app_drawer.dart';
 import 'package:share_learning/templates/widgets/image_gallery.dart';
 import 'package:share_learning/templates/widgets/post_comments.dart';
@@ -123,7 +124,12 @@ class SinglePostScreen extends StatelessWidget {
 
                         if (await books.deletePost(
                             loggedInUserSession, bookId)) {
-                          Navigator.pop(context);
+                          // Navigator.pop(context);
+                          Navigator.of(context).pushReplacementNamed(
+                              HomeScreen.routeName,
+                              arguments: {
+                                'authSession': loggedInUserSession,
+                              });
                           BotToast.showSimpleNotification(
                             title: 'Post deleted successfully',
                             duration: Duration(seconds: 3),

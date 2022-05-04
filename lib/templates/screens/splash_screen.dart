@@ -4,12 +4,18 @@ import 'dart:math';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:share_learning/data/session_api.dart';
+import 'package:share_learning/models/session.dart';
+import 'package:share_learning/providers/sessions.dart';
 import 'package:share_learning/templates/managers/assets_manager.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/screens/home_screen.dart';
 import 'package:share_learning/templates/screens/login_screen.dart';
 import 'package:share_learning/templates/screens/onboarding_screen.dart';
 import 'package:share_learning/templates/utils/internet_connection.dart';
+import 'package:share_learning/templates/utils/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -21,6 +27,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  // SharedPrefrencesHelper _sharedPrefrencesHelper = SharedPrefrencesHelper();
+
   Timer? _timer;
 
   _startDelay() {
@@ -121,9 +129,47 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
+  _getPreviousSession() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+
+    // String accessToken =
+    //     await _sharedPrefrencesHelper.getStringFromPrefrences('accessToken');
+    // SessionProvider sessions =
+    if (_prefs.containsKey('accessToken')) {
+      String accessToken = _prefs.getString('accessToken') as String;
+      SessionProvider sessions =
+          Provider.of<SessionProvider>(context, listen: false);
+      // Session session = await SessionApi.getPreviousSessions(accessToken);
+      sessions.getPreviousSession(accessToken);
+
+      if (sessions.session != null)
+        Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+      // else
+      //   Navigator.pushReplacementNamed(context, OnBoardingScreen.routeName);
+    }
+    // String accessToken = await _prefs.getString('accessToken');
+
+    //     Provider.of<SessionProvider>(context, listen: false);
+    // if (await sessions.getPreviousSession(accessToken)) {
+    //   // return sessions.session as Session;
+    //   Navigator.pushReplacementNamed(context, HomeScreen.routeName, arguments: {
+    //     'authSession': sessions.session,
+    //   });
+  }
+
   @override
   void initState() {
+    _getPreviousSession();
+    _startDelay();
     // if (await InternetConnectionChecker.checkInternetConnection())
+
+    // if (_sharedPrefrencesHelper.getStringFromPrefrences('accessToken') !=
+    //     null) {
+    //   _getPreviousSession();
+    // if (_getPreviousSession() != null) {
+    // Session loggedInSession = _getPreviousSession() as Session;
+
+    // }
     super.initState();
     // if (InternetConnectionChecker.checkInternetConnection() as bool) {
     //   _startDelay();
@@ -131,7 +177,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //   print('no internet');
     //   BotToast.showSimpleNotification(title: 'No Internet');
     // }
-    _startDelay();
+    // _startDelay();
   }
 
   @override

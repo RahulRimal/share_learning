@@ -282,7 +282,7 @@ class Books with ChangeNotifier {
     if (response is Success) {
       final postIndex = _myBooks.indexWhere((element) => element.id == postId);
       _myBooks.removeAt(postIndex);
-      notifyListeners();
+      // notifyListeners();
       return true;
     }
     if (response is Failure) {

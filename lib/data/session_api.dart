@@ -10,6 +10,45 @@ import 'package:share_learning/templates/managers/strings_manager.dart';
 import 'package:share_learning/templates/managers/values_manager.dart';
 
 class SessionApi {
+  static Future<Object> getPreviousSessions(String accessToken) async {
+    try {
+      var url = Uri.parse(RemoteManager.BASE_URI + '/sessions');
+
+      var response = await http.get(
+        url,
+        headers: {HttpHeaders.authorizationHeader: accessToken},
+      );
+
+      if (response.statusCode == ApiStatusCode.responseSuccess) {
+        return Success(
+            code: response.statusCode,
+            response: sessionFromJson(json
+                .encode(json.decode(response.body)['data']['sessions'][0])));
+      }
+
+      return Failure(
+        code: ApiStatusCode.invalidResponse,
+        errorResponse: ApiStrings.invalidResponseString,
+      );
+    } on HttpException {
+      return Failure(
+        code: ApiStatusCode.httpError,
+        errorResponse: ApiStrings.noInternetString,
+      );
+    } on FormatException {
+      return Failure(
+        code: ApiStatusCode.invalidResponse,
+        errorResponse: ApiStrings.invalidFormatString,
+      );
+    } catch (e) {
+      // return Failure(code: 103, errorResponse: e.toString());
+      return Failure(
+        code: ApiStatusCode.unknownError,
+        errorResponse: ApiStrings.unknownErrorString,
+      );
+    }
+  }
+
   static Future<Object> postSession(String userName, String password) async {
     try {
       Map<String, String> postBody = {

@@ -38,7 +38,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
   final _booksCountFocusNode = FocusNode();
   final _descFocusNode = FocusNode();
 
-  List<bool> postTypeBuying = [true, false];
+  List<bool> postTypeSelling = [true, false];
+
   bool ispostType = true;
 
   picker.NepaliDateTime? _boughtDate;
@@ -144,6 +145,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
       return false;
     }
     _form.currentState!.save();
+    _edittedBook.postType = ispostType ? 'S' : 'B';
     // _edittedBook.pictures = actualImages;
     // Provider.of<Books>(context, listen: false).addPost(_edittedBook);
     Provider.of<Books>(context, listen: false)
@@ -167,17 +169,33 @@ class _AddPostScreenState extends State<AddPostScreen> {
             icon: Icon(Icons.save),
             onPressed: () {
               if (_savePost(loggedInUserSession)) {
-                final snackBar = SnackBar(
-                  content: Text(
-                    'Posted Successfully',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                // final snackBar = SnackBar(
+                //   content: Text(
+                //     'Posted Successfully',
+                //     textAlign: TextAlign.center,
+                //     style: TextStyle(
+                //       fontSize: 13,
+                //       fontWeight: FontWeight.bold,
+                //     ),
+                //   ),
+                // );
+                // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                BotToast.showSimpleNotification(
+                  title: 'Your book has been posted!!',
+                  duration: Duration(seconds: 3),
+                  backgroundColor: ColorManager.primary,
+                  titleStyle: getBoldStyle(color: ColorManager.white),
+                  align: Alignment(1, 1),
                 );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              } else {
+                BotToast.showSimpleNotification(
+                  title: 'Couldn\'t post your book, plase try again!!',
+                  duration: Duration(seconds: 3),
+                  backgroundColor: ColorManager.primary,
+                  titleStyle: getBoldStyle(color: ColorManager.white),
+                  align: Alignment(1, 1),
+                  hideCloseButton: true,
+                );
               }
             },
           ),
@@ -437,7 +455,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     focusNode: _descFocusNode,
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.multiline,
                     cursorColor: Theme.of(context).primaryColor,
                     decoration: InputDecoration(
                       labelText: 'Book description',
@@ -476,7 +494,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 ),
                 Container(
                   child: ToggleButtons(
-                    isSelected: postTypeBuying,
+                    isSelected: postTypeSelling,
                     color: Colors.grey,
                     selectedColor: Colors.white,
                     fillColor: Theme.of(context).primaryColor,
@@ -505,13 +523,13 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     ],
                     onPressed: (int index) {
                       setState(() {
-                        for (int i = 0; i < postTypeBuying.length; i++) {
+                        for (int i = 0; i < postTypeSelling.length; i++) {
                           if (i == index)
-                            postTypeBuying[i] = true;
+                            postTypeSelling[i] = true;
                           else
-                            postTypeBuying[i] = false;
+                            postTypeSelling[i] = false;
                         }
-                        ispostType = postTypeBuying[0];
+                        ispostType = postTypeSelling[0];
                       });
                     },
                   ),
@@ -594,6 +612,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           backgroundColor: ColorManager.primary,
                           titleStyle: getBoldStyle(color: ColorManager.white),
                           align: Alignment(1, 1),
+                        );
+                      } else {
+                        BotToast.showSimpleNotification(
+                          title: 'Couldn\'t post your book, please try again!!',
+                          duration: Duration(seconds: 3),
+                          backgroundColor: ColorManager.primary,
+                          titleStyle: getBoldStyle(color: ColorManager.white),
+                          align: Alignment(1, 1),
+                          hideCloseButton: true,
                         );
                       }
                     },

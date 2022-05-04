@@ -11,7 +11,9 @@ import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/screens/home_screen.dart';
 import 'package:share_learning/templates/screens/signup_screen.dart';
 import 'package:share_learning/templates/screens/user_profile_screen.dart';
+import 'package:share_learning/templates/utils/shared_preferences.dart';
 import 'package:share_learning/templates/widgets/beizer_container.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key, this.title}) : super(key: key);
@@ -25,6 +27,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  // SharedPrefrencesHelper _sharedPrefrencesHelper = SharedPrefrencesHelper();
+
   final _form = GlobalKey<FormState>();
 
   FocusNode _passwordFocusNode = FocusNode();
@@ -76,6 +80,13 @@ class _LoginScreenState extends State<LoginScreen> {
           //     showSpinner = false;
           //   }
           // });
+
+          // _sharedPrefrencesHelper.setStringInPrefrences(
+          //     'accessToken', userSession.session!.accessToken);
+
+          SharedPreferences _prefs = await SharedPreferences.getInstance();
+
+          _prefs.setString('accessToken', userSession.session!.accessToken);
 
           Navigator.of(context)
               .pushReplacementNamed(HomeScreen.routeName, arguments: {
