@@ -101,7 +101,7 @@ class Book {
         id: json["id"] == null ? null : json["id"],
         userId: json["userId"] == null ? null : json["userId"],
         bookName: json["bookName"] == null ? null : json["bookName"],
-        author: json["author"] == null ? null : json["author"],
+        author: json["author"] == null ? 'Unknown' : json["author"],
         description: json["description"] == null ? null : json["description"],
         // boughtDate: json["boughtDate"] == null
         //     ? null

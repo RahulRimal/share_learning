@@ -8,6 +8,7 @@ import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/sessions.dart';
 import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
+import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/screens/home_screen.dart';
 import 'package:share_learning/templates/screens/signup_screen.dart';
 import 'package:share_learning/templates/screens/user_profile_screen.dart';
@@ -30,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
   // SharedPrefrencesHelper _sharedPrefrencesHelper = SharedPrefrencesHelper();
 
   final _form = GlobalKey<FormState>();
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   FocusNode _passwordFocusNode = FocusNode();
 
@@ -46,6 +48,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool visible = false;
   var showSpinner = false;
 
+  String _loginErrorText = '';
+
   @override
   void dispose() {
     _passwordFocusNode.dispose();
@@ -56,6 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final isValid = _form.currentState!.validate();
 
     if (isValid) {
+      showSpinner = true;
       _form.currentState!.save();
       // User logginedUser = new User(
       //     id: 'tempUser',
@@ -84,9 +89,16 @@ class _LoginScreenState extends State<LoginScreen> {
           // _sharedPrefrencesHelper.setStringInPrefrences(
           //     'accessToken', userSession.session!.accessToken);
 
-          SharedPreferences _prefs = await SharedPreferences.getInstance();
+          // SharedPreferences _prefs = await SharedPreferences.getInstance();
+          SharedPreferences prefs = await _prefs;
+          // prefs = await SharedPreferences.getInstance();
 
-          _prefs.setString('accessToken', userSession.session!.accessToken);
+          prefs.setString('accessToken', userSession.session!.accessToken);
+
+          // setState(() {
+          //   _loginErrorText =
+          //       prefs.getString('accessToken') ?? 'no access token';
+          // });
 
           Navigator.of(context)
               .pushReplacementNamed(HomeScreen.routeName, arguments: {
@@ -94,9 +106,13 @@ class _LoginScreenState extends State<LoginScreen> {
           });
         }
       } else {
-        setState(() {
-          showSpinner = true;
-        });
+        if (mounted) {
+          setState(() {
+            // showSpinner = true;
+            showSpinner = false;
+            _loginErrorText = 'Something went wrong';
+          });
+        }
       }
     }
   }
@@ -531,6 +547,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 )
                               // : SizedBox(height: 1),
                               : Container(),
+                          Text(
+                            // '$_loginErrorText',
+                            _loginErrorText,
+                            style: getBoldStyle(color: ColorManager.primary),
+                          ),
                           _submitButton(),
                           Container(
                             padding: EdgeInsets.symmetric(vertical: 10),

@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:share_learning/models/order.dart';
+import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/templates/managers/assets_manager.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 
-class OrderItem extends StatelessWidget {
-  const OrderItem({Key? key}) : super(key: key);
+class OrderItem extends StatefulWidget {
+  const OrderItem({Key? key, required this.order}) : super(key: key);
+
+  final Order order;
 
   @override
+  State<OrderItem> createState() => _OrderItemState();
+}
+
+class _OrderItemState extends State<OrderItem> {
+  @override
   Widget build(BuildContext context) {
+    Books _books = context.watch<Books>();
+
     return Container(
       margin: EdgeInsets.only(
         top: 8.00,
@@ -63,6 +75,7 @@ class OrderItem extends StatelessWidget {
                         width: 158.00,
                         child: Text(
                           "Nike Air Zoom Pegasus 36 Miami",
+                          // order.boo
                           maxLines: null,
                           textAlign: TextAlign.left,
                           style: TextStyle(
@@ -137,53 +150,75 @@ class OrderItem extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Container(
-                        width: 108.29,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              height: 20.00,
-                              width: 33.32,
-                              child: IconButton(
-                                icon: Icon(Icons.plus_one),
-                                onPressed: () {},
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.center,
-                              height: 20.00,
-                              width: 41.65,
-                              decoration: BoxDecoration(
-                                // color: ColorConstant.blue50,
-                                color: Colors.blue,
-                                border: Border.all(
-                                  // color: ColorConstant.blue50,
-                                  color: Colors.blue,
-                                  width: 1.00,
-                                ),
-                              ),
-                              child: Text(
-                                "1",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  // color: ColorConstant.indigo900,
-                                  color: Colors.indigo,
-                                  fontSize: 12,
+                      // Container(
+                      //   width: 108.29,
+                      //   child: Row(
+                      //     crossAxisAlignment: CrossAxisAlignment.center,
+                      //     mainAxisSize: MainAxisSize.min,
+                      //     children: [
+                      //       Container(
+                      //         height: 20.00,
+                      //         width: 33.32,
+                      //         child: IconButton(
+                      //           icon: Icon(Icons.plus_one),
+                      //           onPressed: () {},
+                      //         ),
+                      //       ),
+                      //       Container(
+                      //         alignment: Alignment.center,
+                      //         height: 20.00,
+                      //         width: 41.65,
+                      //         decoration: BoxDecoration(
+                      //           // color: ColorConstant.blue50,
+                      //           color: Colors.blue,
+                      //           border: Border.all(
+                      //             // color: ColorConstant.blue50,
+                      //             color: Colors.blue,
+                      //             width: 1.00,
+                      //           ),
+                      //         ),
+                      //         child: Text(
+                      //           "1",
+                      //           textAlign: TextAlign.center,
+                      //           style: TextStyle(
+                      //             // color: ColorConstant.indigo900,
+                      //             color: Colors.indigo,
+                      //             fontSize: 12,
 
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
-                                  letterSpacing: 0.06,
-                                ),
+                      //             fontFamily: 'Poppins',
+                      //             fontWeight: FontWeight.w400,
+                      //             letterSpacing: 0.06,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       Container(
+                      //         height: 20.00,
+                      //         width: 33.32,
+                      //         child: IconButton(
+                      //           icon: Icon(Icons.plus_one),
+                      //           onPressed: () {},
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+
+                      Container(
+                        child: ButtonBar(
+                          children: [
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.miscellaneous_services,
                               ),
                             ),
-                            Container(
-                              height: 20.00,
-                              width: 33.32,
-                              child: IconButton(
-                                icon: Icon(Icons.plus_one),
-                                onPressed: () {},
+                            Text(
+                              '1',
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.miscellaneous_services,
                               ),
                             ),
                           ],

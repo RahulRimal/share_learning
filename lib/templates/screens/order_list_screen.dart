@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:share_learning/models/session.dart';
+import 'package:share_learning/providers/orders.dart';
 import 'package:share_learning/templates/managers/assets_manager.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/managers/font_manager.dart';
@@ -23,6 +26,12 @@ class _OrderListScreenState extends State<OrderListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+
+    final Session authendicatedSession = args['loggedInUserSession'] as Session;
+
+    Orders orders = context.watch<Orders>();
+
     return Scaffold(
       // appBar: AppBar(),
       body: SafeArea(
@@ -98,11 +107,20 @@ class _OrderListScreenState extends State<OrderListScreen> {
                 ),
               ),
               Expanded(
+                // child: ListView.builder(
+                //   itemCount: 3,
+                //   itemBuilder: (context, index) {
+                //     return OrderItem();
+                //   },
+                // ),
                 child: ListView.builder(
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      return OrderItem();
-                    }),
+                  itemCount: orders.orders.length,
+                  itemBuilder: (context, index) {
+                    return OrderItem(
+                      order: orders.orders[index],
+                    );
+                  },
+                ),
               ),
             ],
           ),

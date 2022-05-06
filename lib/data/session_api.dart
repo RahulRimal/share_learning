@@ -10,7 +10,7 @@ import 'package:share_learning/templates/managers/strings_manager.dart';
 import 'package:share_learning/templates/managers/values_manager.dart';
 
 class SessionApi {
-  static Future<Object> getPreviousSessions(String accessToken) async {
+  static Future<Object> getPreviousSession(String accessToken) async {
     try {
       var url = Uri.parse(RemoteManager.BASE_URI + '/sessions');
 
@@ -18,12 +18,11 @@ class SessionApi {
         url,
         headers: {HttpHeaders.authorizationHeader: accessToken},
       );
-
       if (response.statusCode == ApiStatusCode.responseSuccess) {
         return Success(
             code: response.statusCode,
-            response: sessionFromJson(json
-                .encode(json.decode(response.body)['data']['sessions'][0])));
+            response: sessionFromJson(
+                json.encode(json.decode(response.body)['data']['session'])));
       }
 
       return Failure(

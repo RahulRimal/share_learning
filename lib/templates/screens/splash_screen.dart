@@ -29,6 +29,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   // SharedPrefrencesHelper _sharedPrefrencesHelper = SharedPrefrencesHelper();
 
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   Timer? _timer;
 
   _startDelay() {
@@ -130,23 +131,37 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _getPreviousSession() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    // SharedPreferences _prefs = await SharedPreferences.getInstance();
+    // SharedPreferences _prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await _prefs;
+
+// 9845534518
 
     // String accessToken =
     //     await _sharedPrefrencesHelper.getStringFromPrefrences('accessToken');
     // SessionProvider sessions =
-    if (_prefs.containsKey('accessToken')) {
-      String accessToken = _prefs.getString('accessToken') as String;
+
+    if (prefs.containsKey('accessToken')) {
+      String accessToken = prefs.getString('accessToken') as String;
       SessionProvider sessions =
           Provider.of<SessionProvider>(context, listen: false);
       // Session session = await SessionApi.getPreviousSessions(accessToken);
-      sessions.getPreviousSession(accessToken);
+      sessions.getPreviousSession(accessToken).then((value) {
+        if (sessions.session != null)
+          Navigator.pushReplacementNamed(context, HomeScreen.routeName,
+              arguments: {
+                'authSession': sessions.session,
+              });
+        else
+          _startDelay();
+      });
 
-      if (sessions.session != null)
-        Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+      // if (sessions.session != null)
+      //   Navigator.pushReplacementNamed(context, HomeScreen.routeName);
       // else
       //   Navigator.pushReplacementNamed(context, OnBoardingScreen.routeName);
     }
+    // print('No access token');
     // String accessToken = await _prefs.getString('accessToken');
 
     //     Provider.of<SessionProvider>(context, listen: false);
@@ -155,12 +170,14 @@ class _SplashScreenState extends State<SplashScreen> {
     //   Navigator.pushReplacementNamed(context, HomeScreen.routeName, arguments: {
     //     'authSession': sessions.session,
     //   });
+    else
+      _startDelay();
   }
 
   @override
   void initState() {
     _getPreviousSession();
-    _startDelay();
+    // _startDelay();
     // if (await InternetConnectionChecker.checkInternetConnection())
 
     // if (_sharedPrefrencesHelper.getStringFromPrefrences('accessToken') !=

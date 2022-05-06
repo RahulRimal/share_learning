@@ -12,8 +12,10 @@ import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/screens/add_post_screen.dart';
 import 'package:share_learning/templates/screens/home_screen.dart';
 import 'package:share_learning/templates/screens/login_screen.dart';
+import 'package:share_learning/templates/screens/order_list_screen.dart';
 import 'package:share_learning/templates/screens/user_posts_screen.dart';
 import 'package:share_learning/templates/utils/user_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppDrawer extends StatelessWidget {
   // User user;
@@ -22,6 +24,9 @@ class AppDrawer extends StatelessWidget {
 
   // final String accessToken;
   final Session loggedInSession;
+
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   // Users? users;
 
   // AppDrawer({required this.user});
@@ -59,6 +64,10 @@ class AppDrawer extends StatelessWidget {
       title: 'Profile',
       route: UserPostsScreen.routeName,
     ),
+    DrawerItem(
+        title: 'Your Orders',
+        icon: Icons.shop_rounded,
+        route: OrderListScreen.routeName)
     // DrawerItem(
     //   icon: Icons.exit_to_app,
     //   title: 'Logout',
@@ -94,6 +103,15 @@ class AppDrawer extends StatelessWidget {
                 'uId': loggedInSession.userId,
                 'loggedInUserSession': loggedInSession
               });
+            if (item.route == OrderListScreen.routeName)
+              Navigator.pushNamed(
+                context,
+                item.route,
+                arguments: {
+                  // 'uId': loggedInSession.userId,
+                  'loggedInUserSession': loggedInSession
+                },
+              );
           }),
     );
   }
@@ -284,13 +302,17 @@ class AppDrawer extends StatelessWidget {
                             fontSize: FontSize.s18,
                           ),
                         ),
-                        onTap: () {
+                        onTap: () async {
+                          SharedPreferences prefs = await _prefs;
                           Provider.of<Books>(context, listen: false)
                               .setBooks([]);
                           users.logoutUser(loggedInSession.id);
 
                           Provider.of<Comments>(context, listen: false)
                               .setComments([]);
+
+                          prefs.remove('accessToken');
+
                           Navigator.pushReplacementNamed(
                               context, LoginScreen.routeName);
                         },
