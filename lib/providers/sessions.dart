@@ -46,7 +46,7 @@ class SessionProvider with ChangeNotifier {
         message: response.errorResponse,
       );
       setSessionError(sessionError as CustomSessionError);
-      sessionError.showErrorMessage();
+      // sessionError.showErrorMessage();
       setLoading(false);
       return false;
     }
@@ -67,7 +67,7 @@ class SessionProvider with ChangeNotifier {
         message: response.errorResponse,
       );
       setSessionError(sessionError as CustomSessionError);
-      sessionError.showErrorMessage();
+      // sessionError.showErrorMessage();
       setLoading(false);
       return false;
     }

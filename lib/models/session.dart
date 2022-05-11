@@ -65,7 +65,7 @@ class CustomSessionError {
 
   CustomSessionError({required this.code, required this.message});
 
-  showErrorMessage() {
-    print(message);
-  }
+  // showErrorMessage() {
+  //   print(message);
+  // }
 }

@@ -154,4 +154,24 @@ class Users with ChangeNotifier {
     setUsers([]);
     notifyListeners();
   }
+
+  Future<bool> createNewUser(User user, String password) async {
+    setLoading(true);
+    var response = await UserApi.createUser(user, password);
+    if (response is Success) {
+      setUser(response.response as User);
+      setLoading(false);
+      return true;
+    }
+    if (response is Failure) {
+      UserError userError = UserError(
+        code: response.code,
+        message: response.errorResponse,
+      );
+      setUserError(userError);
+      setLoading(false);
+      return false;
+    }
+    return false;
+  }
 }

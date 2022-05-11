@@ -22,6 +22,8 @@
 
 import 'dart:convert';
 
+import 'dart:io';
+
 // List<User> userFromJson(String str) =>
 //     List<User>.from(json.decode(str).map((x) => User.fromJson(x)));
 
@@ -54,6 +56,7 @@ class User {
   String? description;
 
   String? image;
+  // File? image;
   // String userClass;
   String? userClass;
   // String followers;

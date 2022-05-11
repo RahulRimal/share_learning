@@ -161,4 +161,83 @@ class UserApi {
           errorResponse: ApiStrings.unknownErrorString);
     }
   }
+
+  static Future<Object> createUser(User user, String password) async {
+    try {
+      var url = Uri.parse(RemoteManager.BASE_URI + '/users');
+
+      // print(user.username.toString());
+
+      Map<String, dynamic> postBody = {
+        "username": user.username.toString(),
+        "email": user.email.toString(),
+        "password": password,
+        "firstName": user.firstName.toString(),
+        "lastName": user.lastName.toString(),
+        "description": user.description.toString(),
+        // "avatar": user.image as File,
+        // "avatar": user.image == null ? null : user.image as File,
+        "avatar": user.image == null ? null : user.image.toString(),
+        "class": user.userClass.toString(),
+      };
+
+      // Map<String, String> postHeaders = {
+      // "Content-Type": "application/json; charset=utf-8",
+      // "Content-Type": "application/json",
+      // HttpHeaders.contentTypeHeader: "application/json; charset=utf-8",
+      // HttpHeaders.contentTypeHeader: "application/json",
+      // };
+
+      var response = await http.post(
+        url,
+        // headers: postHeaders,
+        headers: {
+          HttpHeaders.authorizationHeader:
+              'ZjNlNTU5OGYyNTk4ZjMwMTQ1MTNkZDFlYzI5MGY3MzNiOTRjNzc1YmRkNTM2N2YxMzEzNjM1MzAzODM0MzczMTM5MzA=',
+          // "Accept": "application/json",
+          "Accept": "application/json; charset=utf-8",
+          // "Accept": "application/json; charset=UTF-8",
+          "Access-Control-Allow-Origin":
+              "*", // Required for CORS support to work
+          "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+          // "Content-Type": "application/json; charset=utf-8",
+          // "Content-Type": "application/json; charset=utf-8",
+          // "Content-Type": "application/json",
+          // HttpHeaders.contentTypeHeader: "application/json; charset=utf-8",
+          HttpHeaders.contentTypeHeader: "application/json",
+          // HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded",
+        },
+        body: json.encode(postBody),
+        // body: postBody,
+      );
+
+      // print(json.encode(json.decode(response.body)['data']['sessions']));
+      // print(response.body);
+      // print(json.encode(json.decode(response.body)['data']['sessions'][0]));
+      print(response.body);
+      if (response.statusCode == ApiStatusCode.responseCreated) {
+        return Success(
+            code: response.statusCode,
+            response: userFromJson(
+                json.encode(json.decode(response.body)['data']['users'][0])));
+      }
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          // errorResponse: ApiStrings.invalidResponseString
+          errorResponse: response.body);
+    } on HttpException {
+      return Failure(
+          code: ApiStatusCode.httpError,
+          errorResponse: ApiStrings.noInternetString);
+    } on FormatException {
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          errorResponse: ApiStrings.invalidFormatString);
+    } catch (e) {
+      return Failure(code: 103, errorResponse: e.toString());
+      // return Failure(
+      //     code: ApiStatusCode.unknownError,
+      //     errorResponse: ApiStrings.unknownErrorString);
+    }
+  }
 }

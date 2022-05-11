@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/sessions.dart';
+import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/screens/home_screen.dart';
 import 'package:share_learning/templates/screens/login_screen.dart';
 import 'package:share_learning/templates/widgets/beizer_container.dart';
@@ -20,28 +22,33 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final _form = GlobalKey<FormState>();
   FocusNode _passwordFocusNode = FocusNode();
-  var usernameOrEmail;
+  FocusNode _emailFocusNode = FocusNode();
+  // var usernameOrEmail;
   var userpassword;
   bool visible = false;
   var showSpinner = false;
 
-  // var _newUser = User(
-  //     id: 'tempUser',
-  //     firstName: 'temp',
-  //     lastName: 'Name',
-  //     username: 'tempN',
-  //     email: 'temp@mail.com',
-  //     image: ,
-  //     description: 'This is a temp user',
-  //     userClass: 'tempClass',
-  //     followers: '',
-  //     createdDate: NepaliDateTime.now());
+  var _newUser = User(
+    id: 'tempUser',
+    firstName: 'tempFirstName',
+    lastName: 'tempLastName',
+    username: 'tempUsername',
+    email: 'temp@mail.com',
+    image: null,
+    description: 'This is a temp user',
+    userClass: 'tempClass',
+    followers: '',
+    createdDate: NepaliDateTime.now(),
+  );
 
   void _saveForm() async {
     final isValid = _form.currentState!.validate();
 
     if (isValid) {
       _form.currentState!.save();
+      print(_newUser.email);
+      print(_newUser.username);
+      print(userpassword);
       // User logginedUser = new User(
       //     id: 'tempUser',
       //     firstName: 'temp',
@@ -54,18 +61,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
       //     createdDate: NepaliDateTime.now());
       // Users loggedInUser = Users();
       SessionProvider userSession = new SessionProvider();
-      if (await userSession.createSession(usernameOrEmail, userpassword) ==
-          true) {
+
+      Users users = Users(null);
+      // Provider.of<Users>(context, listen: false)
+      //     .createNewUser(_newUser, userpassword);
+      // users.
+
+      if (await users.createNewUser(_newUser, userpassword) == true) {
         setState(() {
           if (mounted) {
             showSpinner = false;
           }
         });
 
-        Navigator.of(context)
-            .pushReplacementNamed(HomeScreen.routeName, arguments: {
-          'authSession': userSession.session,
-        });
+        // Navigator.of(context)
+        //     .pushReplacementNamed(HomeScreen.routeName, arguments: {
+        //   'authSession': userSession.session,
+        // });
+        Navigator.of(context).pushReplacementNamed(LoginScreen.routeName);
       } else {
         setState(() {
           showSpinner = true;
@@ -123,7 +136,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   //   );
   // }
 
-  Widget _entryField(String title, {bool isPassword = false}) {
+  Widget _entryField(String title,
+      {bool isPassword = false, bool isEmail = false}) {
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.symmetric(vertical: 10),
@@ -140,7 +154,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           TextFormField(
             // obscureText: isPassword,
             obscureText: isPassword ? !visible : false,
-            focusNode: isPassword ? _passwordFocusNode : null,
+            focusNode: isPassword
+                ? _passwordFocusNode
+                : (isEmail ? _emailFocusNode : null),
             textInputAction:
                 isPassword ? TextInputAction.done : TextInputAction.next,
             keyboardType:
@@ -163,17 +179,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
               labelStyle: new TextStyle(color: Colors.green),
             ),
             onFieldSubmitted: (_) {
-              if (!isPassword)
+              if (isEmail)
                 FocusScope.of(context).requestFocus(_passwordFocusNode);
-              else {
+              if (isPassword)
                 _saveForm();
+              else {
+                // _saveForm();
+                FocusScope.of(context).requestFocus(_emailFocusNode);
               }
             },
             onSaved: (value) {
               if (isPassword) {
                 userpassword = value;
               } else {
-                usernameOrEmail = value;
+                // usernameOrEmail = value;
+                isEmail
+                    ? _newUser = new User(
+                        id: _newUser.id,
+                        firstName: _newUser.firstName,
+                        lastName: _newUser.lastName,
+                        username: _newUser.username,
+                        email: value,
+                        image: _newUser.image,
+                        description: _newUser.description,
+                        userClass: _newUser.userClass,
+                        followers: _newUser.followers,
+                        createdDate: _newUser.createdDate,
+                      )
+                    : _newUser = new User(
+                        id: _newUser.id,
+                        firstName: _newUser.firstName,
+                        lastName: _newUser.lastName,
+                        username: value,
+                        email: _newUser.email,
+                        image: _newUser.image,
+                        description: _newUser.description,
+                        userClass: _newUser.userClass,
+                        followers: _newUser.followers,
+                        createdDate: _newUser.createdDate,
+                      );
               }
             },
           ),
@@ -183,29 +227,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget _submitButton() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.symmetric(vertical: 15),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: Colors.grey.shade200,
-                offset: Offset(2, 4),
-                blurRadius: 5,
-                spreadRadius: 2)
-          ],
-          gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [
-                Theme.of(context).primaryColor.withAlpha(200),
-                Theme.of(context).primaryColorDark.withAlpha(200),
-              ])),
-      child: Text(
-        'Register Now',
-        style: TextStyle(fontSize: 20, color: Colors.white),
+    return GestureDetector(
+      onTap: _saveForm,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.symmetric(vertical: 15),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.grey.shade200,
+                  offset: Offset(2, 4),
+                  blurRadius: 5,
+                  spreadRadius: 2)
+            ],
+            gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  Theme.of(context).primaryColor.withAlpha(200),
+                  Theme.of(context).primaryColorDark.withAlpha(200),
+                ])),
+        child: Text(
+          'Register Now',
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
       ),
     );
   }
@@ -275,7 +322,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Column(
       children: <Widget>[
         _entryField("Username"),
-        _entryField("Email id"),
+        _entryField("Email id", isEmail: true),
         _entryField("Password", isPassword: true),
       ],
     );
@@ -306,10 +353,174 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     SizedBox(
                       height: 50,
                     ),
-                    _emailPasswordWidget(),
+                    Form(
+                      key: _form,
+                      child: _emailPasswordWidget(),
+                      // child: Column(
+                      //   children: [
+                      //     Container(
+                      //       width: MediaQuery.of(context).size.width,
+                      //       margin: EdgeInsets.symmetric(vertical: 10),
+                      //       child: Column(
+                      //         crossAxisAlignment: CrossAxisAlignment.start,
+                      //         children: <Widget>[
+                      //           Text(
+                      //             'UserName',
+                      //             style: TextStyle(
+                      //                 fontWeight: FontWeight.bold,
+                      //                 fontSize: 15),
+                      //           ),
+                      //           SizedBox(
+                      //             height: 10,
+                      //           ),
+                      //           TextFormField(
+                      //             // obscureText: isPassword,
+                      //             textInputAction: TextInputAction.next,
+                      //             keyboardType: TextInputType.text,
+                      //             decoration: new InputDecoration(
+                      //               enabledBorder: const OutlineInputBorder(
+                      //                 borderSide: const BorderSide(
+                      //                     color: Colors.black, width: 1.0),
+                      //               ),
+                      //               border: const OutlineInputBorder(),
+                      //               labelStyle:
+                      //                   new TextStyle(color: Colors.green),
+                      //             ),
+                      //             onFieldSubmitted: (_) {
+                      //               FocusScope.of(context)
+                      //                   .requestFocus(_emailFocusNode);
+                      //             },
+                      //             onSaved: (value) {
+                      //               _newUser = new User(
+                      //                 id: _newUser.id,
+                      //                 firstName: _newUser.firstName,
+                      //                 lastName: _newUser.lastName,
+                      //                 username: value,
+                      //                 email: _newUser.email,
+                      //                 image: _newUser.image,
+                      //                 description: _newUser.description,
+                      //                 userClass: _newUser.userClass,
+                      //                 followers: _newUser.followers,
+                      //                 createdDate: _newUser.createdDate,
+                      //               );
+                      //             },
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     Container(
+                      //       width: MediaQuery.of(context).size.width,
+                      //       margin: EdgeInsets.symmetric(vertical: 10),
+                      //       child: Column(
+                      //         crossAxisAlignment: CrossAxisAlignment.start,
+                      //         children: <Widget>[
+                      //           Text(
+                      //             'Emain ID',
+                      //             style: TextStyle(
+                      //                 fontWeight: FontWeight.bold,
+                      //                 fontSize: 15),
+                      //           ),
+                      //           SizedBox(
+                      //             height: 10,
+                      //           ),
+                      //           TextFormField(
+                      //             // obscureText: isPassword,
+                      //             textInputAction: TextInputAction.next,
+                      //             keyboardType: TextInputType.text,
+                      //             decoration: new InputDecoration(
+                      //               enabledBorder: const OutlineInputBorder(
+                      //                 borderSide: const BorderSide(
+                      //                     color: Colors.black, width: 1.0),
+                      //               ),
+                      //               border: const OutlineInputBorder(),
+                      //               labelStyle:
+                      //                   new TextStyle(color: Colors.green),
+                      //             ),
+                      //             onFieldSubmitted: (_) {
+                      //               FocusScope.of(context)
+                      //                   .requestFocus(_passwordFocusNode);
+                      //             },
+                      //             onSaved: (value) {
+                      //               _newUser = new User(
+                      //                 id: _newUser.id,
+                      //                 firstName: _newUser.firstName,
+                      //                 lastName: _newUser.lastName,
+                      //                 username: _newUser.username,
+                      //                 email: value,
+                      //                 image: _newUser.image,
+                      //                 description: _newUser.description,
+                      //                 userClass: _newUser.userClass,
+                      //                 followers: _newUser.followers,
+                      //                 createdDate: _newUser.createdDate,
+                      //               );
+                      //             },
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     Container(
+                      //       width: MediaQuery.of(context).size.width,
+                      //       margin: EdgeInsets.symmetric(vertical: 10),
+                      //       child: Column(
+                      //         crossAxisAlignment: CrossAxisAlignment.start,
+                      //         children: <Widget>[
+                      //           Text(
+                      //             'Passowrd',
+                      //             style: TextStyle(
+                      //                 fontWeight: FontWeight.bold,
+                      //                 fontSize: 15),
+                      //           ),
+                      //           SizedBox(
+                      //             height: 10,
+                      //           ),
+                      //           TextFormField(
+                      //             // obscureText: isPassword,
+                      //             textInputAction: TextInputAction.done,
+                      //             keyboardType: TextInputType.text,
+                      //             decoration: new InputDecoration(
+                      //               enabledBorder: const OutlineInputBorder(
+                      //                 borderSide: const BorderSide(
+                      //                     color: Colors.black, width: 1.0),
+                      //               ),
+                      //               border: const OutlineInputBorder(),
+                      //               labelStyle:
+                      //                   new TextStyle(color: Colors.green),
+                      //             ),
+                      //             onSaved: (value) {
+                      //               userpassword = value;
+                      //               // _newUser = new User(
+                      //               //   id: _newUser.id,
+                      //               //   firstName: _newUser.firstName,
+                      //               //   lastName: _newUser.lastName,
+                      //               //   username: value,
+                      //               //   email: _newUser.email,
+                      //               //   image: _newUser.image,
+                      //               //   description: _newUser.description,
+                      //               //   userClass: _newUser.userClass,
+                      //               //   followers: _newUser.followers,
+                      //               //   createdDate: _newUser.createdDate,
+                      //               // );
+                      //             },
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                    ),
                     SizedBox(
                       height: 20,
                     ),
+                    showSpinner
+                        ? Column(
+                            children: [
+                              CircularProgressIndicator(),
+                              SizedBox(
+                                height: 20,
+                              ),
+                            ],
+                          )
+                        : Container(),
                     _submitButton(),
                     SizedBox(height: height * .14),
                     _loginAccountLabel(),
