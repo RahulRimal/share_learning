@@ -12,7 +12,7 @@ import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/screens/add_post_screen.dart';
 import 'package:share_learning/templates/screens/home_screen.dart';
 import 'package:share_learning/templates/screens/login_screen.dart';
-import 'package:share_learning/templates/screens/order_list_screen.dart';
+import 'package:share_learning/templates/screens/cart_screen.dart';
 import 'package:share_learning/templates/screens/user_posts_screen.dart';
 import 'package:share_learning/templates/utils/user_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -67,7 +67,7 @@ class AppDrawer extends StatelessWidget {
     DrawerItem(
         title: 'Your Orders',
         icon: Icons.shop_rounded,
-        route: OrderListScreen.routeName)
+        route: CartScreen.routeName)
     // DrawerItem(
     //   icon: Icons.exit_to_app,
     //   title: 'Logout',
@@ -103,7 +103,7 @@ class AppDrawer extends StatelessWidget {
                 'uId': loggedInSession.userId,
                 'loggedInUserSession': loggedInSession
               });
-            if (item.route == OrderListScreen.routeName)
+            if (item.route == CartScreen.routeName)
               Navigator.pushNamed(
                 context,
                 item.route,

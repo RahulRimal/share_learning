@@ -1,16 +1,15 @@
 import 'dart:convert';
 
 import 'package:nepali_date_picker/nepali_date_picker.dart';
-import 'package:share_learning/templates/widgets/order_item.dart';
 
-List<Order> OrderFromJson(String str) =>
-    List<Order>.from(json.decode(str).map((x) => Order.fromJson(x)));
+List<Cart> cartFromJson(String str) =>
+    List<Cart>.from(json.decode(str).map((x) => Cart.fromJson(x)));
 
-String OrderToJson(List<Order> data) =>
+String cartToJson(List<Cart> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class Order {
-  Order({
+class Cart {
+  Cart({
     required this.id,
     required this.bookId,
     required this.sellingUserId,
@@ -26,9 +25,11 @@ class Order {
   String id;
   String bookId;
   // String postingUserId;
-  // String orderingUserId;
+  // String CartingUserId;
   String sellingUserId;
   String buyingUserId;
+  // int sellingUserId;
+  // int buyingUserId;
   double pricePerPiece;
   // double totalPrice;
   int bookCount;
@@ -36,15 +37,22 @@ class Order {
   String postType;
   // DateTime postedOn;
 
-  factory Order.fromJson(Map<String, dynamic> json) => Order(
+  factory Cart.fromJson(Map<String, dynamic> json) => Cart(
         id: json["id"] == null ? null : json["id"],
         bookId: json["bookId"] == null ? null : json["bookId"],
-        sellingUserId:
-            json["sellingUserId"] == null ? null : json["sellingUserId"],
-        buyingUserId:
-            json["buyingUserId"] == null ? null : json["buyingUserId"],
-        pricePerPiece:
-            json["pricePerPiece"] == null ? null : json["pricePerPiece"],
+        // sellingUserId:
+        //     json["sellingUserId"] == null ? null : json["sellingUserId"],
+        // buyingUserId:
+        //     json["buyingUserId"] == null ? null : json["buyingUserId"],
+        sellingUserId: json["sellingUserId"].toString(),
+        buyingUserId: json["buyingUserId"].toString(),
+        // pricePerPiece:
+        //     json["pricePerPiece"] == null ? null : json["pricePerPiece"],
+        pricePerPiece: json["pricePerPiece"].toDouble(),
+        // pricePerPiece: json["pricePerPiece"] == null
+        //     ? null
+        //     : double.parse(json["pricePerPiece"]),
+
         // boughtDate: json["boughtDate"] == null
         //     ? null
         //     : DateTime.parse(json["boughtDate"]),
@@ -72,9 +80,9 @@ class Order {
       };
 }
 
-class OrderError {
+class CartError {
   int code;
   Object message;
 
-  OrderError({required this.code, required this.message});
+  CartError({required this.code, required this.message});
 }

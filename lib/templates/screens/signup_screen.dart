@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
+import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/sessions.dart';
 import 'package:share_learning/templates/screens/home_screen.dart';
 import 'package:share_learning/templates/screens/login_screen.dart';
@@ -22,6 +24,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var userpassword;
   bool visible = false;
   var showSpinner = false;
+
+  // var _newUser = User(
+  //     id: 'tempUser',
+  //     firstName: 'temp',
+  //     lastName: 'Name',
+  //     username: 'tempN',
+  //     email: 'temp@mail.com',
+  //     image: ,
+  //     description: 'This is a temp user',
+  //     userClass: 'tempClass',
+  //     followers: '',
+  //     createdDate: NepaliDateTime.now());
 
   void _saveForm() async {
     final isValid = _form.currentState!.validate();

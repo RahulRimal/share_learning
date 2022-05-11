@@ -3,10 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/session.dart';
-import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/providers/comment.dart';
-import 'package:share_learning/providers/orders.dart';
+import 'package:share_learning/providers/carts.dart';
 import 'package:share_learning/providers/sessions.dart';
 import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/managers/strings_manager.dart';
@@ -14,15 +13,13 @@ import 'package:share_learning/templates/managers/theme_manager.dart';
 import 'package:share_learning/templates/screens/add_post_screen.dart';
 import 'package:share_learning/templates/screens/login_signup_screen.dart';
 import 'package:share_learning/templates/screens/onboarding_screen.dart';
-import 'package:share_learning/templates/screens/order_list_screen.dart';
+import 'package:share_learning/templates/screens/cart_screen.dart';
 import 'package:share_learning/templates/screens/signup_screen.dart';
 import 'package:share_learning/templates/screens/single_post_screen.dart';
 import 'package:share_learning/templates/screens/splash_screen.dart';
 import 'package:share_learning/templates/screens/login_screen.dart';
 import 'package:share_learning/templates/screens/user_posts_screen.dart';
 import 'package:share_learning/templates/screens/user_profile_screen.dart';
-import 'package:share_learning/templates/widgets/app_drawer.dart';
-
 import 'templates/screens/edit_post_screen.dart';
 import 'templates/screens/home_screen.dart';
 
@@ -33,7 +30,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => SessionProvider()),
+        ChangeNotifierProvider(
+          create: (_) => SessionProvider(),
+        ),
         // ChangeNotifierProvider.value(value: Books()),
         // ChangeNotifierProxyProvider<SessionProvider, Books>(
         //   // create: (_) => Books(),
@@ -56,7 +55,7 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(create: (_) => Books()),
         ChangeNotifierProvider(create: (_) => Comments()),
-        ChangeNotifierProvider(create: (_) => Orders()),
+        ChangeNotifierProvider(create: (_) => Carts()),
       ],
       child: Theme.of(context).platform == TargetPlatform.iOS
           ? CupertinoApp(
@@ -70,7 +69,7 @@ class MyApp extends StatelessWidget {
               // home: AddPostScreen(),
               // home: LoginSignupScreen(),
               // home: LoginScreen(),
-              home: OrderListScreen(),
+              home: CartScreen(),
               // home: SignUpScreen(),
               routes: {
                 SinglePostScreen.routeName: (context) => SinglePostScreen(),
@@ -84,7 +83,7 @@ class MyApp extends StatelessWidget {
                 SignUpScreen.routeName: (context) => SignUpScreen(),
                 LoginSignupScreen.routeName: (context) => LoginSignupScreen(),
                 UserProfileScreen.routeName: (context) => UserProfileScreen(),
-                OrderListScreen.routeName: (context) => OrderListScreen(),
+                CartScreen.routeName: (context) => CartScreen(),
               },
             )
           : MaterialApp(
@@ -113,7 +112,7 @@ class MyApp extends StatelessWidget {
                 SignUpScreen.routeName: (context) => SignUpScreen(),
                 LoginSignupScreen.routeName: (context) => LoginSignupScreen(),
                 UserProfileScreen.routeName: (context) => UserProfileScreen(),
-                OrderListScreen.routeName: (context) => OrderListScreen(),
+                CartScreen.routeName: (context) => CartScreen(),
               },
             ),
     );

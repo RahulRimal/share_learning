@@ -179,9 +179,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         } else {
                           return CircleAvatar(
                             backgroundImage: NetworkImage(
-                                // ((snapshot.data as User).image) as String),
-                                (UserHelper.userProfileImage(
-                                    snapshot.data as User))),
+                              // ((snapshot.data as User).image) as String),
+                              (UserHelper.userProfileImage(
+                                  snapshot.data as User)),
+                            ),
                           );
                         }
                       }
