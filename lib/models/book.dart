@@ -57,7 +57,10 @@
 //     final book = bookFromJson(jsonString);
 
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 
 List<Book> bookFromJson(String str) =>
@@ -95,7 +98,8 @@ class Book {
   String postType;
   String postRating;
   DateTime postedOn;
-  List<String>? pictures;
+  // List<String>? pictures;
+  List<XFile>? pictures;
 
   factory Book.fromJson(Map<String, dynamic> json) => Book(
         id: json["id"] == null ? null : json["id"],
@@ -114,6 +118,9 @@ class Book {
         wishlisted: json["wishlisted"] == '1' ? true : false,
         postType: json["postType"] == null ? null : json["postType"],
         postRating: json["postRating"] == null ? '' : json["postRating"],
+        pictures: json["pictures"] == null
+            ? null
+            : List<XFile>.from(json["pictures"]),
         // postedOn:
         //     json["postedOn"] == null ? null : DateTime.parse(json["postedOn"]),
         postedOn: NepaliDateTime.parse(json["postedOn"].toString()),
@@ -133,6 +140,9 @@ class Book {
         "wishlisted": wishlisted == null ? null : wishlisted,
         "postType": postType == null ? null : postType,
         "postRating": postRating == null ? null : postRating,
+        "pictures": pictures == null
+            ? null
+            : List<dynamic>.from(pictures!.map((x) => x.path)),
         "postedOn": postedOn == null ? null : postedOn.toIso8601String(),
       };
 }

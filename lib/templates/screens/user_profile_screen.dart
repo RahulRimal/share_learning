@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/session.dart';
+import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/sessions.dart';
+import 'package:share_learning/templates/managers/values_manager.dart';
+import 'package:share_learning/templates/screens/user_profile_edit_screen.dart';
+import 'package:share_learning/templates/utils/user_helper.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -13,7 +17,9 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  _profilePageUI(SessionProvider userSession) {
+  _profilePageUI(SessionProvider userSession, User user) {
+    print(user.firstName);
+    print(user.image);
     if (userSession.loading) {
       return Container(
         child: Center(
@@ -34,11 +40,18 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
 
     Session? userSessionData = userSession.session;
+
     return Container(
+      padding: EdgeInsets.only(top: AppPadding.p12),
       child: Column(
         children: [
-          Text(userSessionData!.id),
-          Text(userSessionData.accessToken),
+          CircleAvatar(
+            radius: 70,
+            backgroundImage: NetworkImage(
+              UserHelper.userProfileImage(user),
+            ),
+          ),
+          Text(userSessionData!.accessToken),
           Text(userSessionData.accessTokenExpiry.toString()),
         ],
       ),
@@ -47,13 +60,37 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+
+    Session loggedInUserSession = args['loggedInUserSession'] as Session;
+
+    User user = args['user'] as User;
+
+    // Session userSession = args['session'] as Session;
 
     SessionProvider userSession = (context).watch<SessionProvider>();
 
-    return Container(
-      child: _profilePageUI(userSession),
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: Icon(Icons.edit_rounded),
+            onPressed: () {
+              Navigator.of(context).pushNamed(
+                UserProfileEditScreen.routeName,
+                arguments: {
+                  // 'loggedInUserSession': userSession.session,
+                  'loggedInUserSession': loggedInUserSession,
+                  'user': user,
+                },
+              );
+            },
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: _profilePageUI(userSession, user),
+      ),
     );
   }
 }

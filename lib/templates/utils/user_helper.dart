@@ -7,10 +7,11 @@ class UserHelper {
   }
 
   static String userProfileImage(User user) {
-    String firstNameInLower = user.firstName.toLowerCase();
+    // String firstNameInLower = user.firstName.toLowerCase();
+    String username = user.username.toString();
     // return user.image ?? 'https://cdn.pixabay.com/photo/2017/02/04/12/25/
     // return RemoteManager.PROFILE_POOL + '/' + user.firstName + '/' + user.image as String;
     // return "${RemoteManager.PROFILE_POOL}/${user.firstName}/${user.image}";
-    return "${RemoteManager.PROFILE_POOL}/$firstNameInLower/${user.image}";
+    return "${RemoteManager.PROFILE_POOL}/$username/${user.image}";
   }
 }

@@ -144,8 +144,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
     if (!isValid) {
       return false;
     }
+
     _form.currentState!.save();
     _edittedBook.postType = ispostType ? 'S' : 'B';
+    _edittedBook.pictures = _storedImages;
     // _edittedBook.pictures = actualImages;
     // Provider.of<Books>(context, listen: false).addPost(_edittedBook);
     Provider.of<Books>(context, listen: false)
@@ -485,7 +487,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         wishlisted: _edittedBook.wishlisted,
                         price: _edittedBook.price,
                         bookCount: _edittedBook.bookCount,
-                        pictures: actualImages,
+                        // pictures: actualImages,
                         postedOn: _edittedBook.postedOn,
                         postRating: _edittedBook.postRating,
                       );
@@ -565,11 +567,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton(
-                              child: Text('From Gallery'),
-                              style: ButtonStyle(),
-                              onPressed: () {
-                                _getPicture();
-                              }),
+                            child: Text('From Gallery'),
+                            style: ButtonStyle(),
+                            onPressed: () {
+                              _getPicture();
+                            },
+                          ),
                           SizedBox(
                             width: 10,
                           ),

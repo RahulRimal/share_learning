@@ -10,72 +10,6 @@ import 'package:share_learning/templates/managers/strings_manager.dart';
 import 'package:share_learning/templates/managers/values_manager.dart';
 
 class UserApi {
-  // static Future<Object> postSession(String userName, String password) async {
-  //   try {
-  //     Map<String, String> postBody = {
-  //       "username": userName,
-  //       "password": password
-  //     };
-  //     // var url = Uri.parse('http://localhost/apiforsharelearn/sessions');
-  //     var url = Uri.parse('http://10.0.2.2/apiforsharelearn/sessions');
-
-  //     // Map<String, String> postHeaders = {
-  //     // "Content-Type": "application/json; charset=utf-8",
-  //     // "Content-Type": "application/json",
-  //     // HttpHeaders.contentTypeHeader: "application/json; charset=utf-8",
-  //     // HttpHeaders.contentTypeHeader: "application/json",
-  //     // };
-
-  //     var response = await http.post(
-  //       url,
-  //       // headers: postHeaders,
-  //       headers: {
-  //         // HttpHeaders.authorizationHeader:
-  //         //     'Mzk0YTM2ZWZhZGQ1ZjY2MDQwZmMxMWZkNGE4MzRjMmM2M2FhMTNhY2M1ZDhlYTEyMzEzNjM0MzIzOTM1MzAzMjM1MzA=',
-  //         // "Accept": "application/json",
-  //         "Accept": "application/json; charset=utf-8",
-  //         // "Accept": "application/json; charset=UTF-8",
-  //         "Access-Control-Allow-Origin":
-  //             "*", // Required for CORS support to work
-  //         "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-  //         // "Content-Type": "application/json; charset=utf-8",
-  //         // "Content-Type": "application/json; charset=utf-8",
-  //         // "Content-Type": "application/json",
-  //         // HttpHeaders.contentTypeHeader: "application/json; charset=utf-8",
-  //         HttpHeaders.contentTypeHeader: "application/json",
-  //       },
-  //       body: json.encode(postBody),
-  //       // body: postBody,
-  //     );
-
-  //     // print(json.encode(json.decode(response.body)['data']['sessions']));
-  //     // print(json.encode(json.decode(response.body)['data']['sessions'][0]));
-  //     // print(json.encode(json.decode(response.body)));
-  //     if (response.statusCode == ApiStatusCode.responseCreated) {
-  //       return Success(
-  //           code: response.statusCode,
-  //           response: userFromJson(json
-  //               .encode(json.decode(response.body)['data']['sessions'][0])));
-  //     }
-  //     return Failure(
-  //         code: ApiStatusCode.invalidResponse,
-  //         errorResponse: ApiStrings.invalidResponseString);
-  //   } on HttpException {
-  //     return Failure(
-  //         code: ApiStatusCode.httpError,
-  //         errorResponse: ApiStrings.noInternetString);
-  //   } on FormatException {
-  //     return Failure(
-  //         code: ApiStatusCode.invalidResponse,
-  //         errorResponse: ApiStrings.invalidFormatString);
-  //   } catch (e) {
-  //     return Failure(code: 103, errorResponse: e.toString());
-  //     return Failure(
-  //         code: ApiStatusCode.unknownError,
-  //         errorResponse: ApiStrings.unknownErrorString);
-  //   }
-  // }
-
   static Future<Object> getUserFromToken(String accessToken) async {
     try {
       // var url = Uri.parse('http://localhost/apiforsharelearn/users/me');
@@ -177,7 +111,8 @@ class UserApi {
         "description": user.description.toString(),
         // "avatar": user.image as File,
         // "avatar": user.image == null ? null : user.image as File,
-        "avatar": user.image == null ? null : user.image.toString(),
+        // "picture": user.image == null ? null : user.image.toString(),
+        "picture": user.image == null ? null : user.image.toString(),
         "class": user.userClass.toString(),
       };
 
@@ -214,7 +149,7 @@ class UserApi {
       // print(json.encode(json.decode(response.body)['data']['sessions']));
       // print(response.body);
       // print(json.encode(json.decode(response.body)['data']['sessions'][0]));
-      print(response.body);
+      // print(response.body);
       if (response.statusCode == ApiStatusCode.responseCreated) {
         return Success(
             code: response.statusCode,
@@ -225,6 +160,77 @@ class UserApi {
           code: ApiStatusCode.invalidResponse,
           // errorResponse: ApiStrings.invalidResponseString
           errorResponse: response.body);
+    } on HttpException {
+      return Failure(
+          code: ApiStatusCode.httpError,
+          errorResponse: ApiStrings.noInternetString);
+    } on FormatException {
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          errorResponse: ApiStrings.invalidFormatString);
+    } catch (e) {
+      return Failure(code: 103, errorResponse: e.toString());
+      // return Failure(
+      //     code: ApiStatusCode.unknownError,
+      //     errorResponse: ApiStrings.unknownErrorString);
+    }
+  }
+
+  static Future<Object> postUserPic(Session loggedinSession, User user) async {
+    try {
+      var url = Uri.parse(RemoteManager.BASE_URI + '/users/pic/' + user.id);
+
+      // print(user.username.toString());
+
+      // Map<String, File> postBody = {
+      //   "picture": File(user.image as String),
+      // };
+
+      var request = http.MultipartRequest("POST", url);
+      //add text fields
+      //  request.fields["text_field"] = text;
+      //create multipart using filepath, string or bytes
+      var pic =
+          await http.MultipartFile.fromPath("picture", user.image.toString());
+      //add multipart to request
+      request.files.add(pic);
+      request.headers.addAll({
+        HttpHeaders.authorizationHeader:
+            // 'ZjNlNTU5OGYyNTk4ZjMwMTQ1MTNkZDFlYzI5MGY3MzNiOTRjNzc1YmRkNTM2N2YxMzEzNjM1MzAzODM0MzczMTM5MzA=',
+
+            loggedinSession.accessToken,
+
+        "Accept": "application/json; charset=utf-8",
+        // "Accept": "application/json; charset=UTF-8",
+        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+        "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+      });
+      var response = await request.send();
+
+      //Get the response from the server
+      var responseData = await response.stream.toBytes();
+      var responseBody = String.fromCharCodes(responseData);
+      // print(json.encode(json.decode(responseBody)['data']['user'][0]));
+
+      print(responseBody);
+
+      // if (response.statusCode == ApiStatusCode.responseCreated) {
+      if (json.decode(responseBody)['statusCode'] ==
+          ApiStatusCode.responseSuccess) {
+        return Success(
+          code: response.statusCode,
+          response: userFromJson(
+            json.encode(
+              json.decode(responseBody)['data']['user'][0],
+            ),
+          ),
+        );
+      }
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          // errorResponse: ApiStrings.invalidResponseString
+          // errorResponse: response.body);
+          errorResponse: response.stream.toString());
     } on HttpException {
       return Failure(
           code: ApiStatusCode.httpError,

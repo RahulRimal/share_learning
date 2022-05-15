@@ -19,6 +19,7 @@ import 'package:share_learning/templates/screens/single_post_screen.dart';
 import 'package:share_learning/templates/screens/splash_screen.dart';
 import 'package:share_learning/templates/screens/login_screen.dart';
 import 'package:share_learning/templates/screens/user_posts_screen.dart';
+import 'package:share_learning/templates/screens/user_profile_edit_screen.dart';
 import 'package:share_learning/templates/screens/user_profile_screen.dart';
 import 'templates/screens/edit_post_screen.dart';
 import 'templates/screens/home_screen.dart';
@@ -83,6 +84,8 @@ class MyApp extends StatelessWidget {
                 SignUpScreen.routeName: (context) => SignUpScreen(),
                 LoginSignupScreen.routeName: (context) => LoginSignupScreen(),
                 UserProfileScreen.routeName: (context) => UserProfileScreen(),
+                UserProfileEditScreen.routeName: (context) =>
+                    UserProfileEditScreen(),
                 CartScreen.routeName: (context) => CartScreen(),
               },
             )
@@ -112,6 +115,8 @@ class MyApp extends StatelessWidget {
                 SignUpScreen.routeName: (context) => SignUpScreen(),
                 LoginSignupScreen.routeName: (context) => LoginSignupScreen(),
                 UserProfileScreen.routeName: (context) => UserProfileScreen(),
+                UserProfileEditScreen.routeName: (context) =>
+                    UserProfileEditScreen(),
                 CartScreen.routeName: (context) => CartScreen(),
               },
             ),

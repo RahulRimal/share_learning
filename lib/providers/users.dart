@@ -174,4 +174,26 @@ class Users with ChangeNotifier {
     }
     return false;
   }
+
+  Future<bool> updatePicture(Session userSession, User user) async {
+    setLoading(true);
+    var response = await UserApi.postUserPic(userSession, user);
+    if (response is Success) {
+      setUser(response.response as User);
+      setLoading(false);
+      notifyListeners();
+      return true;
+    }
+    if (response is Failure) {
+      UserError userError = UserError(
+        code: response.code,
+        message: response.errorResponse,
+      );
+      setUserError(userError);
+      setLoading(false);
+      notifyListeners();
+      return false;
+    }
+    return false;
+  }
 }

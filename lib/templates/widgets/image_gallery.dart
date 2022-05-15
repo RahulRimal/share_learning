@@ -59,7 +59,9 @@ class ImageGallery extends StatelessWidget {
                       // ),
 
                       child:
-                          CustomImage(selectedPost.pictures![index], isNetwork),
+                          // CustomImage(selectedPost.pictures![index], isNetwork),
+                          CustomImage(
+                              selectedPost.pictures![index].name, isNetwork),
                     ),
                   ),
                   // Post Image ends Here,
