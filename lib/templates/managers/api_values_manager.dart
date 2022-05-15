@@ -5,6 +5,10 @@ class RemoteManager {
   static const String PROFILE_POOL =
       'http://10.0.2.2/apiforsharelearn/images/profile-pics';
   // 'https://ojasfilms.org/apiforshareLearn/images/profile-pics';
+
+  static const String POST_POOL =
+      'http://10.0.2.2/apiforsharelearn/images/posts';
+  // 'https://ojasfilms.org/apiforshareLearn/images/posts';
 }
 
 class ApiManager {}

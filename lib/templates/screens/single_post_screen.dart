@@ -9,6 +9,7 @@ import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/providers/comment.dart';
 import 'package:share_learning/providers/users.dart';
+import 'package:share_learning/templates/managers/api_values_manager.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/screens/home_screen.dart';
@@ -86,6 +87,10 @@ class SinglePostScreen extends StatelessWidget {
       context,
       listen: false,
     ).getBookById(bookId);
+
+    selectedPost.pictures = selectedPost.pictures!.map((e) {
+      return "${RemoteManager.POST_POOL}/$bookId/$e";
+    }).toList();
 
     // List<Comment> postComments = Provider.of<Comments>(
     //   context,
@@ -346,7 +351,11 @@ class SinglePostScreen extends StatelessWidget {
                 ),
                 // Image Gallery Starts Here
 
-                ImageGallery(true, this.bookId),
+                // ImageGallery(true, this.bookId),
+                ImageGallery(
+                  true,
+                  images: selectedPost.pictures,
+                ),
 
                 // Image Gallery Ends Here
 

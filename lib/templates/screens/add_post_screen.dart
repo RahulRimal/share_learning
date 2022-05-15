@@ -551,7 +551,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   child: _storedImages != null
                       ?
                       // ImageGallery(null, _storedImages)
-                      ImageGallery(false, null, actualImages)
+                      // ImageGallery(false, null, actualImages)
+                      ImageGallery(false, images: actualImages)
                       : Text('No Image'),
                 ),
                 Container(

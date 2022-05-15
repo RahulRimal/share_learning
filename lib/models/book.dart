@@ -99,7 +99,8 @@ class Book {
   String postRating;
   DateTime postedOn;
   // List<String>? pictures;
-  List<XFile>? pictures;
+  // List<XFile>? pictures;
+  List<dynamic>? pictures;
 
   factory Book.fromJson(Map<String, dynamic> json) => Book(
         id: json["id"] == null ? null : json["id"],
@@ -120,7 +121,8 @@ class Book {
         postRating: json["postRating"] == null ? '' : json["postRating"],
         pictures: json["pictures"] == null
             ? null
-            : List<XFile>.from(json["pictures"]),
+            // : List<XFile>.from(json["pictures"]),
+            : (json["pictures"]),
         // postedOn:
         //     json["postedOn"] == null ? null : DateTime.parse(json["postedOn"]),
         postedOn: NepaliDateTime.parse(json["postedOn"].toString()),

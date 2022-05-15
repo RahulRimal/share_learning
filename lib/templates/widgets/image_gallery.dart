@@ -13,7 +13,7 @@ class ImageGallery extends StatelessWidget {
   final bool isNetwork;
 
   // ImageGallery({bookId = null, images = null});
-  ImageGallery(this.isNetwork, [this.bookId, this.images]);
+  ImageGallery(this.isNetwork, {this.bookId, this.images});
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +60,23 @@ class ImageGallery extends StatelessWidget {
 
                       child:
                           // CustomImage(selectedPost.pictures![index], isNetwork),
+                          // CustomImage(
+                          //     selectedPost.pictures![index].runtimeType ==
+                          //             String
+                          //         ? selectedPost.pictures![index]
+                          //         : selectedPost.pictures![index].name,
+                          //     isNetwork),
+                          // CustomImage(
+                          //     selectedPost.pictures![index].runtimeType ==
+                          //             String
+                          //         ? selectedPost.pictures![index]
+                          //         : selectedPost.pictures![index].name,
+                          //     isNetwork),
                           CustomImage(
-                              selectedPost.pictures![index].name, isNetwork),
+                              isNetwork
+                                  ? selectedPost.pictures![index]
+                                  : selectedPost.pictures![index].name,
+                              isNetwork),
                     ),
                   ),
                   // Post Image ends Here,
