@@ -4,7 +4,6 @@ import 'package:share_learning/data/user_api.dart';
 import 'package:share_learning/models/api_status.dart';
 import 'package:share_learning/models/session.dart';
 import 'package:share_learning/models/user.dart';
-import 'package:share_learning/providers/sessions.dart';
 
 class Users with ChangeNotifier {
   Users(this._session);

@@ -1,6 +1,4 @@
-import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -11,8 +9,8 @@ import 'package:share_learning/models/book.dart';
 import 'package:share_learning/models/session.dart';
 import 'package:share_learning/providers/books.dart';
 
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart' as syspaths;
+// import 'package:path/path.dart' as path;
+// import 'package:path_provider/path_provider.dart' as syspaths;
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/widgets/image_gallery.dart';
@@ -138,7 +136,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
     // DateFormat('yyyy/MM/dd').format(_boughtDate as DateTime).toString();
   }
 
-  bool _savePost(Session loggedInUser) {
+  Future<bool> _savePost(Session loggedInUser) async {
     final isValid = _form.currentState!.validate();
 
     if (!isValid) {
@@ -150,12 +148,37 @@ class _AddPostScreenState extends State<AddPostScreen> {
     _edittedBook.pictures = _storedImages;
     // _edittedBook.pictures = actualImages;
     // Provider.of<Books>(context, listen: false).addPost(_edittedBook);
-    Provider.of<Books>(context, listen: false)
-        .createPost(loggedInUser, _edittedBook);
-    Navigator.of(context).pop();
-    Navigator.of(context).pop();
 
-    return true;
+    // Books books = context.watch<Books>();
+    Books books = Provider.of<Books>(context, listen: false);
+    // if (await Provider.of<Books>(context, listen: false)
+    //     .createPost(loggedInUser, _edittedBook)) {
+    //   if (_storedImages != null) {
+    //     await Provider.of<Books>(context, listen: false)
+    //         .updatePictures(loggedInUser, _edittedBook);
+    //   }
+
+    if (await books.createPost(loggedInUser, _edittedBook)) {
+      if (_storedImages != null) {
+        _edittedBook = books.books.last;
+        _edittedBook.pictures = _storedImages;
+        books.updatePictures(loggedInUser, _edittedBook);
+      }
+
+      // Provider.of<Books>(context, listen: false)
+      //     .updatePictures(loggedInUser, _edittedBook)
+      //     .then((value) {
+      //       Navigator.of(context).pop();
+      // Navigator.of(context).pop();
+      //     });
+
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+
+      return true;
+    }
+
+    return false;
   }
 
   @override
@@ -169,8 +192,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: () {
-              if (_savePost(loggedInUserSession)) {
+            onPressed: () async {
+              if (await _savePost(loggedInUserSession)) {
                 // final snackBar = SnackBar(
                 //   content: Text(
                 //     'Posted Successfully',
@@ -596,8 +619,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       backgroundColor: MaterialStateProperty.all(
                           Theme.of(context).primaryColor),
                     ),
-                    onPressed: () {
-                      if (_savePost(loggedInUserSession)) {
+                    onPressed: () async {
+                      if (await _savePost(loggedInUserSession)) {
                         // final snackBar = SnackBar(
                         //   content: Text(
                         //     'Posted Successfully',

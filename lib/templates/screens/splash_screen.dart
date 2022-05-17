@@ -1,20 +1,14 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:share_learning/data/session_api.dart';
-import 'package:share_learning/models/session.dart';
 import 'package:share_learning/providers/sessions.dart';
 import 'package:share_learning/templates/managers/assets_manager.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/screens/home_screen.dart';
 import 'package:share_learning/templates/screens/login_screen.dart';
-import 'package:share_learning/templates/screens/onboarding_screen.dart';
 import 'package:share_learning/templates/utils/internet_connection.dart';
-import 'package:share_learning/templates/utils/shared_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {

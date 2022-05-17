@@ -12,6 +12,7 @@ import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/managers/api_values_manager.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';
+import 'package:share_learning/templates/managers/values_manager.dart';
 import 'package:share_learning/templates/screens/home_screen.dart';
 import 'package:share_learning/templates/widgets/app_drawer.dart';
 import 'package:share_learning/templates/widgets/image_gallery.dart';
@@ -20,6 +21,7 @@ import 'package:share_learning/templates/widgets/post_comments.dart';
 import 'edit_post_screen.dart';
 import 'user_posts_screen.dart';
 
+// ignore: must_be_immutable
 class SinglePostScreen extends StatelessWidget {
   static const routeName = '/post-details';
 
@@ -88,9 +90,18 @@ class SinglePostScreen extends StatelessWidget {
       listen: false,
     ).getBookById(bookId);
 
-    selectedPost.pictures = selectedPost.pictures!.map((e) {
-      return "${RemoteManager.POST_POOL}/$bookId/$e";
-    }).toList();
+    // if (selectedPost.pictures != null &&
+    //     // (selectedPost.pictures![0]
+    //     //         .compareTo("${RemoteManager.POST_POOL}/$bookId/") ==
+    //     //     0)) {
+    // if (selectedPost.pictures != null) {
+    //   // print("${RemoteManager.POST_POOL}/$bookId/");
+    //   selectedPost.pictures = selectedPost.pictures!.map((e) {
+    //     return "${RemoteManager.POST_POOL}/$bookId/$e";
+    //   }).toList();
+    // } else {
+    //   selectedPost.pictures = null;
+    // }
 
     // List<Comment> postComments = Provider.of<Comments>(
     //   context,
@@ -352,10 +363,25 @@ class SinglePostScreen extends StatelessWidget {
                 // Image Gallery Starts Here
 
                 // ImageGallery(true, this.bookId),
-                ImageGallery(
-                  true,
-                  images: selectedPost.pictures,
-                ),
+                // selectedPost.pictures != null
+                selectedPost.pictures != null
+                    ? ImageGallery(
+                        true,
+                        images: selectedPost.pictures,
+                      )
+                    : SizedBox(
+                        height: AppHeight.h100,
+                        child: Center(
+                          child: Text(
+                            'No Images found',
+                            // textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
 
                 // Image Gallery Ends Here
 

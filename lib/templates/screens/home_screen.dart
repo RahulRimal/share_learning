@@ -1,19 +1,12 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
-import 'package:share_learning/models/book.dart';
 import 'package:share_learning/models/session.dart';
-import 'package:share_learning/models/user.dart';
 import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/providers/users.dart';
-import 'package:share_learning/templates/managers/api_values_manager.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/managers/font_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/models/cart.dart';
 import 'package:share_learning/models/session.dart';
-import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/providers/carts.dart';
-import 'package:share_learning/templates/managers/assets_manager.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/managers/font_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';
@@ -62,7 +59,6 @@ class _CartItemState extends State<CartItem> {
   @override
   void initState() {
     _quantity = widget.cartItem.bookCount;
-    // TODO: implement initState
     super.initState();
   }
 

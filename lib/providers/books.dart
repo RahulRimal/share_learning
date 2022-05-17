@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:share_learning/data/book_api.dart';
 import 'package:share_learning/models/api_status.dart';
 import 'package:share_learning/models/session.dart';
@@ -202,7 +201,7 @@ class Books with ChangeNotifier {
     // );
 
     _myBooks.add(receivedInfo);
-    notifyListeners();
+    // notifyListeners();
   }
 
   void addPosts(List<Book> receivedInfo) {
@@ -235,11 +234,14 @@ class Books with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void createPost(Session currentSession, Book receivedInfo) async {
+  Future<bool> createPost(Session currentSession, Book receivedInfo) async {
     var response = await BookApi.createPost(currentSession, receivedInfo);
 
     if (response is Success) {
-      addPost(response.response as Book);
+      addPost((response.response as List<Book>)[0]);
+      // addPost(response.response as Book);
+      // notifyListeners();
+      return true;
     }
     if (response is Failure) {
       BookError bookError = BookError(
@@ -247,8 +249,42 @@ class Books with ChangeNotifier {
         message: response.errorResponse,
       );
       setBookError(bookError);
+      // notifyListeners();
+      return false;
     }
-    notifyListeners();
+    return false;
+  }
+
+  Future<bool> updatePictures(Session userSession, Book book) async {
+    setLoading(true);
+
+    List<String> images = [];
+
+    for (var i = 0; i < book.pictures!.length; i++) {
+      // images.add(book.pictures![i].toString());
+      images.add(book.pictures![i].path);
+    }
+
+    book.pictures = images;
+
+    var response = await BookApi.postPictures(userSession, book);
+    if (response is Success) {
+      // setBooks(response.response as Book);
+      setLoading(false);
+      notifyListeners();
+      return true;
+    }
+    if (response is Failure) {
+      BookError bookError = BookError(
+        code: response.code,
+        message: response.errorResponse,
+      );
+      setBookError(bookError);
+      setLoading(false);
+      notifyListeners();
+      return false;
+    }
+    return false;
   }
 
   void updatePost(Session currentSession, Book edittedPost) async {

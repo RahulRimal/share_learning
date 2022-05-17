@@ -46,16 +46,23 @@ class Session {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "userId": userId == null ? null : userId,
-        "accessToken": accessToken == null ? null : accessToken,
-        "accessTokenExpiry": accessTokenExpiry == null
-            ? null
-            : accessTokenExpiry.toIso8601String(),
-        "refreshToken": refreshToken == null ? null : refreshToken,
-        "refreshTokenExpiry": refreshTokenExpiry == null
-            ? null
-            : refreshTokenExpiry.toIso8601String(),
+        "id": id,
+        "userId": userId,
+        "accessToken": accessToken,
+        "accessTokenExpiry": accessTokenExpiry.toIso8601String(),
+        "refreshToken": refreshToken,
+        "refreshTokenExpiry": refreshTokenExpiry.toIso8601String(),
+
+        //     "id": id == null ? null : id,
+        // "userId": userId == null ? null : userId,
+        // "accessToken": accessToken == null ? null : accessToken,
+        // "accessTokenExpiry": accessTokenExpiry == null
+        //     ? null
+        //     : accessTokenExpiry.toIso8601String(),
+        // "refreshToken": refreshToken == null ? null : refreshToken,
+        // "refreshTokenExpiry": refreshTokenExpiry == null
+        //     ? null
+        //     : refreshTokenExpiry.toIso8601String(),
       };
 }
 

@@ -184,12 +184,20 @@ class BookApi {
         body: json.encode(postBody),
       );
 
+      // print(response.body);
+
       // print(json.encode(json.decode(response.body)['data']['posts'][0]));
-      if (response.statusCode == ApiStatusCode.responseSuccess) {
+      if (response.statusCode == ApiStatusCode.responseCreated) {
         return Success(
-            code: response.statusCode,
-            response: sessionFromJson(
-                json.encode(json.decode(response.body)['data']['posts'][0])));
+          code: response.statusCode,
+          response: bookFromJson(
+            json.encode(json.decode(response.body)['data']['posts']),
+          ),
+        );
+        // response: bookFromJson(
+        //     json.encode(json.decode(response.body)['data']['posts'][0])));
+        // response: sessionFromJson(
+        //     json.encode(json.decode(response.body)['data']['posts'][0])));
       }
       return Failure(
           code: ApiStatusCode.invalidResponse,
@@ -252,6 +260,81 @@ class BookApi {
       return Failure(
           code: ApiStatusCode.unknownError,
           errorResponse: ApiStrings.unknownErrorString);
+    }
+  }
+
+  static Future<Object> postPictures(Session loggedinSession, Book book) async {
+    try {
+      var url =
+          Uri.parse(RemoteManager.BASE_URI + '/posts/postPics/' + book.id);
+
+      var request = http.MultipartRequest("POST", url);
+
+      var pics = [];
+
+      for (var i = 0; i < book.pictures!.length; i++) {
+        var pic = await http.MultipartFile.fromPath(
+          ('pics ${i + 1}'),
+          // book.pictures![i].image.toString(),
+          // book.pictures![i].image.path,
+          // book.pictures![i].image..toString(),
+          book.pictures![i],
+        );
+        // filename: book.pictures![i].image.path.split('/').last);
+        pics.add(pic);
+      }
+
+      request.files.addAll(pics.map((e) => e));
+
+      request.headers.addAll({
+        HttpHeaders.authorizationHeader: loggedinSession.accessToken,
+
+        "Accept": "application/json; charset=utf-8",
+        // "Accept": "application/json; charset=UTF-8",
+        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+        "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+      });
+      var response = await request.send();
+
+      //Get the response from the server
+      var responseData = await response.stream.toBytes();
+      var responseBody = String.fromCharCodes(responseData);
+      // print(json.encode(json.decode(responseBody)['data']['user'][0]));
+
+      // print(responseBody);
+
+      // if (response.statusCode == ApiStatusCode.responseCreated) {
+      if (json.decode(responseBody)['statusCode'] ==
+          ApiStatusCode.responseSuccess) {
+        return Success(
+          code: response.statusCode,
+          response: bookFromJson(
+            json.encode(
+              json.decode(responseBody)['data']['posts'],
+              // json.encode(
+              //   json.decode(responseBody)['data']['posts'][0],
+            ),
+          ),
+        );
+      }
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          // errorResponse: ApiStrings.invalidResponseString
+          // errorResponse: response.body);
+          errorResponse: response.stream.toString());
+    } on HttpException {
+      return Failure(
+          code: ApiStatusCode.httpError,
+          errorResponse: ApiStrings.noInternetString);
+    } on FormatException {
+      return Failure(
+          code: ApiStatusCode.invalidResponse,
+          errorResponse: ApiStrings.invalidFormatString);
+    } catch (e) {
+      return Failure(code: 103, errorResponse: e.toString());
+      // return Failure(
+      //     code: ApiStatusCode.unknownError,
+      //     errorResponse: ApiStrings.unknownErrorString);
     }
   }
 }

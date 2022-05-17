@@ -22,7 +22,7 @@
 
 import 'dart:convert';
 
-import 'dart:io';
+// import 'dart:io';
 
 // List<User> userFromJson(String str) =>
 //     List<User>.from(json.decode(str).map((x) => User.fromJson(x)));
@@ -79,17 +79,26 @@ class User {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "name": (firstName == null && lastName == null)
-            ? null
-            : firstName + lastName,
+        "id": id,
+        "name": firstName + lastName,
         "username": username == null ? null : username,
         "email": email == null ? null : email,
         "description": description == null ? null : description,
         "class": userClass == null ? null : userClass,
         "followers": followers == null ? null : followers,
-        "createdDate":
-            createdDate == null ? null : createdDate.toIso8601String(),
+        "createdDate": createdDate.toIso8601String(),
+
+        // "id": id == null ? null : id,
+        // "name": (firstName == null && lastName == null)
+        //     ? null
+        //     : firstName + lastName,
+        // "username": username == null ? null : username,
+        // "email": email == null ? null : email,
+        // "description": description == null ? null : description,
+        // "class": userClass == null ? null : userClass,
+        // "followers": followers == null ? null : followers,
+        // "createdDate":
+        //     createdDate == null ? null : createdDate.toIso8601String(),
       };
 }
 

@@ -57,14 +57,29 @@
 //     final book = bookFromJson(jsonString);
 
 import 'dart:convert';
-import 'dart:io';
+// import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+// import 'package:flutter/material.dart';
+// import 'package:image_picker/image_picker.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
+import 'package:share_learning/templates/managers/api_values_manager.dart';
+
+// List<Book> bookFromJson(String str) =>
+//     List<Book>.from(json.decode(str).map((x) => Book.fromJson(x)));
 
 List<Book> bookFromJson(String str) =>
-    List<Book>.from(json.decode(str).map((x) => Book.fromJson(x)));
+    List<Book>.from(json.decode(str).map((x) {
+      Book book = Book.fromJson(x);
+
+      if (book.pictures != null) {
+        // print("${RemoteManager.POST_POOL}/$bookId/");
+        book.pictures = book.pictures!.map((e) {
+          return "${RemoteManager.POST_POOL}/${book.id}/$e";
+        }).toList();
+      }
+
+      return book;
+    }));
 
 String bookToJson(List<Book> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -122,30 +137,49 @@ class Book {
         pictures: json["pictures"] == null
             ? null
             // : List<XFile>.from(json["pictures"]),
-            : (json["pictures"]),
+            // : (List<dynamic>.from(json["pictures"])).isEmpty
+            //     ? null
+            : json["pictures"],
+        // : ("${RemoteManager.POST_POOL}/$id$/${json['pictures'].toString()}"),
         // postedOn:
         //     json["postedOn"] == null ? null : DateTime.parse(json["postedOn"]),
         postedOn: NepaliDateTime.parse(json["postedOn"].toString()),
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "userId": userId == null ? null : userId,
-        "bookName": bookName == null ? null : bookName,
-        "author": author == null ? null : author,
-        "description": description == null ? null : description,
-        "boughtDate": boughtDate == null
-            ? null
-            : "${boughtDate.year.toString().padLeft(4, '0')}-${boughtDate.month.toString().padLeft(2, '0')}-${boughtDate.day.toString().padLeft(2, '0')}",
-        "price": price == null ? null : price,
-        "bookCount": bookCount == null ? null : bookCount,
-        "wishlisted": wishlisted == null ? null : wishlisted,
-        "postType": postType == null ? null : postType,
-        "postRating": postRating == null ? null : postRating,
+        "id": id,
+        "userId": userId,
+        "bookName": bookName,
+        "author": author,
+        "description": description,
+        "boughtDate":
+            "${boughtDate.year.toString().padLeft(4, '0')}-${boughtDate.month.toString().padLeft(2, '0')}-${boughtDate.day.toString().padLeft(2, '0')}",
+        "price": price,
+        "bookCount": bookCount,
+        "wishlisted": wishlisted,
+        "postType": postType,
+        "postRating": postRating,
         "pictures": pictures == null
             ? null
             : List<dynamic>.from(pictures!.map((x) => x.path)),
-        "postedOn": postedOn == null ? null : postedOn.toIso8601String(),
+        "postedOn": postedOn.toIso8601String(),
+        // "id": id == null ? null : id,
+        // "userId": userId == null ? null : userId,
+        // "bookName": bookName == null ? null : bookName,
+        // "author": author == null ? null : author,
+        // "description": description == null ? null : description,
+        // "boughtDate": boughtDate == null
+        //     ? null
+        //     : "${boughtDate.year.toString().padLeft(4, '0')}-${boughtDate.month.toString().padLeft(2, '0')}-${boughtDate.day.toString().padLeft(2, '0')}",
+        // "price": price == null ? null : price,
+        // "bookCount": bookCount == null ? null : bookCount,
+        // "wishlisted": wishlisted == null ? null : wishlisted,
+        // "postType": postType == null ? null : postType,
+        // "postRating": postRating == null ? null : postRating,
+        // "pictures": pictures == null
+        //     ? null
+        //     : List<dynamic>.from(pictures!.map((x) => x.path)),
+        // "postedOn": postedOn == null ? null : postedOn.toIso8601String(),
       };
 }
 

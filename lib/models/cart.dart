@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:nepali_date_picker/nepali_date_picker.dart';
+// import 'package:nepali_date_picker/nepali_date_picker.dart';
 
 List<Cart> cartFromJson(String str) =>
     List<Cart>.from(json.decode(str).map((x) => Cart.fromJson(x)));
@@ -69,14 +69,22 @@ class Cart {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "bookId": bookId == null ? null : bookId,
-        "sellingUserId": sellingUserId == null ? null : sellingUserId,
-        "buyingUserId": buyingUserId == null ? null : buyingUserId,
-        "pricePerPiece": pricePerPiece == null ? null : pricePerPiece,
-        "bookCount": bookCount == null ? null : bookCount,
-        "wishlisted": wishlisted == null ? null : wishlisted,
-        "postType": postType == null ? null : postType,
+        // "id": id == null ? null : id,
+        // "bookId": bookId == null ? null : bookId,
+        // "sellingUserId": sellingUserId == null ? null : sellingUserId,
+        // "buyingUserId": buyingUserId == null ? null : buyingUserId,
+        // "pricePerPiece": pricePerPiece == null ? null : pricePerPiece,
+        // "bookCount": bookCount == null ? null : bookCount,
+        // "wishlisted": wishlisted == null ? null : wishlisted,
+        // "postType": postType == null ? null : postType,
+        "id": id,
+        "bookId": bookId,
+        "sellingUserId": sellingUserId,
+        "buyingUserId": buyingUserId,
+        "pricePerPiece": pricePerPiece,
+        "bookCount": bookCount,
+        "wishlisted": wishlisted,
+        "postType": postType,
       };
 }
 

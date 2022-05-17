@@ -1,18 +1,11 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:nepali_date_picker/nepali_date_picker.dart';
-import 'package:provider/provider.dart';
-import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/sessions.dart';
-import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/screens/home_screen.dart';
 import 'package:share_learning/templates/screens/signup_screen.dart';
-import 'package:share_learning/templates/screens/user_profile_screen.dart';
-import 'package:share_learning/templates/utils/shared_preferences.dart';
 import 'package:share_learning/templates/widgets/beizer_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -53,16 +53,25 @@ class Comment {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "userId": userId == null ? null : userId,
-        "postId": postId == null ? null : postId,
-        "commentBody": commentBody == null ? null : commentBody,
-        "createdDate":
-            createdDate == null ? null : createdDate.toIso8601String(),
-
+        "id": id,
+        "userId": userId,
+        "postId": postId,
+        "commentBody": commentBody,
+        "createdDate": createdDate.toIso8601String(),
         // "boughtDate": boughtDate == null
         //     ? null
         //     : "${boughtDate.year.toString().padLeft(4, '0')}-${boughtDate.month.toString().padLeft(2, '0')}-${boughtDate.day.toString().padLeft(2, '0')}",
+
+        // "id": id == null ? null : id,
+        // "userId": userId == null ? null : userId,
+        // "postId": postId == null ? null : postId,
+        // "commentBody": commentBody == null ? null : commentBody,
+        // "createdDate":
+        //     createdDate == null ? null : createdDate.toIso8601String(),
+
+        // // "boughtDate": boughtDate == null
+        // //     ? null
+        // //     : "${boughtDate.year.toString().padLeft(4, '0')}-${boughtDate.month.toString().padLeft(2, '0')}-${boughtDate.day.toString().padLeft(2, '0')}",
       };
 }
 

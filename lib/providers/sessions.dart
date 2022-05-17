@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:share_learning/data/session_api.dart';
 import 'package:share_learning/models/api_status.dart';
-import 'package:share_learning/models/book.dart';
 import 'package:share_learning/models/session.dart';
 
 class SessionProvider with ChangeNotifier {
@@ -45,7 +44,8 @@ class SessionProvider with ChangeNotifier {
         code: response.code,
         message: response.errorResponse,
       );
-      setSessionError(sessionError as CustomSessionError);
+      setSessionError(sessionError);
+      // setSessionError(sessionError as CustomSessionError);
       // sessionError.showErrorMessage();
       setLoading(false);
       return false;
@@ -66,7 +66,8 @@ class SessionProvider with ChangeNotifier {
         code: response.code,
         message: response.errorResponse,
       );
-      setSessionError(sessionError as CustomSessionError);
+      setSessionError(sessionError);
+      // setSessionError(sessionError as CustomSessionError);
       // sessionError.showErrorMessage();
       setLoading(false);
       return false;

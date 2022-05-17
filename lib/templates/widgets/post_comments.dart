@@ -1,7 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/session.dart';
 import 'package:share_learning/models/user.dart';
@@ -11,7 +10,6 @@ import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/managers/font_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';
-import 'package:share_learning/templates/screens/single_post_screen.dart';
 import 'package:share_learning/templates/screens/user_posts_screen.dart';
 import 'package:share_learning/templates/utils/user_helper.dart';
 

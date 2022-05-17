@@ -7,7 +7,6 @@ import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/managers/strings_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/managers/values_manager.dart';
-import 'package:share_learning/templates/screens/home_screen.dart';
 import 'package:share_learning/templates/screens/login_screen.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -171,7 +170,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 }
 
 class OnBoardingPage extends StatelessWidget {
-  SliderObject _sliderObject;
+  final SliderObject _sliderObject;
+  // SliderObject _sliderObject;
 
   OnBoardingPage(this._sliderObject, {Key? key}) : super(key: key);
 

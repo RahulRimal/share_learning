@@ -166,7 +166,8 @@ class Carts with ChangeNotifier {
     // return null;
     CartError cartError = CartError(
       code: (response as CartError).code,
-      message: (response as CartError).message,
+      message: (response).message,
+      // message: (response as CartError).message,
     );
     setCaartError(cartError);
     return _cartError as CartError;

@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:share_learning/models/api_status.dart';
-import 'package:share_learning/models/book.dart';
 import 'package:share_learning/models/session.dart';
 import 'package:share_learning/templates/managers/api_values_manager.dart';
 import 'package:share_learning/templates/managers/strings_manager.dart';

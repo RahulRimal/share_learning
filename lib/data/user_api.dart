@@ -47,7 +47,7 @@ class UserApi {
           code: ApiStatusCode.invalidResponse,
           errorResponse: ApiStrings.invalidFormatString);
     } catch (e) {
-      return Failure(code: 103, errorResponse: e.toString());
+      // return Failure(code: 103, errorResponse: e.toString());
       return Failure(
           code: ApiStatusCode.unknownError,
           errorResponse: ApiStrings.unknownErrorString);
@@ -89,7 +89,7 @@ class UserApi {
           code: ApiStatusCode.invalidResponse,
           errorResponse: ApiStrings.invalidFormatString);
     } catch (e) {
-      return Failure(code: 103, errorResponse: e.toString());
+      // return Failure(code: 103, errorResponse: e.toString());
       return Failure(
           code: ApiStatusCode.unknownError,
           errorResponse: ApiStrings.unknownErrorString);
@@ -180,25 +180,13 @@ class UserApi {
     try {
       var url = Uri.parse(RemoteManager.BASE_URI + '/users/pic/' + user.id);
 
-      // print(user.username.toString());
-
-      // Map<String, File> postBody = {
-      //   "picture": File(user.image as String),
-      // };
-
       var request = http.MultipartRequest("POST", url);
-      //add text fields
-      //  request.fields["text_field"] = text;
-      //create multipart using filepath, string or bytes
       var pic =
           await http.MultipartFile.fromPath("picture", user.image.toString());
       //add multipart to request
       request.files.add(pic);
       request.headers.addAll({
-        HttpHeaders.authorizationHeader:
-            // 'ZjNlNTU5OGYyNTk4ZjMwMTQ1MTNkZDFlYzI5MGY3MzNiOTRjNzc1YmRkNTM2N2YxMzEzNjM1MzAzODM0MzczMTM5MzA=',
-
-            loggedinSession.accessToken,
+        HttpHeaders.authorizationHeader: loggedinSession.accessToken,
 
         "Accept": "application/json; charset=utf-8",
         // "Accept": "application/json; charset=UTF-8",

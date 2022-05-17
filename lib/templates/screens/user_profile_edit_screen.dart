@@ -1,8 +1,5 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/session.dart';
@@ -10,7 +7,6 @@ import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/managers/values_manager.dart';
 import 'package:share_learning/templates/utils/user_helper.dart';
-import 'package:share_learning/templates/widgets/image_gallery.dart';
 
 class UserProfileEditScreen extends StatefulWidget {
   const UserProfileEditScreen({Key? key}) : super(key: key);
