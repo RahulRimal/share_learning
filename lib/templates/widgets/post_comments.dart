@@ -14,11 +14,7 @@ import 'package:share_learning/templates/screens/user_posts_screen.dart';
 import 'package:share_learning/templates/utils/user_helper.dart';
 
 class PostComments extends StatelessWidget {
-  // final Book selectedPost;
-  // final User commentUser;
   final Session loggedInUser;
-  // final String comment;
-  // final Comment comment;
 
   final Comments comments;
   final String bookId;
@@ -29,6 +25,8 @@ class PostComments extends StatelessWidget {
     if (testString.length > 11) return true;
     return false;
   }
+
+  bool _commentEditted = false;
 
   User _commentUser = new User(
     id: '0',
@@ -54,6 +52,33 @@ class PostComments extends StatelessWidget {
     commentBody: '',
     createdDate: NepaliDateTime.now(),
   );
+
+  bool _addComment(
+      BuildContext context, Session loggedInUserSession, Comment comment) {
+    final isValid = _form.currentState!.validate();
+
+    if (!isValid) {
+      return false;
+    }
+    _form.currentState!.save();
+
+    _edittedComment.postId = bookId;
+
+    Provider.of<Comments>(context, listen: false)
+        .addComment(loggedInUserSession, _edittedComment);
+
+    Navigator.of(context).pop();
+
+    BotToast.showSimpleNotification(
+      title: 'Replied to the post',
+      duration: Duration(seconds: 3),
+      backgroundColor: ColorManager.primary,
+      titleStyle: getBoldStyle(color: ColorManager.white),
+      align: Alignment(1, 1),
+    );
+
+    return true;
+  }
 
   bool _updateComment(
       BuildContext context, Session loggedInUserSession, Comment comment) {
@@ -322,6 +347,8 @@ class PostComments extends StatelessWidget {
                                                     loggedInUser.userId
                                                 ? IconButton(
                                                     onPressed: () {
+                                                      _commentEditted = true;
+
                                                       _edittedComment = comments
                                                           .comments[index];
 
@@ -392,8 +419,11 @@ class PostComments extends StatelessWidget {
                             decoration: InputDecoration(
                               suffixIcon: IconButton(
                                 onPressed: () {
-                                  _updateComment(
-                                      context, loggedInUser, _edittedComment);
+                                  _commentEditted == true
+                                      ? _updateComment(context, loggedInUser,
+                                          _edittedComment)
+                                      : _addComment(context, loggedInUser,
+                                          _edittedComment);
                                 },
                                 icon: Icon(
                                   Icons.send,

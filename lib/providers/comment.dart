@@ -170,6 +170,26 @@ class Comments with ChangeNotifier {
     setLoading(false);
   }
 
+  Future<bool> addComment(
+      Session currentSession, Comment edittedComment) async {
+    var response = await CommentApi.addComment(currentSession, edittedComment);
+
+    if (response is Success) {
+      // final postIndex =
+      //     _comments.indexWhere((element) => element.id == edittedComment.id);
+
+      // _comments[postIndex] = edittedComment;
+
+      _comments.add(response as Comment);
+
+      notifyListeners();
+
+      return true;
+    }
+
+    return false;
+  }
+
   Future<bool> updateComment(
       Session currentSession, Comment edittedComment) async {
     var response =

@@ -241,8 +241,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   focusNode: isPassword ? _passwordFocusNode : null,
                   textInputAction:
                       isPassword ? TextInputAction.done : TextInputAction.next,
-                  keyboardType:
-                      isPassword ? TextInputType.number : TextInputType.text,
+                  // keyboardType:
+                  //     isPassword ? TextInputType.number : TextInputType.text,
+                  keyboardType: TextInputType.text,
                   decoration: new InputDecoration(
                     suffix: isPassword
                         ? IconButton(
