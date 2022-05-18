@@ -208,4 +208,22 @@ class Comments with ChangeNotifier {
 
     return false;
   }
+
+  Future<bool> deleteComment(
+      Session currentSession, Comment edittedComment) async {
+    var response =
+        await CommentApi.deleteComment(currentSession, edittedComment);
+
+    if (response is Success) {
+      final postIndex =
+          _comments.indexWhere((element) => element.id == edittedComment.id);
+
+      _comments.removeAt(postIndex);
+
+      notifyListeners();
+      return true;
+    }
+
+    return false;
+  }
 }

@@ -63,6 +63,19 @@ class PhotoViewRouteWrapper extends StatelessWidget {
         backgroundDecoration: backgroundDecoration,
         minScale: minScale,
         maxScale: maxScale,
+        loadingBuilder: (context, progress) => Center(
+          child: Container(
+            width: 20.0,
+            height: 20.0,
+            child: CircularProgressIndicator(
+              value: progress == null
+                  ? null
+                  : progress.cumulativeBytesLoaded /
+                      num.parse(
+                          (progress.expectedTotalBytes as int).toString()),
+            ),
+          ),
+        ),
       ),
     );
   }

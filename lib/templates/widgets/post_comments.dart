@@ -108,6 +108,33 @@ class PostComments extends StatelessWidget {
     return true;
   }
 
+  bool _deleteComment(
+      BuildContext context, Session loggedInUserSession, Comment comment) {
+    final isValid = _form.currentState!.validate();
+
+    if (!isValid) {
+      return false;
+    }
+    _form.currentState!.save();
+
+    _edittedComment.postId = bookId;
+
+    Provider.of<Comments>(context, listen: false)
+        .deleteComment(loggedInUserSession, _edittedComment);
+
+    Navigator.of(context).pop();
+
+    BotToast.showSimpleNotification(
+      title: 'Your reply has been deleted',
+      duration: Duration(seconds: 3),
+      backgroundColor: ColorManager.primary,
+      titleStyle: getBoldStyle(color: ColorManager.white),
+      align: Alignment(1, 1),
+    );
+
+    return true;
+  }
+
   // void _showUpdateSnackbar(BuildContext context) {
   //   final snackBar = SnackBar(
   //     content: Text(
@@ -345,23 +372,44 @@ class PostComments extends StatelessWidget {
                                             ),
                                             _commentUser.id ==
                                                     loggedInUser.userId
-                                                ? IconButton(
-                                                    onPressed: () {
-                                                      _commentEditted = true;
+                                                ? Row(
+                                                    children: [
+                                                      IconButton(
+                                                        onPressed: () {
+                                                          _commentEditted =
+                                                              true;
 
-                                                      _edittedComment = comments
-                                                          .comments[index];
+                                                          _edittedComment =
+                                                              comments.comments[
+                                                                  index];
 
-                                                      commentController.text =
-                                                          comments
-                                                              .comments[index]
-                                                              .commentBody;
+                                                          commentController
+                                                                  .text =
+                                                              comments
+                                                                  .comments[
+                                                                      index]
+                                                                  .commentBody;
 
-                                                      FocusScope.of(context)
-                                                          .requestFocus(
-                                                              _commentFocusNode);
-                                                    },
-                                                    icon: Icon(Icons.edit),
+                                                          FocusScope.of(context)
+                                                              .requestFocus(
+                                                                  _commentFocusNode);
+                                                        },
+                                                        icon: Icon(Icons.edit),
+                                                      ),
+                                                      IconButton(
+                                                        onPressed: () {
+                                                          _edittedComment =
+                                                              comments.comments[
+                                                                  index];
+                                                          _deleteComment(
+                                                              context,
+                                                              loggedInUser,
+                                                              _edittedComment);
+                                                        },
+                                                        icon:
+                                                            Icon(Icons.delete),
+                                                      ),
+                                                    ],
                                                   )
                                                 : Container(),
                                           ],
