@@ -36,25 +36,29 @@ class _AddPostScreenState extends State<AddPostScreen> {
   final _booksCountFocusNode = FocusNode();
   final _descFocusNode = FocusNode();
 
+  bool isUploading = false;
+
   List<bool> postTypeSelling = [true, false];
 
   bool ispostType = true;
 
   picker.NepaliDateTime? _boughtDate;
 
-  // Future<void> _getPicture() async {
-  //   print('getPic');
-  //   final imageFile = await imagePicker.pickImage(source: ImageSource.gallery);
-  //   if (imageFile == null) return;
-  //   setState(() {
-  //     _storedImage = imageFile;
-  //   });
-  //   final appDir = await syspaths.getApplicationDocumentsDirectory();
-  //     String imageName= path.basename(imageFile.path);
-  //     await imageFile.saveTo('${appDir.path}/${imageName}');
-  //   // final imageName = path.basename(imageFile.path);
-  //   // await imageFile.saveTo('${appDir.path}/$imageName');
-  // }
+  eraseImage(dynamic image) {
+    if (image is XFile) {
+      setState(() {
+        _storedImages?.remove(image);
+        actualImages.remove(image.path);
+      });
+    } else {
+      setState(() {
+        XFile imageToRemove =
+            _storedImages!.firstWhere((element) => element.path == image);
+        _storedImages?.remove(imageToRemove);
+        actualImages.remove(image);
+      });
+    }
+  }
 
   Future<void> _getPicture() async {
     final imageFiles =
@@ -143,6 +147,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
       return false;
     }
 
+    isUploading = true;
+
+    // if (isUploading) {
+    //   BotToast.showLoading(
+    //     crossPage: false,
+    //     clickClose: false,
+    //   );
+    // }
+
     _form.currentState!.save();
     _edittedBook.postType = ispostType ? 'S' : 'B';
     _edittedBook.pictures = _storedImages;
@@ -162,7 +175,14 @@ class _AddPostScreenState extends State<AddPostScreen> {
       if (_storedImages != null) {
         _edittedBook = books.books.last;
         _edittedBook.pictures = _storedImages;
-        books.updatePictures(loggedInUser, _edittedBook);
+        await books.updatePictures(loggedInUser, _edittedBook).then((value) {
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+        });
+
+        // Center(
+        //   child: CircularProgressIndicator(),
+        // );
       }
 
       // Provider.of<Books>(context, listen: false)
@@ -171,9 +191,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
       //       Navigator.of(context).pop();
       // Navigator.of(context).pop();
       //     });
-
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
 
       return true;
     }
@@ -575,7 +592,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       ?
                       // ImageGallery(null, _storedImages)
                       // ImageGallery(false, null, actualImages)
-                      ImageGallery(false, images: actualImages)
+                      ImageGallery(
+                          false,
+                          images: actualImages,
+                          isErasable: true,
+                          eraseImage: eraseImage,
+                        )
                       : Text('No Image'),
                 ),
                 Container(

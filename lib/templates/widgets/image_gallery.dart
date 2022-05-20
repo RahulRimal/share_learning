@@ -5,18 +5,26 @@ import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/templates/widgets/custom_image.dart';
 
 // ignore: must_be_immutable
-class ImageGallery extends StatelessWidget {
+class ImageGallery extends StatefulWidget {
   var bookId;
   List<dynamic>? images;
   final bool isNetwork;
+  final bool isErasable;
+  final Function? eraseImage;
 
   // ImageGallery({bookId = null, images = null});
-  ImageGallery(this.isNetwork, {this.bookId, this.images});
+  ImageGallery(this.isNetwork,
+      {this.bookId, this.images, required this.isErasable, this.eraseImage});
 
   @override
+  State<ImageGallery> createState() => _ImageGalleryState();
+}
+
+class _ImageGalleryState extends State<ImageGallery> {
+  @override
   Widget build(BuildContext context) {
-    Book? selectedPost = bookId != null
-        ? Provider.of<Books>(context).getBookById(bookId!)
+    Book? selectedPost = widget.bookId != null
+        ? Provider.of<Books>(context).getBookById(widget.bookId!)
         : null;
 
     return // Image Gallery Starts Here
@@ -71,10 +79,16 @@ class ImageGallery extends StatelessWidget {
                           //         : selectedPost.pictures![index].name,
                           //     isNetwork),
                           CustomImage(
-                              isNetwork
-                                  ? selectedPost.pictures![index]
-                                  : selectedPost.pictures![index].name,
-                              isNetwork),
+                        // isNetwork
+                        //     ?selectedPost.pictures![index]
+                        //     : selectedPost.pictures![index].name,
+                        imageUrl: widget.isNetwork
+                            ? selectedPost.pictures![index]
+                            : selectedPost.pictures![index].name,
+                        isNetwork: widget.isNetwork,
+                        isErasable: widget.isErasable,
+                        eraseImage: this.widget.eraseImage,
+                      ),
                     ),
                   ),
                   // Post Image ends Here,
@@ -89,10 +103,10 @@ class ImageGallery extends StatelessWidget {
                     ),
                   ),
                 )
-          : images != null
+          : widget.images != null
               ? ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: images!.length,
+                  itemCount: widget.images!.length,
                   itemBuilder: (context, index) =>
                       // Post Image Starts Here
                       Padding(
@@ -118,9 +132,12 @@ class ImageGallery extends StatelessWidget {
                       // ),
 
                       child: CustomImage(
-                          // selectedPost.pictures![index],
-                          images![index],
-                          isNetwork),
+                        // selectedPost.pictures![index],
+                        imageUrl: widget.images![index],
+                        isNetwork: widget.isNetwork,
+                        isErasable: widget.isErasable,
+                        eraseImage: this.widget.eraseImage,
+                      ),
                     ),
                   ),
                   // Post Image ends Here,

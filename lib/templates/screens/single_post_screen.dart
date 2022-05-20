@@ -368,6 +368,7 @@ class SinglePostScreen extends StatelessWidget {
                     ? ImageGallery(
                         true,
                         images: selectedPost.pictures,
+                        isErasable: false,
                       )
                     : SizedBox(
                         height: AppHeight.h100,

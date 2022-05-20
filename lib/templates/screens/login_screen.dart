@@ -53,7 +53,11 @@ class _LoginScreenState extends State<LoginScreen> {
     final isValid = _form.currentState!.validate();
 
     if (isValid) {
-      showSpinner = true;
+      setState(() {
+        showSpinner = true;
+      });
+
+      // showSpinner = true;
       _form.currentState!.save();
       // User logginedUser = new User(
       //     id: 'tempUser',
