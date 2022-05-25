@@ -287,18 +287,49 @@ class Books with ChangeNotifier {
     return false;
   }
 
-  void updatePost(Session currentSession, Book edittedPost) async {
+  Future<bool> deletePictures(Session userSession, Book book) async {
+    setLoading(true);
+
+    List<String> images = [];
+
+    for (var i = 0; i < book.pictures!.length; i++) {
+      images.add(book.pictures![i].toString());
+      // images.add(book.pictures![i].path);
+    }
+
+    book.pictures = images;
+
+    var response = await BookApi.deletePictures(userSession, book);
+    if (response is Success) {
+      setLoading(false);
+      notifyListeners();
+      return true;
+    }
+    if (response is Failure) {
+      BookError bookError = BookError(
+        code: response.code,
+        message: response.errorResponse,
+      );
+      setBookError(bookError);
+      setLoading(false);
+      notifyListeners();
+      return false;
+    }
+    return false;
+  }
+
+  Future<bool> updatePost(Session currentSession, Book edittedPost) async {
     var response = await BookApi.updatePost(currentSession, edittedPost);
-
-    // final postIndex =
-    //     _myBooks.indexWhere((element) => element.id == edittedPost.id);
-
-    // _myBooks[postIndex] = edittedPost;
 
     if (response is Success) {
       final postIndex =
           _myBooks.indexWhere((element) => element.id == edittedPost.id);
-      _myBooks[postIndex] = response as Book;
+
+      List<Book> books = response.response as List<Book>;
+      _myBooks[postIndex] = books[0];
+      // _myBooks[postIndex] = response as Book;
+      notifyListeners();
+      return true;
     }
 
     if (response is Failure) {
@@ -307,9 +338,11 @@ class Books with ChangeNotifier {
         message: response.errorResponse,
       );
       setBookError(bookError);
+      notifyListeners();
+      return false;
     }
 
-    notifyListeners();
+    return false;
   }
 
   Future<bool> deletePost(Session currentSession, String postId) async {

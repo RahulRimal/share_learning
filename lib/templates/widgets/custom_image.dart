@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
@@ -6,7 +7,9 @@ import 'package:share_learning/templates/managers/font_manager.dart';
 
 class CustomImage extends StatelessWidget {
   final String imageUrl;
-  final bool isNetwork;
+  // final DynamicLibrary imageUrl;
+  // final bool isNetwork;
+  bool isNetwork;
   final bool isErasable;
   final Function? eraseImage;
 
@@ -33,14 +36,24 @@ class CustomImage extends StatelessWidget {
                                 this.imageUrl,
                               )
                             : FileImage(File(this.imageUrl)) as ImageProvider,
+
+                        // imageProvider: (imageUrl is String)
+                        //     ? NetworkImage(this.imageUrl as String)
+                        //     : FileImage(File(this.imageUrl.toString()))
+                        //         as ImageProvider,
                       ),
                     ),
                   );
                 },
                 child: PhotoView(
-                  imageProvider: isNetwork
+                  // imageProvider: isNetwork
+                  //     ? NetworkImage(this.imageUrl) as ImageProvider
+                  //     : FileImage(File(this.imageUrl)),
+
+                  imageProvider: !imageUrl.contains('/data/user')
                       ? NetworkImage(this.imageUrl) as ImageProvider
                       : FileImage(File(this.imageUrl)),
+
                   minScale: PhotoViewComputedScale.contained * 0.8,
                   maxScale: PhotoViewComputedScale.covered * 2,
                 ),
@@ -82,18 +95,23 @@ class CustomImage extends StatelessWidget {
                             this.imageUrl,
                           )
                         : FileImage(File(this.imageUrl)) as ImageProvider,
+
+                    // imageProvider: (imageUrl is String)
+                    //     ? NetworkImage(this.imageUrl as String)
+                    //     : FileImage(File(this.imageUrl.toString()))
+                    //         as ImageProvider,
                   ),
                 ),
               );
             },
             child: PhotoView(
-              imageProvider: isNetwork
+              // imageProvider: isNetwork
+              //     ? NetworkImage(this.imageUrl) as ImageProvider
+              //     : FileImage(File(this.imageUrl)),
+              imageProvider: !imageUrl.contains('/data/user')
                   ? NetworkImage(this.imageUrl) as ImageProvider
                   : FileImage(File(this.imageUrl)),
-              // imageProvider: FileImage(File(this.imageUrl)),
-              // imageProvider: kIsWeb
-              //                   ? NetworkImage(this.imageUrl) as ImageProvider
-              //                   : FileImage(File(this.imageUrl)) as ImageProvider,
+
               minScale: PhotoViewComputedScale.contained * 0.8,
               maxScale: PhotoViewComputedScale.covered * 2,
             ),

@@ -1,5 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
 import 'package:nepali_date_picker/nepali_date_picker.dart';
@@ -8,7 +9,9 @@ import 'package:share_learning/models/book.dart';
 import 'package:share_learning/models/session.dart';
 import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
+import 'package:share_learning/templates/managers/font_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';
+import 'package:share_learning/templates/widgets/image_gallery.dart';
 
 class EditPostScreen extends StatefulWidget {
   static const routeName = '/edit-post';
@@ -18,6 +21,9 @@ class EditPostScreen extends StatefulWidget {
 }
 
 class _EditPostScreenState extends State<EditPostScreen> {
+  bool _first = true;
+  bool _presentInFile = true;
+
   final _form = GlobalKey<FormState>();
 
   final _authorFocusNode = FocusNode();
@@ -27,6 +33,13 @@ class _EditPostScreenState extends State<EditPostScreen> {
   final _descFocusNode = FocusNode();
 
   List<bool> postTypeSelling = [true, false];
+
+  List<XFile>? _storedImages;
+  List<String> actualImages = [];
+
+  List<String> _imagesToDelete = [];
+
+  ImagePicker imagePicker = ImagePicker();
 
   var _edittedBook = Book(
     id: '',
@@ -62,6 +75,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
 
       ispostType = _edittedBook.postType == 'S' ? true : false;
       postTypeSelling = [ispostType, !ispostType];
+      if (_first) _retrieveImage(_edittedBook);
     } else
       print('Book Id Is Empty');
 
@@ -69,6 +83,70 @@ class _EditPostScreenState extends State<EditPostScreen> {
         DateFormat('yyyy-MM-dd').format(_edittedBook.boughtDate).toString();
 
     super.didChangeDependencies();
+  }
+
+  _retrieveImage(Book post) {
+    if (post.pictures != null) {
+      for (int i = 0; i < post.pictures!.length; i++) {
+        actualImages.add(post.pictures![i]);
+      }
+    }
+
+    // actualImages.addAll(post.pictures);
+  }
+
+  Future<void> _getPicture() async {
+    final imageFiles =
+        await imagePicker.pickMultiImage(maxWidth: 770, imageQuality: 100);
+
+    if (imageFiles == null) return;
+
+    // _storedImages = imageFiles;
+
+    if (_storedImages == null) {
+      _storedImages = [];
+    }
+
+    _storedImages!.addAll(imageFiles);
+
+    List<String> imagesName = [];
+
+    setState(() {
+      for (int i = 0; i < _storedImages!.length; i++) {
+        actualImages.add(_storedImages![i].path);
+      }
+    });
+
+    _first = false;
+  }
+
+  eraseImage(dynamic image) {
+    if (image is XFile) {
+      setState(() {
+        _storedImages?.remove(image);
+        actualImages.remove(image.path);
+      });
+    } else {
+      setState(() {
+        if (_storedImages != null) {
+          XFile? imageToRemove;
+
+          try {
+            // XFile? imageToRemove = _storedImages!.firstWhere(
+            //   (element) => element.path == image,
+            imageToRemove = _storedImages!.firstWhere(
+              (element) => element.path == image,
+            );
+          } on StateError {
+            imageToRemove = null;
+          }
+          if (imageToRemove != null) _storedImages?.remove(imageToRemove);
+        }
+
+        actualImages.remove(image);
+        if (_edittedBook.pictures!.contains(image)) _imagesToDelete.add(image);
+      });
+    }
   }
 
   Future<void> _showPicker(BuildContext context) async {
@@ -82,7 +160,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
         DateFormat('yyyy-MM-dd').format(_boughtDate as DateTime).toString();
   }
 
-  bool _updatePost(Session loggedInUserSession, Book edittedBook) {
+  Future<bool> _updatePost(
+      Session loggedInUserSession, Book edittedBook) async {
     final isValid = _form.currentState!.validate();
 
     if (!isValid) {
@@ -90,29 +169,37 @@ class _EditPostScreenState extends State<EditPostScreen> {
     }
     _form.currentState!.save();
     _edittedBook.postType = ispostType ? 'S' : 'B';
-    Provider.of<Books>(context, listen: false)
-        // .updatePost(_edittedBook.id, _edittedBook);
-        .updatePost(loggedInUserSession, _edittedBook);
+    _edittedBook.pictures = _storedImages;
+
+    // Provider.of<Books>(context, listen: false)
+    //     .updatePost(loggedInUserSession, _edittedBook);
+
+    if (await Provider.of<Books>(context, listen: false)
+        .updatePost(loggedInUserSession, _edittedBook)) {
+      if (_storedImages != null) {
+        if (_storedImages!.isNotEmpty) {
+          _edittedBook.pictures = _storedImages;
+          if (await Provider.of<Books>(context, listen: false)
+              .updatePictures(loggedInUserSession, _edittedBook)) {
+            if (_imagesToDelete.isNotEmpty) {
+              _edittedBook.pictures = _imagesToDelete;
+              if (await Provider.of<Books>(context, listen: false)
+                  .deletePictures(loggedInUserSession, _edittedBook)) {
+                // Navigator.of(context).pop();
+                // Navigator.of(context).pop();
+              }
+            }
+          }
+        }
+      }
+    }
+
     Navigator.of(context).pop();
     Navigator.of(context).pop();
     // showUpdateSnackbar(context);
 
     return true;
   }
-
-  // void _showUpdateSnackbar(BuildContext context) {
-  //   final snackBar = SnackBar(
-  //     content: Text(
-  //       'Posted Updated Successfully',
-  //       textAlign: TextAlign.center,
-  //       style: TextStyle(
-  //         fontSize: 13,
-  //         fontWeight: FontWeight.bold,
-  //       ),
-  //     ),
-  //   );
-  //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +214,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
           loggedInUserSession.userId == _edittedBook.userId
               ? IconButton(
                   icon: Icon(Icons.save),
-                  onPressed: () {
-                    if (_updatePost(loggedInUserSession, _edittedBook))
+                  onPressed: () async {
+                    if (await _updatePost(loggedInUserSession, _edittedBook))
                       // _showUpdateSnackbar(context);
                       BotToast.showSimpleNotification(
                         title: 'Posted Updated Successfully',
@@ -491,6 +578,62 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     },
                   ),
                 ),
+                actualImages.isNotEmpty
+                    ? ImageGallery(
+                        true,
+                        // images: _edittedBook.pictures,
+                        images: actualImages,
+                        isErasable: true,
+                        eraseImage: eraseImage,
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 20,
+                        ),
+                        child: Center(
+                          child: Text(
+                            "No Images",
+                            style: getBoldStyle(
+                              fontSize: FontSize.s16,
+                              color: ColorManager.primary,
+                            ),
+                          ),
+                        ),
+                      ),
+                Container(
+                  child: Column(
+                    children: [
+                      Text(
+                        'Add Images',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            child: Text('From Gallery'),
+                            style: ButtonStyle(),
+                            onPressed: () {
+                              _getPicture();
+                            },
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          // ElevatedButton(
+                          //   child: Text('From Camera'),
+                          //   style: ButtonStyle(),
+                          //   onPressed: () {
+                          //     _takePicture();
+                          //   },
+                          // ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextButton(
@@ -499,8 +642,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
                           Theme.of(context).primaryColor),
                     ),
                     // onPressed: _savePost,
-                    onPressed: () {
-                      if (_updatePost(loggedInUserSession, _edittedBook))
+                    onPressed: () async {
+                      if (await _updatePost(loggedInUserSession, _edittedBook))
                         // _showUpdateSnackbar(context);
                         BotToast.showSimpleNotification(
                           title: 'Posted Updated Successfully',

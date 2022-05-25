@@ -25,7 +25,6 @@ class AddPostScreen extends StatefulWidget {
 class _AddPostScreenState extends State<AddPostScreen> {
   List<XFile>? _storedImages;
   List<String> actualImages = [];
-  // XFile? _storedImage;
   ImagePicker imagePicker = ImagePicker();
 
   final _form = GlobalKey<FormState>();
@@ -76,33 +75,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
     List<String> imagesName = [];
 
-    // for (int i = 0; i < imageFiles.length; i++) {
-    //   imagesName[i] = path.basename(imageFiles[i].path);
-    //   await imageFiles[i].saveTo('${appDir.path}/${imagesName[i]}');
-    // }
-
     setState(() {
       for (int i = 0; i < _storedImages!.length; i++) {
         actualImages.add(_storedImages![i].path);
       }
     });
   }
-
-  // Future<void> _takePicture() async {
-  //   print('takePic');
-  //   final imageFile = await imagePicker.pickImage(
-  //     source: ImageSource.gallery,
-  //     maxWidth: 150,
-  //   );
-  //   if (imageFile == null) return;
-  //   setState(() {
-  //     _storedImage = imageFile;
-  //   });
-  //   final appDir = await syspaths.getApplicationDocumentsDirectory();
-  //   final imageName = path.basename(imageFile.path);
-  //   await imageFile.saveTo('${appDir.path}/$imageName');
-  // }
-  // List<Xfile>? images = await imagePicker.pickMultiImage();
 
   var _edittedBook = Book(
     id: '',
@@ -148,7 +126,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
     }
 
     isUploading = true;
-
     // if (isUploading) {
     //   BotToast.showLoading(
     //     crossPage: false,
@@ -159,17 +136,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
     _form.currentState!.save();
     _edittedBook.postType = ispostType ? 'S' : 'B';
     _edittedBook.pictures = _storedImages;
-    // _edittedBook.pictures = actualImages;
-    // Provider.of<Books>(context, listen: false).addPost(_edittedBook);
-
-    // Books books = context.watch<Books>();
     Books books = Provider.of<Books>(context, listen: false);
-    // if (await Provider.of<Books>(context, listen: false)
-    //     .createPost(loggedInUser, _edittedBook)) {
-    //   if (_storedImages != null) {
-    //     await Provider.of<Books>(context, listen: false)
-    //         .updatePictures(loggedInUser, _edittedBook);
-    //   }
 
     if (await books.createPost(loggedInUser, _edittedBook)) {
       if (_storedImages != null) {

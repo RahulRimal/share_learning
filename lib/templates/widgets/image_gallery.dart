@@ -132,8 +132,9 @@ class _ImageGalleryState extends State<ImageGallery> {
                       // ),
 
                       child: CustomImage(
-                        // selectedPost.pictures![index],
                         imageUrl: widget.images![index],
+                        // imageUrl: (widget.images![index] as dynamic),
+                        // imageUrl: widget.images![index] is String ? widget.images![index] : widget.images![index].path,
                         isNetwork: widget.isNetwork,
                         isErasable: widget.isErasable,
                         eraseImage: this.widget.eraseImage,
