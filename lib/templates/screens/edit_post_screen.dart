@@ -171,26 +171,38 @@ class _EditPostScreenState extends State<EditPostScreen> {
     _edittedBook.postType = ispostType ? 'S' : 'B';
     _edittedBook.pictures = _storedImages;
 
-    // Provider.of<Books>(context, listen: false)
-    //     .updatePost(loggedInUserSession, _edittedBook);
+    // if (await Provider.of<Books>(context, listen: false)
+    //     .updatePost(loggedInUserSession, _edittedBook)) {
+    //   if (_storedImages != null) {
+    //     if (_storedImages!.isNotEmpty) {
+    //       _edittedBook.pictures = _storedImages;
+    //       if (await Provider.of<Books>(context, listen: false)
+    //           .updatePictures(loggedInUserSession, _edittedBook)) {
+    //         if (_imagesToDelete.isNotEmpty) {
+    //           _edittedBook.pictures = _imagesToDelete;
+    //           if (await Provider.of<Books>(context, listen: false)
+    //               .deletePictures(loggedInUserSession, _edittedBook)) {
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
 
-    if (await Provider.of<Books>(context, listen: false)
-        .updatePost(loggedInUserSession, _edittedBook)) {
-      if (_storedImages != null) {
-        if (_storedImages!.isNotEmpty) {
-          _edittedBook.pictures = _storedImages;
-          if (await Provider.of<Books>(context, listen: false)
-              .updatePictures(loggedInUserSession, _edittedBook)) {
-            if (_imagesToDelete.isNotEmpty) {
-              _edittedBook.pictures = _imagesToDelete;
-              if (await Provider.of<Books>(context, listen: false)
-                  .deletePictures(loggedInUserSession, _edittedBook)) {
-                // Navigator.of(context).pop();
-                // Navigator.of(context).pop();
-              }
-            }
-          }
-        }
+    await Provider.of<Books>(context, listen: false)
+        .updatePost(loggedInUserSession, _edittedBook);
+
+    if (_imagesToDelete.isNotEmpty) {
+      _edittedBook.pictures = _imagesToDelete;
+      if (await Provider.of<Books>(context, listen: false)
+          .deletePictures(loggedInUserSession, _edittedBook)) {}
+    }
+
+    if (_storedImages != null) {
+      if (_storedImages!.isNotEmpty) {
+        _edittedBook.pictures = _storedImages;
+        if (await Provider.of<Books>(context, listen: false)
+            .updatePictures(loggedInUserSession, _edittedBook)) {}
       }
     }
 
