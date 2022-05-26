@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
@@ -19,48 +20,99 @@ class CartItem extends StatefulWidget {
 }
 
 class _CartItemState extends State<CartItem> {
-  bool _cartItemChanged = false;
+  // bool _cartItemChanged = false;
+  late bool _cartItemChanged;
   late int _quantity;
   late bool _wishlisted;
-
-  // _incrementQuantity() {
-  //   if (mounted) {
-  //     setState(() {
-  //       _quantity++;
-  //     });
-  //   }
-  //   _ifCartItemChanged();
-  // }
-
-  // _decrementQuantity() {
-  //   if (mounted) {
-  //     setState(() {
-  //       _quantity--;
-  //     });
-  //   }
-
-  //   _ifCartItemChanged();
-  // }
+  late Cart _edittedItem;
 
   _ifCartItemChanged() {
     if (_quantity != widget.cartItem.bookCount) {
-      _cartItemChanged = true;
-    } else {
-      _cartItemChanged = false;
-    }
+      setState(() {
+        _cartItemChanged = true;
+      });
 
-    if (_wishlisted != widget.cartItem.wishlisted) {
-      _cartItemChanged = true;
-    } else {
-      _cartItemChanged = false;
+      return;
     }
+    if (_wishlisted != widget.cartItem.wishlisted) {
+      setState(() {
+        _cartItemChanged = true;
+      });
+      return;
+    }
+    setState(() {
+      _cartItemChanged = false;
+    });
   }
 
   @override
   void initState() {
+    _edittedItem = widget.cartItem;
+    _cartItemChanged = false;
     _quantity = widget.cartItem.bookCount;
     _wishlisted = widget.cartItem.wishlisted;
     super.initState();
+  }
+
+  Future<bool> _updatePost(
+      Session loggedInUserSession, Cart edittedItem) async {
+    _edittedItem.bookCount = _quantity;
+    _edittedItem.wishlisted = _wishlisted;
+
+    await Provider.of<Carts>(context, listen: false)
+        .updateCartItem(loggedInUserSession, edittedItem)
+        .then(
+      (value) {
+        if (value) {
+          BotToast.showSimpleNotification(
+            title: 'Cart Item updated',
+            duration: Duration(seconds: 3),
+            backgroundColor: ColorManager.primary,
+            titleStyle: getBoldStyle(color: ColorManager.white),
+            // align: Alignment(0, 0),
+            align: Alignment(-1, -1),
+            hideCloseButton: true,
+          );
+          _cartItemChanged = false;
+        } else
+          BotToast.showSimpleNotification(
+            title: "Something went wrong, Please try again!",
+            duration: Duration(seconds: 3),
+            backgroundColor: ColorManager.primary,
+            titleStyle: getBoldStyle(color: ColorManager.white),
+            align: Alignment(-1, -1),
+            hideCloseButton: true,
+          );
+      },
+    );
+
+    return true;
+  }
+
+  _deleteCartItem(Session userSession, String cartId) async {
+    print(cartId);
+    await Provider.of<Carts>(context, listen: false)
+        .deleteCartItem(userSession, cartId)
+        .then((value) {
+      if (value) {
+        BotToast.showSimpleNotification(
+          title: 'Book deleted from the cart',
+          duration: Duration(seconds: 3),
+          backgroundColor: ColorManager.primary,
+          titleStyle: getBoldStyle(color: ColorManager.white),
+          align: Alignment(-1, -1),
+          hideCloseButton: true,
+        );
+      } else
+        BotToast.showSimpleNotification(
+          title: 'Something went wrong, Please try again!',
+          duration: Duration(seconds: 3),
+          backgroundColor: ColorManager.primary,
+          titleStyle: getBoldStyle(color: ColorManager.white),
+          align: Alignment(-1, -1),
+          hideCloseButton: true,
+        );
+    });
   }
 
   @override
@@ -88,13 +140,8 @@ class _CartItemState extends State<CartItem> {
               if (snapshot.data is Book) {
                 final Book orderedBook = snapshot.data as Book;
                 return Container(
-                  // margin: EdgeInsets.only(
-                  //   top: 8.00,
-                  //   bottom: 8.00,
-                  // ),
                   margin: EdgeInsets.all(AppMargin.m8),
                   decoration: BoxDecoration(
-                    // color: ColorConstant.whiteA700,
                     color: ColorManager.white,
                     borderRadius: BorderRadius.circular(
                       5.00,
@@ -146,14 +193,10 @@ class _CartItemState extends State<CartItem> {
                                       Container(
                                         width: 158.00,
                                         child: Text(
-                                          // "Nike Air Zoom Pegasus 36 Miami",
-                                          // snapshot.data!.bookName,
                                           orderedBook.bookName,
-                                          // order.boo
                                           maxLines: null,
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
-                                            // color: ColorConstant.indigo900,
                                             color: Colors.indigo,
                                             fontSize: 12,
                                             fontFamily: 'Poppins',
@@ -177,10 +220,10 @@ class _CartItemState extends State<CartItem> {
                                               color: ColorManager.primary,
                                             ),
                                             onPressed: () {
-                                              setState(() {
-                                                _wishlisted = !_wishlisted;
-                                                _ifCartItemChanged();
-                                              });
+                                              _wishlisted = !_wishlisted;
+                                              _ifCartItemChanged();
+                                              // _edittedItem.wishlisted =
+                                              //     _wishlisted;
                                             },
                                           ),
                                         ),
@@ -194,7 +237,63 @@ class _CartItemState extends State<CartItem> {
                                           width: 24.00,
                                           child: IconButton(
                                             icon: Icon(Icons.delete),
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              bool userConfirmed = false;
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    AlertDialog(
+                                                  title: Text('Are you sure?'),
+                                                  content: Text(
+                                                    'This will remove the item from  your cart',
+                                                    style: getRegularStyle(
+                                                      fontSize: FontSize.s16,
+                                                      color: ColorManager.black,
+                                                    ),
+                                                  ),
+                                                  actions: [
+                                                    TextButton(
+                                                      child: Text(
+                                                        'Yes',
+                                                        style: getBoldStyle(
+                                                          fontSize:
+                                                              FontSize.s16,
+                                                          color: ColorManager
+                                                              .primary,
+                                                        ),
+                                                      ),
+                                                      onPressed: () {
+                                                        userConfirmed = true;
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                    ),
+                                                    TextButton(
+                                                      child: Text(
+                                                        'No',
+                                                        style: getBoldStyle(
+                                                          fontSize:
+                                                              FontSize.s16,
+                                                          // color: ColorManager.primary,
+                                                          color: Colors.green,
+                                                        ),
+                                                      ),
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              ).then((_) {
+                                                if (userConfirmed) {
+                                                  _deleteCartItem(
+                                                    authendicatedSession,
+                                                    widget.cartItem.id,
+                                                  );
+                                                }
+                                              });
+                                            },
                                           ),
                                         ),
                                       ),
@@ -219,94 +318,32 @@ class _CartItemState extends State<CartItem> {
                                           bottom: 1.00,
                                         ),
                                         child: Text(
-                                          // "299,43",
                                           "Rs. ${widget.cartItem.pricePerPiece * widget.cartItem.bookCount}",
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
-                                            // color: ColorConstant.lightBlueA200,
                                             color: Colors.lightBlue,
                                             fontSize: 12,
-
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.w700,
                                             letterSpacing: 0.50,
                                           ),
                                         ),
                                       ),
-                                      // Container(
-                                      //   width: 108.29,
-                                      //   child: Row(
-                                      //     crossAxisAlignment: CrossAxisAlignment.center,
-                                      //     mainAxisSize: MainAxisSize.min,
-                                      //     children: [
-                                      //       Container(
-                                      //         height: 20.00,
-                                      //         width: 33.32,
-                                      //         child: IconButton(
-                                      //           icon: Icon(Icons.plus_one),
-                                      //           onPressed: () {},
-                                      //         ),
-                                      //       ),
-                                      //       Container(
-                                      //         alignment: Alignment.center,
-                                      //         height: 20.00,
-                                      //         width: 41.65,
-                                      //         decoration: BoxDecoration(
-                                      //           // color: ColorConstant.blue50,
-                                      //           color: Colors.blue,
-                                      //           border: Border.all(
-                                      //             // color: ColorConstant.blue50,
-                                      //             color: Colors.blue,
-                                      //             width: 1.00,
-                                      //           ),
-                                      //         ),
-                                      //         child: Text(
-                                      //           "1",
-                                      //           textAlign: TextAlign.center,
-                                      //           style: TextStyle(
-                                      //             // color: ColorConstant.indigo900,
-                                      //             color: Colors.indigo,
-                                      //             fontSize: 12,
-
-                                      //             fontFamily: 'Poppins',
-                                      //             fontWeight: FontWeight.w400,
-                                      //             letterSpacing: 0.06,
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //       Container(
-                                      //         height: 20.00,
-                                      //         width: 33.32,
-                                      //         child: IconButton(
-                                      //           icon: Icon(Icons.plus_one),
-                                      //           onPressed: () {},
-                                      //         ),
-                                      //       ),
-                                      //     ],
-                                      //   ),
-                                      // ),
-
                                       Container(
                                         child: ButtonBar(
                                           children: [
                                             IconButton(
-                                              // color: ColorManager.primary,
                                               color: Colors.black,
-                                              // onPressed: () {},
-                                              // icon: Icon(
-                                              //   Icons.miscellaneous_services,
-                                              // ),
-                                              // onPressed: _decrementQuantity(),
                                               onPressed: _quantity < 2
                                                   ? null
                                                   : () {
-                                                      setState(() {
-                                                        _quantity--;
-                                                        _ifCartItemChanged();
-                                                      });
-                                                    },
+                                                      _quantity--;
+                                                      _ifCartItemChanged();
 
+                                                      // _edittedItem.bookCount =
+                                                      //     _quantity;
+                                                    },
                                               icon: Container(
                                                 width: AppSize.s40,
                                                 alignment: Alignment.center,
@@ -338,10 +375,11 @@ class _CartItemState extends State<CartItem> {
                                               // ),
                                               // onPressed: _incrementQuantity(),
                                               onPressed: () {
-                                                setState(() {
-                                                  _quantity++;
-                                                  _ifCartItemChanged();
-                                                });
+                                                _quantity++;
+                                                _ifCartItemChanged();
+
+                                                // _edittedItem.bookCount =
+                                                //     _quantity;
                                               },
 
                                               icon: Container(
@@ -371,7 +409,9 @@ class _CartItemState extends State<CartItem> {
                       ),
                       _cartItemChanged
                           ? ElevatedButton(
-                              onPressed: () {}, child: Text('Update Cart'))
+                              onPressed: () => _updatePost(
+                                  authendicatedSession, _edittedItem),
+                              child: Text('Update Cart'))
                           : Container(),
                     ],
                   ),

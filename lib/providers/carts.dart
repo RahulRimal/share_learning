@@ -4,6 +4,7 @@ import 'package:share_learning/models/api_status.dart';
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/models/cart.dart';
 import 'package:share_learning/models/session.dart';
+import 'package:share_learning/templates/widgets/cart_item.dart';
 
 class Carts with ChangeNotifier {
   List<Cart> _myCartItems = [];
@@ -87,7 +88,10 @@ class Carts with ChangeNotifier {
     _myCartItems = cartItems;
   }
 
-  setCaartError(CartError cartError) {
+  // setCaartError(CartError cartError) {
+  //   _cartError = cartError;
+  // }
+  setCartError(CartError cartError) {
     _cartError = cartError;
   }
 
@@ -160,7 +164,7 @@ class Carts with ChangeNotifier {
         code: response.code,
         message: response.errorResponse,
       );
-      setCaartError(cartError);
+      setCartError(cartError);
       return _cartError as CartError;
     }
     // return null;
@@ -169,7 +173,7 @@ class Carts with ChangeNotifier {
       message: (response).message,
       // message: (response as CartError).message,
     );
-    setCaartError(cartError);
+    setCartError(cartError);
     return _cartError as CartError;
   }
 
@@ -186,7 +190,7 @@ class Carts with ChangeNotifier {
         message: response.errorResponse,
       );
 
-      setCaartError(cartError);
+      setCartError(cartError);
     }
   }
 
@@ -211,34 +215,82 @@ class Carts with ChangeNotifier {
   }
 
   void addCartItems(List<Cart> receivedInfo) {
-    // for (Cart Cart in receivedInfo) {
-    //   Cart newCart = Cart(
-    //     id: Cart.id,
-    //     userId: Cart.userId,
-    //     CartName: Cart.CartName,
-    //     author: Cart.author,
-    //     boughtTime: Cart.boughtTime,
-    //     description: Cart.description,
-    //     isWishlisted: Cart.isWishlisted,
-    //     price: Cart.price,
-    //     CartCount: Cart.CartCount,
-    //     selling: Cart.selling,
-    //   );
-    //   _myCarts.add(newCart);
-    // }
-
     _myCartItems.addAll(receivedInfo);
     notifyListeners();
   }
 
-  // void updatePost(String id, Cart edittedPost){
+  Future<bool> postCartItem(Session userSession, Cart cartItem) async {
+    var response = await CartApi.postCartItem(userSession, cartItem);
 
-  //   final postIndex = _myCarts.indexWhere((element) => element.id == id);
+    if (response is Success) {
+      List<Cart> carts = response.response as List<Cart>;
+      cartItem = carts[0];
 
-  //   _myCarts[postIndex] = edittedPost;
+      _myCartItems.add(cartItem);
 
-  //   notifyListeners();
-  // }
+      notifyListeners();
+      return true;
+    }
+
+    if (response is Failure) {
+      CartError cartError = CartError(
+        code: response.code,
+        message: response.errorResponse,
+      );
+      setCartError(cartError);
+      notifyListeners();
+      return false;
+    }
+
+    return false;
+  }
+
+  Future<bool> updateCartItem(Session userSession, Cart edittedItem) async {
+    var response = await CartApi.updateCartItem(userSession, edittedItem);
+
+    if (response is Success) {
+      final postIndex =
+          _myCartItems.indexWhere((element) => element.id == edittedItem.id);
+
+      List<Cart> carts = response.response as List<Cart>;
+      _myCartItems[postIndex] = carts[0];
+      notifyListeners();
+      return true;
+    }
+
+    if (response is Failure) {
+      CartError cartError = CartError(
+        code: response.code,
+        message: response.errorResponse,
+      );
+      setCartError(cartError);
+      notifyListeners();
+      return false;
+    }
+
+    return false;
+  }
+
+  Future<bool> deleteCartItem(Session userSession, String cartId) async {
+    var response = await CartApi.deleteCartItem(userSession, cartId);
+    if (response is Success) {
+      final postIndex =
+          _myCartItems.indexWhere((element) => element.id == cartId);
+      _myCartItems.removeAt(postIndex);
+      notifyListeners();
+      return true;
+    }
+    if (response is Failure) {
+      CartError cartError = CartError(
+        code: response.code,
+        message: response.errorResponse,
+      );
+      setCartError(cartError);
+      notifyListeners();
+      return false;
+    }
+    return false;
+  }
 
   // void createCart(Session currentSession, Cart receivedInfo) async {
   //   var response = await CartApi.createPost(currentSession, receivedInfo);

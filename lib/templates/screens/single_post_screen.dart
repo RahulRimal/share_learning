@@ -4,15 +4,18 @@ import 'package:nepali_date_picker/nepali_date_picker.dart';
 // import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
+import 'package:share_learning/models/cart.dart';
 import 'package:share_learning/models/session.dart';
 import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/books.dart';
+import 'package:share_learning/providers/carts.dart';
 import 'package:share_learning/providers/comment.dart';
 import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/managers/api_values_manager.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/managers/values_manager.dart';
+import 'package:share_learning/templates/screens/cart_screen.dart';
 import 'package:share_learning/templates/screens/home_screen.dart';
 import 'package:share_learning/templates/widgets/app_drawer.dart';
 import 'package:share_learning/templates/widgets/image_gallery.dart';
@@ -63,9 +66,6 @@ class SinglePostScreen extends StatelessWidget {
     }
   }
 
-  // final _form = GlobalKey<FormState>();
-  // TextEditingController commentController = new TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map;
@@ -82,6 +82,8 @@ class SinglePostScreen extends StatelessWidget {
     Comments comments = context.watch<Comments>();
 
     Books books = context.watch<Books>();
+
+    Carts carts = Provider.of<Carts>(context, listen: false);
 
     Duration timeDifference =
         NepaliDateTime.now().difference(selectedPost.boughtDate);
@@ -533,7 +535,48 @@ class SinglePostScreen extends StatelessWidget {
                   // primary: Colors.black,
                   minimumSize: const Size.fromHeight(50), // NEW
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  Cart _cartItem = new Cart(
+                      id: 'tempId',
+                      bookId: selectedPost.id,
+                      sellingUserId: selectedPost.userId,
+                      buyingUserId: loggedInUserSession.userId,
+                      bookCount: 1,
+                      pricePerPiece: selectedPost.price,
+                      wishlisted: selectedPost.wishlisted,
+                      postType: selectedPost.postType);
+
+                  // carts.postCartItem(loggedInUserSession, _cartItem);
+
+                  await carts
+                      .postCartItem(loggedInUserSession, _cartItem)
+                      .then((value) {
+                    if (value) {
+                      Navigator.pushNamed(
+                        context,
+                        CartScreen.routeName,
+                        arguments: {'loggedInUserSession': loggedInUserSession},
+                      );
+                      BotToast.showSimpleNotification(
+                        title: 'Book added to your cart !',
+                        duration: Duration(seconds: 3),
+                        backgroundColor: ColorManager.primary,
+                        titleStyle: getBoldStyle(color: ColorManager.white),
+                        align: Alignment(0, 1),
+                        hideCloseButton: true,
+                      );
+                    } else
+                      BotToast.showSimpleNotification(
+                        title:
+                            "Couldn't add this book to cart, Please try again!!",
+                        duration: Duration(seconds: 3),
+                        backgroundColor: ColorManager.primary,
+                        titleStyle: getBoldStyle(color: ColorManager.white),
+                        align: Alignment(0, 0),
+                        hideCloseButton: true,
+                      );
+                  });
+                },
                 child: const Text(
                   'Order this book',
                   style: TextStyle(fontSize: 24),
