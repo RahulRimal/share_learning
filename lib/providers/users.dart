@@ -102,6 +102,7 @@ class Users with ChangeNotifier {
   Future<User?> getUserByIdAndSession(Session loggedInUser, String uId) async {
     if (users.contains((user) => user.id == uId)) {
       // return users.firstWhere((user) => user.id == uId);
+      setUser(user as User);
       return user;
     }
 

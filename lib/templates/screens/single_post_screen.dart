@@ -70,52 +70,18 @@ class SinglePostScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map;
 
-    // if (args != null) {
-    // if (true) {
-    // bookId = args['id'] != null ? args['id'] : 1;
     bookId = args['id'];
     final Session loggedInUserSession = args['loggedInUserSession'] as Session;
-
-    // final Comment? _editComment = args['editComment'];
-    // if (_editComment != null) commentController.text = _editComment.commentBody;
-
-    // if (_editComment != null) commentController.text = _editComment.commentBody;
-
     users.getUserByToken(loggedInUserSession.accessToken);
-    // final User loggedInUser = _getSessionUser(loggedInUserSession.accessToken);
-    // }
 
     Book selectedPost = Provider.of<Books>(
       context,
       listen: false,
     ).getBookById(bookId);
 
-    // if (selectedPost.pictures != null &&
-    //     // (selectedPost.pictures![0]
-    //     //         .compareTo("${RemoteManager.POST_POOL}/$bookId/") ==
-    //     //     0)) {
-    // if (selectedPost.pictures != null) {
-    //   // print("${RemoteManager.POST_POOL}/$bookId/");
-    //   selectedPost.pictures = selectedPost.pictures!.map((e) {
-    //     return "${RemoteManager.POST_POOL}/$bookId/$e";
-    //   }).toList();
-    // } else {
-    //   selectedPost.pictures = null;
-    // }
-
-    // List<Comment> postComments = Provider.of<Comments>(
-    //   context,
-    //   listen: false,
-    // ).getPostComments(bookId);
-
     Comments comments = context.watch<Comments>();
 
     Books books = context.watch<Books>();
-
-    // bool _shouldFlex(String testString) {
-    //   if (testString.length > 11) return true;
-    //   return false;
-    // }
 
     Duration timeDifference =
         NepaliDateTime.now().difference(selectedPost.boughtDate);
@@ -123,7 +89,15 @@ class SinglePostScreen extends StatelessWidget {
         double.parse((timeDifference.inDays / 365).toStringAsFixed(1));
 
     return Scaffold(
-        drawer: AppDrawer(loggedInUserSession),
+        drawer: users.user == null
+            ? AppDrawer(
+                loggedInUserSession,
+                null,
+              )
+            : AppDrawer(
+                loggedInUserSession,
+                users.user,
+              ),
         appBar: AppBar(
           actions: [
             Padding(

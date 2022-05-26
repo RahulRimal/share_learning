@@ -21,6 +21,7 @@ class CartItem extends StatefulWidget {
 class _CartItemState extends State<CartItem> {
   bool _cartItemChanged = false;
   late int _quantity;
+  late bool _wishlisted;
 
   // _incrementQuantity() {
   //   if (mounted) {
@@ -43,13 +44,12 @@ class _CartItemState extends State<CartItem> {
 
   _ifCartItemChanged() {
     if (_quantity != widget.cartItem.bookCount) {
-      //   setState(() {
-      //     _cartItemChanged = true;
-      //   });
-      // } else {
-      //   setState(() {
-      //     _cartItemChanged = false;
-      //   });
+      _cartItemChanged = true;
+    } else {
+      _cartItemChanged = false;
+    }
+
+    if (_wishlisted != widget.cartItem.wishlisted) {
       _cartItemChanged = true;
     } else {
       _cartItemChanged = false;
@@ -59,6 +59,7 @@ class _CartItemState extends State<CartItem> {
   @override
   void initState() {
     _quantity = widget.cartItem.bookCount;
+    _wishlisted = widget.cartItem.wishlisted;
     super.initState();
   }
 
@@ -170,10 +171,17 @@ class _CartItemState extends State<CartItem> {
                                           width: 24.00,
                                           child: IconButton(
                                             icon: Icon(
-                                              Icons.favorite,
+                                              _wishlisted
+                                                  ? Icons.favorite
+                                                  : Icons.favorite_border,
                                               color: ColorManager.primary,
                                             ),
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                _wishlisted = !_wishlisted;
+                                                _ifCartItemChanged();
+                                              });
+                                            },
                                           ),
                                         ),
                                       ),
