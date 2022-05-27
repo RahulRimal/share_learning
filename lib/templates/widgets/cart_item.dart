@@ -93,26 +93,28 @@ class _CartItemState extends State<CartItem> {
     print(cartId);
     await Provider.of<Carts>(context, listen: false)
         .deleteCartItem(userSession, cartId)
-        .then((value) {
-      if (value) {
-        BotToast.showSimpleNotification(
-          title: 'Book deleted from the cart',
-          duration: Duration(seconds: 3),
-          backgroundColor: ColorManager.primary,
-          titleStyle: getBoldStyle(color: ColorManager.white),
-          align: Alignment(-1, -1),
-          hideCloseButton: true,
-        );
-      } else
-        BotToast.showSimpleNotification(
-          title: 'Something went wrong, Please try again!',
-          duration: Duration(seconds: 3),
-          backgroundColor: ColorManager.primary,
-          titleStyle: getBoldStyle(color: ColorManager.white),
-          align: Alignment(-1, -1),
-          hideCloseButton: true,
-        );
-    });
+        .then(
+      (value) {
+        if (value) {
+          BotToast.showSimpleNotification(
+            title: 'Book deleted from the cart',
+            duration: Duration(seconds: 3),
+            backgroundColor: ColorManager.primary,
+            titleStyle: getBoldStyle(color: ColorManager.white),
+            align: Alignment(-1, -1),
+            hideCloseButton: true,
+          );
+        } else
+          BotToast.showSimpleNotification(
+            title: 'Something went wrong, Please try again!',
+            duration: Duration(seconds: 3),
+            backgroundColor: ColorManager.primary,
+            titleStyle: getBoldStyle(color: ColorManager.white),
+            align: Alignment(-1, -1),
+            hideCloseButton: true,
+          );
+      },
+    );
   }
 
   @override
