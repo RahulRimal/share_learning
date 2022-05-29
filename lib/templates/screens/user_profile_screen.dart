@@ -3,6 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:share_learning/models/session.dart';
 import 'package:share_learning/models/user.dart';
 import 'package:share_learning/providers/sessions.dart';
+import 'package:share_learning/templates/managers/assets_manager.dart';
+import 'package:share_learning/templates/managers/color_manager.dart';
+import 'package:share_learning/templates/managers/font_manager.dart';
+import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/managers/values_manager.dart';
 import 'package:share_learning/templates/screens/user_profile_edit_screen.dart';
 import 'package:share_learning/templates/utils/user_helper.dart';
@@ -18,8 +22,8 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   _profilePageUI(SessionProvider userSession, User user) {
-    print(user.firstName);
-    print(user.image);
+    // print(user.firstName);
+    // print(user.image);
     if (userSession.loading) {
       return Container(
         child: Center(
@@ -30,10 +34,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     if (userSession.sessionError != null) {
       return Container(
         child: Center(
-          // child: Text('Book Error'),
-          child: Text(
-            userSession.sessionError!.message.toString(),
-          ),
+          child: Text('Error fetching user data'),
+          // child: Text(
+          //   userSession.sessionError!.message.toString(),
           // ),
         ),
       );
@@ -45,14 +48,85 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       padding: EdgeInsets.only(top: AppPadding.p12),
       child: Column(
         children: [
-          CircleAvatar(
-            radius: 70,
-            backgroundImage: NetworkImage(
-              UserHelper.userProfileImage(user),
+          ListTile(
+            horizontalTitleGap: AppHeight.h8,
+            contentPadding: EdgeInsets.zero,
+            leading: CircleAvatar(
+              // radius: AppPadding.p16,
+              // radius: AppRadius.r100,
+              radius: 70,
+              backgroundImage: user.image != null
+                  ? NetworkImage(
+                      UserHelper.userProfileImage(user),
+                    )
+                  : Image.asset(
+                      ImageAssets.noProfile,
+                    ) as ImageProvider,
+              // foregroundImage: NetworkImage(
+              //   UserHelper.userProfileImage(user),
+              // ),
+            ),
+            // title: Text(user.firstName),
+            title: Text(
+              UserHelper.userDisplayName(user),
+              textAlign: TextAlign.center,
+              style: getBoldStyle(
+                fontSize: FontSize.s20,
+                color: ColorManager.black,
+              ),
+            ),
+            subtitle: Text(
+              user.description.toString(),
+              // 'kfdjlfdkflsd djfkjfioa kd fdojfka kdfklafj jklkkljljklkk ll',
+              // textAlign: TextAlign.justify,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              style: getRegularStyle(
+                fontSize: FontSize.s12,
+                color: ColorManager.black,
+              ),
             ),
           ),
-          Text(userSessionData!.accessToken),
-          Text(userSessionData.accessTokenExpiry.toString()),
+
+          // Container(
+          //   // height: AppHeight.h100,
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //     children: [
+          //       CircleAvatar(
+          //         radius: AppRadius.r50,
+          //         backgroundImage: NetworkImage(
+          //           UserHelper.userProfileImage(user),
+          //         ),
+          //       ),
+          //       // Text(user.firstName + user.lastName),
+          //       Column(
+          //         children: [
+          //           Text(
+          //             UserHelper.userDisplayName(user),
+          //             style: getBoldStyle(
+          //               fontSize: FontSize.s20,
+          //               color: ColorManager.black,
+          //             ),
+          //           ),
+          //           Text(
+          //             // user.description.toString(),
+          //             'kfdjlfdkflsd djfkjfioa kd fdojfka kdfklafj jklkkljljklkk llllllll',
+          //             textAlign: TextAlign.left,
+          //             overflow: TextOverflow.ellipsis,
+          //             maxLines: 2,
+          //             style: getRegularStyle(
+          //               fontSize: FontSize.s12,
+          //               color: ColorManager.black,
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          // Text(userSessionData!.accessToken),
+          // Text(userSessionData.accessTokenExpiry.toString()),
         ],
       ),
     );

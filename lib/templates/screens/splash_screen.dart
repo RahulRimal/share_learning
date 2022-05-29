@@ -127,8 +127,6 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _getPreviousSession() async {
-    // SharedPreferences _prefs = await SharedPreferences.getInstance();
-    // SharedPreferences _prefs = await SharedPreferences.getInstance();
     SharedPreferences prefs = await _prefs;
 
 // 9845534518
