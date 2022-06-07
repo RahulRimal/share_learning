@@ -34,8 +34,11 @@ class Session {
   }
 
   factory Session.fromJson(Map<String, dynamic> json) => Session(
-        id: json["id"] == null ? null : json["id"],
-        userId: json["userId"] == null ? null : json["userId"],
+        // id: json["id"] == null ? null : json["id"],
+        // id: json["id"] == null ? null : json["id"],
+        id: json["id"].toString(),
+        // userId: json["userId"] == null ? null : json["userId"],
+        userId: json["userId"].toString(),
         accessToken: json["accessToken"] == null ? null : json["accessToken"],
         // accessTokenExpiry: json["accessTokenExpiry"] == null ? null : DateTime.parse(json["accessTokenExpiry"]),
         accessTokenExpiry: DateTime.parse(json["accessTokenExpiry"]),

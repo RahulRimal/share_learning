@@ -118,8 +118,10 @@ class Book {
   List<dynamic>? pictures;
 
   factory Book.fromJson(Map<String, dynamic> json) => Book(
-        id: json["id"] == null ? null : json["id"],
-        userId: json["userId"] == null ? null : json["userId"],
+        // id: json["id"] == null ? null : json["id"],
+        id: json["id"].toString(),
+        // userId: json["userId"] == null ? null : json["userId"],
+        userId: json["userId"].toString(),
         bookName: json["bookName"] == null ? null : json["bookName"],
         author: json["author"] == null ? 'Unknown' : json["author"],
         description: json["description"] == null ? null : json["description"],
@@ -129,11 +131,14 @@ class Book {
         boughtDate: NepaliDateTime.parse(json["boughtDate"].toString()),
         price: json["price"] == null ? null : json["price"].toDouble(),
         // bookCount: json["bookCount"] == null ? null : int.parse(json["bookCount"]),
-        bookCount: int.parse(json["bookCount"]),
+        // bookCount: int.parse(json["bookCount"]),
+        bookCount: json["bookCount"],
         // wishlisted: json["wishlisted"] == null ? null : json["wishlisted"],
         wishlisted: json["wishlisted"] == '1' ? true : false,
         postType: json["postType"] == null ? null : json["postType"],
-        postRating: json["postRating"] == null ? '' : json["postRating"],
+        // postRating: json["postRating"] == null ? '' : json["postRating"],
+        postRating:
+            json["postRating"] == null ? '' : json["postRating"].toString(),
         pictures: json["pictures"] == null
             ? null
             // : List<XFile>.from(json["pictures"]),

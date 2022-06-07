@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/session.dart';
 import 'package:share_learning/models/user.dart';
+import 'package:share_learning/providers/books.dart';
+import 'package:share_learning/providers/comment.dart';
 import 'package:share_learning/providers/sessions.dart';
+import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/managers/assets_manager.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/managers/font_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/managers/values_manager.dart';
+import 'package:share_learning/templates/screens/login_screen.dart';
 import 'package:share_learning/templates/screens/user_profile_edit_screen.dart';
 import 'package:share_learning/templates/utils/user_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({
@@ -23,6 +28,26 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  _logOut(Session session) async {
+    SharedPreferences prefs = await _prefs;
+    Provider.of<Books>(context, listen: false).setBooks([]);
+    Provider.of<Users>(context, listen: false).logoutUser(session.id);
+    Provider.of<Comments>(context, listen: false).setComments([]);
+    prefs.remove('accessToken');
+    Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+  }
+
+  // Future<void> _logout(Session session) async {
+  //   SharedPreferences prefs = await _prefs;
+  //   Provider.of<Books>(context, listen: false).setBooks([]);
+  //   Provider.of<Users>(context, listen: false).logoutUser(session.id);
+  //   Provider.of<Comments>(context, listen: false).setComments([]);
+  //   prefs.remove('accessToken');
+  //   Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+  // }
+
   _profilePageUI(SessionProvider userSession, User user) {
     // print(user.firstName);
     // print(user.image);
@@ -188,7 +213,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     color: ColorManager.primary,
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
-                                      color: ColorManager.primary,
+                                      color: ColorManager.darkPrimary,
                                       width: 2,
                                     ),
                                   ),
@@ -203,7 +228,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                         UserProfileEditScreen.routeName,
                                         arguments: {
                                           // 'loggedInUserSession': userSession.session,
-                                          'loggedInUserSession': userSession,
+                                          'loggedInUserSession':
+                                              userSession.session,
                                           'user': user,
                                         },
                                       );
@@ -217,29 +243,35 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     width: 44,
                                     height: 44,
                                     decoration: BoxDecoration(
-                                      color: ColorManager.darkSecondary,
+                                      color: ColorManager.primary,
                                       borderRadius: BorderRadius.circular(8),
                                       border: Border.all(
-                                        color: ColorManager.primary,
+                                        color: ColorManager.darkPrimary,
                                         width: 2,
                                       ),
                                     ),
                                     child: IconButton(
                                       icon: Icon(
                                         Icons.login_rounded,
-                                        color: ColorManager.secondary,
+                                        color: ColorManager.white,
                                         size: 24,
                                       ),
                                       onPressed: () async {
-                                        // await signOut();
-                                        // await Navigator
-                                        //     .pushAndRemoveUntil(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //     builder: (context) =>
-                                        //         LoginPageWidget(),
-                                        //   ),
-                                        // );
+                                        _logOut(userSession.session as Session);
+                                        // SharedPreferences prefs = await _prefs;
+                                        // Provider.of<Books>(context,
+                                        //         listen: false)
+                                        //     .setBooks([]);
+                                        // Provider.of<Users>(context,
+                                        //         listen: false)
+                                        //     .logoutUser(
+                                        //         userSession.session!.id);
+                                        // Provider.of<Comments>(context,
+                                        //         listen: false)
+                                        //     .setComments([]);
+                                        // prefs.remove('accessToken');
+                                        // Navigator.pushReplacementNamed(
+                                        //     context, LoginScreen.routeName);
                                       },
                                     ),
                                   ),
@@ -380,7 +412,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     // Session userSession = args['session'] as Session;
 
     SessionProvider userSession = (context).watch<SessionProvider>();
-
+    userSession.setSession(loggedInUserSession);
     return Scaffold(
       appBar: AppBar(
         actions: [

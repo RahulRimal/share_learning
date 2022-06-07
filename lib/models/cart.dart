@@ -38,8 +38,10 @@ class Cart {
   // DateTime postedOn;
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
-        id: json["id"] == null ? null : json["id"],
-        bookId: json["bookId"] == null ? null : json["bookId"],
+        // id: json["id"] == null ? null : json["id"],
+        id: json["id"].toString(),
+        // bookId: json["bookId"] == null ? null : json["bookId"],
+        bookId: json["bookId"].toString(),
         // sellingUserId:
         //     json["sellingUserId"] == null ? null : json["sellingUserId"],
         // buyingUserId:
@@ -59,7 +61,7 @@ class Cart {
         // boughtDate: NepaliDateTime.parse(json["boughtDate"].toString()),
         // totalPrice: json["price"] == null ? null : json["price"].toDouble(),
         // bookCount: json["bookCount"] == null ? null : int.parse(json["bookCount"]),
-        bookCount: int.parse(json["bookCount"]),
+        bookCount: json["bookCount"],
         // wishlisted: json["wishlisted"] == null ? null : json["wishlisted"],
         wishlisted: json["wishlisted"] == '1' ? true : false,
         postType: json["postType"] == null ? null : json["postType"],

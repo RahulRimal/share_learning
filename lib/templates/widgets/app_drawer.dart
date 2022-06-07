@@ -153,6 +153,18 @@ class AppDrawer extends StatelessWidget {
     }
   }
 
+  _logOut(BuildContext context) async {
+    SharedPreferences prefs = await _prefs;
+    Provider.of<Books>(context, listen: false).setBooks([]);
+    users.logoutUser(loggedInSession.id);
+
+    Provider.of<Comments>(context, listen: false).setComments([]);
+
+    prefs.remove('accessToken');
+
+    Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     // final user = Provider.of<Users>(context, listen: false).getUserByToken(this.accessToken);
@@ -323,18 +335,16 @@ class AppDrawer extends StatelessWidget {
                                 ),
                               ),
                               onTap: () async {
-                                SharedPreferences prefs = await _prefs;
-                                Provider.of<Books>(context, listen: false)
-                                    .setBooks([]);
-                                users.logoutUser(loggedInSession.id);
-
-                                Provider.of<Comments>(context, listen: false)
-                                    .setComments([]);
-
-                                prefs.remove('accessToken');
-
-                                Navigator.pushReplacementNamed(
-                                    context, LoginScreen.routeName);
+                                await _logOut(context);
+                                // SharedPreferences prefs = await _prefs;
+                                // Provider.of<Books>(context, listen: false)
+                                //     .setBooks([]);
+                                // users.logoutUser(loggedInSession.id);
+                                // Provider.of<Comments>(context, listen: false)
+                                //     .setComments([]);
+                                // prefs.remove('accessToken');
+                                // Navigator.pushReplacementNamed(
+                                //     context, LoginScreen.routeName);
                               },
                             )
                           ],

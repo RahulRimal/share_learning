@@ -65,7 +65,8 @@ class User {
   DateTime createdDate;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json["id"] == null ? null : json["id"],
+        // id: json["id"] == null ? null : json["id"],
+        id: json["id"].toString(),
         firstName: json["firstName"] == null ? null : json["firstName"],
         lastName: json["lastName"] == null ? null : json["lastName"],
         username: json["username"] == null ? null : json["username"],

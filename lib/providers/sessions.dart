@@ -23,7 +23,7 @@ class SessionProvider with ChangeNotifier {
 
   setSession(Session session) {
     _session = session;
-    notifyListeners();
+    // notifyListeners();
   }
 
   setSessionError(CustomSessionError sessionError) {
