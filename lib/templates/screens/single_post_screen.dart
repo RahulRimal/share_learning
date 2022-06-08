@@ -564,7 +564,6 @@ class SinglePostScreen extends StatelessWidget {
                     minimumSize: const Size.fromHeight(50), // NEW
                   ),
                   onPressed: () async {
-                    // BotToast.showCustomNotification(toastBuilder: )
                     Cart _cartItem = new Cart(
                         id: 'tempId',
                         bookId: selectedPost.id,
@@ -575,6 +574,16 @@ class SinglePostScreen extends StatelessWidget {
                         wishlisted: selectedPost.wishlisted,
                         postType: selectedPost.postType);
                     // carts.postCartItem(loggedInUserSession, _cartItem);
+
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return Container(
+                            height: AppHeight.h200,
+                            child: Text('Book added to cart'),
+                          );
+                        });
+
                     await carts
                         .postCartItem(loggedInUserSession, _cartItem)
                         .then((value) {
