@@ -1,8 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
-import 'package:path/path.dart';
-// import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:share_learning/models/book.dart';
 import 'package:share_learning/models/cart.dart';
@@ -12,7 +11,6 @@ import 'package:share_learning/providers/books.dart';
 import 'package:share_learning/providers/carts.dart';
 import 'package:share_learning/providers/comment.dart';
 import 'package:share_learning/providers/users.dart';
-import 'package:share_learning/templates/managers/api_values_manager.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/managers/values_manager.dart';
@@ -21,6 +19,7 @@ import 'package:share_learning/templates/screens/home_screen.dart';
 import 'package:share_learning/templates/widgets/app_drawer.dart';
 import 'package:share_learning/templates/widgets/image_gallery.dart';
 import 'package:share_learning/templates/widgets/post_comments.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
 
 import 'edit_post_screen.dart';
 import 'user_posts_screen.dart';
@@ -28,6 +27,19 @@ import 'user_posts_screen.dart';
 // ignore: must_be_immutable
 class SinglePostScreen extends StatelessWidget {
   static const routeName = '/post-details';
+
+  NepaliDateTime initDate = NepaliDateTime.now();
+
+  final _buyerDateFocusNode = FocusNode();
+  final _buyerPriceFocusNode = FocusNode();
+  final _buyerBooksCountFocusNode = FocusNode();
+
+  final _datePickercontroller = TextEditingController(
+    text: DateFormat('yyyy-MM-dd').format(NepaliDateTime(
+        NepaliDateTime.now().year,
+        NepaliDateTime.now().month,
+        NepaliDateTime.now().day + 1)),
+  );
 
   Users users = new Users(
     // Session(
@@ -54,8 +66,24 @@ class SinglePostScreen extends StatelessWidget {
     createdDate: DateTime(2050),
   );
 
+  Book _buyerExpectedBook = new Book(
+    id: '',
+    author: 'Unknown',
+    bookName: '',
+    userId: '1',
+    postType: 'B',
+    boughtDate: DateTime.now().toNepaliDateTime(),
+    description: '',
+    wishlisted: false,
+    price: 0,
+    bookCount: 1,
+    pictures: [],
+    postedOn: DateTime.now().toNepaliDateTime(),
+    postRating: '',
+  );
+
   var bookId;
-  // var loggedInUserSession;
+  NepaliDateTime? _buyerExpectedDeadline;
 
   Future<void> _getSessionUser(String accessToken) async {
     await users.getUserByToken(accessToken);
@@ -76,6 +104,28 @@ class SinglePostScreen extends StatelessWidget {
         .indexWhere((element) => element.bookId == selectedPost.id);
     if (check == -1) return false;
     return true;
+  }
+
+  NepaliDateTime _getTomorrowDate() {
+    NepaliDateTime initDate = NepaliDateTime.now();
+    NepaliDateTime tomorrow =
+        NepaliDateTime(initDate.year, initDate.month, initDate.day + 1);
+    return tomorrow;
+  }
+
+  Future<void> _showPicker(BuildContext context) async {
+    _buyerExpectedDeadline = await picker.showAdaptiveDatePicker(
+      context: context,
+      // initialDate: picker.NepaliDateTime.now(),
+      initialDate: _getTomorrowDate(),
+      // firstDate: picker.NepaliDateTime.t
+      firstDate: _getTomorrowDate(),
+      // lastDate: picker.NepaliDateTime.now(),
+      lastDate: picker.NepaliDateTime(2080),
+    );
+    _datePickercontroller.text = DateFormat('yyyy-MM-dd')
+        .format(_buyerExpectedDeadline as DateTime)
+        .toString();
   }
 
   @override
@@ -421,7 +471,6 @@ class SinglePostScreen extends StatelessWidget {
 
               // Container(
               //   height: 200,
-
               //   child: FutureBuilder(
               //     future: comments.getPostComments(bookId),
               //     builder: (context, snapshot) {
@@ -467,7 +516,6 @@ class SinglePostScreen extends StatelessWidget {
               //   ),
               // ),
               // Comments Ends here
-
               // Add your comment starts here !!
               // Container(
               //   padding: EdgeInsets.symmetric(
@@ -563,58 +611,223 @@ class SinglePostScreen extends StatelessWidget {
                     // primary: Colors.black,
                     minimumSize: const Size.fromHeight(50), // NEW
                   ),
-                  onPressed: () async {
-                    Cart _cartItem = new Cart(
-                        id: 'tempId',
-                        bookId: selectedPost.id,
-                        sellingUserId: selectedPost.userId,
-                        buyingUserId: loggedInUserSession.userId,
-                        bookCount: 1,
-                        pricePerPiece: selectedPost.price,
-                        wishlisted: selectedPost.wishlisted,
-                        postType: selectedPost.postType);
-                    // carts.postCartItem(loggedInUserSession, _cartItem);
-
+                  onPressed: () {
+                    _buyerExpectedBook = selectedPost;
                     showModalBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return Container(
-                            height: AppHeight.h200,
-                            child: Text('Book added to cart'),
-                          );
-                        });
+                      isScrollControlled: true,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(AppRadius.r20),
+                              topRight: Radius.circular(AppRadius.r20))
+                          // borderRadius: BorderRadius.circular(
+                          //   20,
+                          // ),
+                          ),
+                      context: context,
+                      builder: (context) {
+                        // return Container(
+                        //   margin: EdgeInsets.all(
+                        //     AppMargin.m12,
+                        //   ),
+                        //   height: AppHeight.h500,
+                        //   child: Text(
+                        //     'Select the deadline for your order',
+                        //     style: getBoldStyle(
+                        //       color: ColorManager.primary,
+                        //     ),
+                        //   ),
+                        // );
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppPadding.p8,
+                            vertical: AppPadding.p16,
+                          ),
+                          child: Form(
+                              child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    controller: _datePickercontroller,
+                                    focusNode: _buyerDateFocusNode,
+                                    keyboardType: TextInputType.datetime,
+                                    cursorColor: Theme.of(context).primaryColor,
+                                    decoration: InputDecoration(
+                                      labelText: 'Your expected deadline',
+                                      suffix: IconButton(
+                                        icon: Icon(Icons.calendar_today),
+                                        tooltip: 'Tap to open date picker',
+                                        onPressed: () {
+                                          _showPicker(context);
+                                        },
+                                      ),
+                                    ),
+                                    textInputAction: TextInputAction.next,
+                                    autovalidateMode: AutovalidateMode.always,
+                                    onFieldSubmitted: (_) {
+                                      FocusScope.of(context)
+                                          .requestFocus(_buyerPriceFocusNode);
+                                    },
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Please provide your expected deadline';
+                                      }
+                                      return null;
+                                    },
+                                    onSaved: (value) {},
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                      // initialValue: _edittedBook.price.toString(),
+                                      initialValue:
+                                          _buyerExpectedBook.price.toString(),
+                                      cursorColor:
+                                          Theme.of(context).primaryColor,
+                                      focusNode: _buyerPriceFocusNode,
+                                      decoration: InputDecoration(
+                                        prefix: Text('Rs. '),
+                                        labelText: 'Expected price per piece',
+                                        focusColor: Colors.redAccent,
+                                      ),
+                                      textInputAction: TextInputAction.next,
+                                      autovalidateMode: AutovalidateMode.always,
+                                      onFieldSubmitted: (_) {
+                                        FocusScope.of(context).requestFocus(
+                                            _buyerBooksCountFocusNode);
+                                      },
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return 'Price can\'t be empty';
+                                        }
+                                        if (double.tryParse(value) == null) {
+                                          return 'Invalid number';
+                                        }
+                                        return null;
+                                      },
+                                      onSaved: (value) {}),
+                                ),
+                              ),
+                              Flexible(
+                                child: Padding(
+                                  // padding: const EdgeInsets.all(8.0),
+                                  padding: EdgeInsets.only(
+                                    top: AppPadding.p8,
+                                    left: AppPadding.p8,
+                                    right: AppPadding.p8,
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom,
+                                  ),
+                                  child: TextFormField(
+                                    initialValue:
+                                        _buyerExpectedBook.bookCount.toString(),
+                                    focusNode: _buyerBooksCountFocusNode,
+                                    keyboardType: TextInputType.number,
+                                    cursorColor: Theme.of(context).primaryColor,
+                                    decoration: InputDecoration(
+                                      labelText: 'Number of Books you want',
+                                    ),
+                                    textInputAction: TextInputAction.next,
+                                    autovalidateMode: AutovalidateMode.always,
+                                    // onFieldSubmitted: (_) {
+                                    //   FocusScope.of(context).requestFocus(_descFocusNode);
+                                    // },
+                                    validator: (value) {
+                                      if (double.tryParse(value as String) ==
+                                          null) {
+                                        return 'Invalid Number';
+                                      }
 
-                    await carts
-                        .postCartItem(loggedInUserSession, _cartItem)
-                        .then((value) {
-                      if (value) {
-                        Navigator.pushNamed(
-                          context,
-                          CartScreen.routeName,
-                          arguments: {
-                            'loggedInUserSession': loggedInUserSession
-                          },
+                                      if (double.parse(value) < 1) {
+                                        return 'Book count must be at least 1';
+                                      }
+                                      return null;
+                                    },
+                                    onSaved: (value) {
+                                      // _edittedBook = Book(
+                                      //   id: _edittedBook.id,
+                                      //   author: _edittedBook.author,
+                                      //   bookName: _edittedBook.bookName,
+                                      //   userId: _edittedBook.userId,
+                                      //   postType: _edittedBook.postType,
+                                      //   boughtDate: _edittedBook.boughtDate,
+                                      //   description: _edittedBook.description,
+                                      //   wishlisted: _edittedBook.wishlisted,
+                                      //   price: _edittedBook.price,
+                                      //   bookCount: int.parse(value as String),
+                                      //   postedOn: _edittedBook.postedOn,
+                                      //   postRating: _edittedBook.postRating,
+                                      // );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )),
                         );
-                        BotToast.showSimpleNotification(
-                          title: 'Book added to your cart !',
-                          duration: Duration(seconds: 3),
-                          backgroundColor: ColorManager.primary,
-                          titleStyle: getBoldStyle(color: ColorManager.white),
-                          align: Alignment(0, 1),
-                          hideCloseButton: true,
-                        );
-                      } else
-                        BotToast.showSimpleNotification(
-                          title:
-                              "Couldn't add this book to cart, Please try again!!",
-                          duration: Duration(seconds: 3),
-                          backgroundColor: ColorManager.primary,
-                          titleStyle: getBoldStyle(color: ColorManager.white),
-                          align: Alignment(0, 0),
-                          hideCloseButton: true,
-                        );
-                    });
+                      },
+                    );
                   },
+                  // onPressed: () async {
+                  //   Cart _cartItem = new Cart(
+                  //       id: 'tempId',
+                  //       bookId: selectedPost.id,
+                  //       sellingUserId: selectedPost.userId,
+                  //       buyingUserId: loggedInUserSession.userId,
+                  //       bookCount: 1,
+                  //       pricePerPiece: selectedPost.price,
+                  //       wishlisted: selectedPost.wishlisted,
+                  //       postType: selectedPost.postType);
+                  //   // carts.postCartItem(loggedInUserSession, _cartItem);
+
+                  //   showModalBottomSheet(
+                  //       context: context,
+                  //       builder: (context) {
+                  //         return Container(
+                  //           height: AppHeight.h200,
+                  //           child: Text(
+                  //             'Book added to cart',
+                  //           ),
+                  //         );
+                  //       });
+
+                  //   await carts
+                  //       .postCartItem(loggedInUserSession, _cartItem)
+                  //       .then((value) {
+                  //     if (value) {
+                  //       Navigator.pushNamed(
+                  //         context,
+                  //         CartScreen.routeName,
+                  //         arguments: {
+                  //           'loggedInUserSession': loggedInUserSession
+                  //         },
+                  //       );
+                  //       BotToast.showSimpleNotification(
+                  //         title: 'Book added to your cart !',
+                  //         duration: Duration(seconds: 3),
+                  //         backgroundColor: ColorManager.primary,
+                  //         titleStyle: getBoldStyle(color: ColorManager.white),
+                  //         align: Alignment(0, 1),
+                  //         hideCloseButton: true,
+                  //       );
+                  //     } else
+                  //       BotToast.showSimpleNotification(
+                  //         title:
+                  //             "Couldn't add this book to cart, Please try again!!",
+                  //         duration: Duration(seconds: 3),
+                  //         backgroundColor: ColorManager.primary,
+                  //         titleStyle: getBoldStyle(color: ColorManager.white),
+                  //         align: Alignment(0, 0),
+                  //         hideCloseButton: true,
+                  //       );
+                  //   });
+                  // },
                   child: const Text(
                     'Order this book',
                     style: TextStyle(fontSize: 24),
