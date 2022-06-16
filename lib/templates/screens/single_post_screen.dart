@@ -622,25 +622,9 @@ class SinglePostScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(AppRadius.r20),
-                                topRight: Radius.circular(AppRadius.r20))
-                            // borderRadius: BorderRadius.circular(
-                            //   20,
-                            // ),
-                            ),
+                                topRight: Radius.circular(AppRadius.r20))),
                         context: context,
                         builder: (context) {
-                          // return Container(
-                          //   margin: EdgeInsets.all(
-                          //     AppMargin.m12,
-                          //   ),
-                          //   height: AppHeight.h500,
-                          //   child: Text(
-                          //     'Select the deadline for your order',
-                          //     style: getBoldStyle(
-                          //       color: ColorManager.primary,
-                          //     ),
-                          //   ),
-                          // );
                           return Padding(
                             padding: EdgeInsets.only(
                               top: AppPadding.p8,
@@ -802,19 +786,25 @@ class SinglePostScreen extends StatelessWidget {
                                     ),
                                   ),
                                   Flexible(
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        minimumSize:
-                                            const Size.fromHeight(40), // NEW
-                                      ),
-                                      child: Text(
-                                        'Place an order',
-                                        style: getBoldStyle(
-                                          color: ColorManager.white,
-                                          fontSize: FontSize.s14,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: AppPadding.p14),
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          minimumSize:
+                                              const Size.fromHeight(40), // NEW
                                         ),
+                                        child: Text(
+                                          'Place an order',
+                                          style: getBoldStyle(
+                                            color: ColorManager.white,
+                                            fontSize: FontSize.s14,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          print('here');
+                                        },
                                       ),
-                                      onPressed: () {},
                                     ),
                                   ),
                                 ],
