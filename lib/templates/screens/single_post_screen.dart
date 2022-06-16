@@ -12,6 +12,7 @@ import 'package:share_learning/providers/carts.dart';
 import 'package:share_learning/providers/comment.dart';
 import 'package:share_learning/providers/users.dart';
 import 'package:share_learning/templates/managers/color_manager.dart';
+import 'package:share_learning/templates/managers/font_manager.dart';
 import 'package:share_learning/templates/managers/style_manager.dart';
 import 'package:share_learning/templates/managers/values_manager.dart';
 import 'package:share_learning/templates/screens/cart_screen.dart';
@@ -606,231 +607,283 @@ class SinglePostScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 24),
                   ),
                 )
-              : ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    // primary: Colors.black,
-                    minimumSize: const Size.fromHeight(50), // NEW
-                  ),
-                  onPressed: () {
-                    _buyerExpectedBook = selectedPost;
-                    showModalBottomSheet(
-                      isScrollControlled: true,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(AppRadius.r20),
-                              topRight: Radius.circular(AppRadius.r20))
-                          // borderRadius: BorderRadius.circular(
-                          //   20,
-                          // ),
-                          ),
-                      context: context,
-                      builder: (context) {
-                        // return Container(
-                        //   margin: EdgeInsets.all(
-                        //     AppMargin.m12,
-                        //   ),
-                        //   height: AppHeight.h500,
-                        //   child: Text(
-                        //     'Select the deadline for your order',
-                        //     style: getBoldStyle(
-                        //       color: ColorManager.primary,
-                        //     ),
-                        //   ),
-                        // );
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppPadding.p8,
-                            vertical: AppPadding.p16,
-                          ),
-                          child: Form(
+              : Padding(
+                  padding: const EdgeInsets.all(AppPadding.p8),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      // primary: Colors.black,
+                      minimumSize: const Size.fromHeight(45), // NEW
+                    ),
+                    onPressed: () {
+                      _buyerExpectedBook = selectedPost;
+                      showModalBottomSheet(
+                        barrierColor: ColorManager.blackWithLowOpacity,
+                        isScrollControlled: true,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(AppRadius.r20),
+                                topRight: Radius.circular(AppRadius.r20))
+                            // borderRadius: BorderRadius.circular(
+                            //   20,
+                            // ),
+                            ),
+                        context: context,
+                        builder: (context) {
+                          // return Container(
+                          //   margin: EdgeInsets.all(
+                          //     AppMargin.m12,
+                          //   ),
+                          //   height: AppHeight.h500,
+                          //   child: Text(
+                          //     'Select the deadline for your order',
+                          //     style: getBoldStyle(
+                          //       color: ColorManager.primary,
+                          //     ),
+                          //   ),
+                          // );
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              top: AppPadding.p8,
+                              left: AppPadding.p8,
+                              right: AppPadding.p8,
+                              bottom: MediaQuery.of(context).viewInsets.bottom,
+                            ),
+                            child: Form(
                               child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Flexible(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TextFormField(
-                                    controller: _datePickercontroller,
-                                    focusNode: _buyerDateFocusNode,
-                                    keyboardType: TextInputType.datetime,
-                                    cursorColor: Theme.of(context).primaryColor,
-                                    decoration: InputDecoration(
-                                      labelText: 'Your expected deadline',
-                                      suffix: IconButton(
-                                        icon: Icon(Icons.calendar_today),
-                                        tooltip: 'Tap to open date picker',
-                                        onPressed: () {
-                                          _showPicker(context);
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Flexible(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: AppPadding.p18,
+                                        horizontal: AppPadding.p12,
+                                      ),
+                                      child: TextFormField(
+                                        controller: _datePickercontroller,
+                                        focusNode: _buyerDateFocusNode,
+                                        keyboardType: TextInputType.datetime,
+                                        cursorColor:
+                                            Theme.of(context).primaryColor,
+                                        decoration: InputDecoration(
+                                          labelText: 'Your expected deadline',
+                                          suffix: IconButton(
+                                            icon: Icon(Icons.calendar_today),
+                                            tooltip: 'Tap to open date picker',
+                                            onPressed: () {
+                                              _showPicker(context);
+                                            },
+                                          ),
+                                        ),
+                                        textInputAction: TextInputAction.next,
+                                        autovalidateMode:
+                                            AutovalidateMode.always,
+                                        onFieldSubmitted: (_) {
+                                          FocusScope.of(context).requestFocus(
+                                              _buyerPriceFocusNode);
                                         },
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return 'Please provide your expected deadline';
+                                          }
+                                          return null;
+                                        },
+                                        onSaved: (value) {},
                                       ),
                                     ),
-                                    textInputAction: TextInputAction.next,
-                                    autovalidateMode: AutovalidateMode.always,
-                                    onFieldSubmitted: (_) {
-                                      FocusScope.of(context)
-                                          .requestFocus(_buyerPriceFocusNode);
-                                    },
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Please provide your expected deadline';
-                                      }
-                                      return null;
-                                    },
-                                    onSaved: (value) {},
                                   ),
-                                ),
-                              ),
-                              Flexible(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TextFormField(
-                                      // initialValue: _edittedBook.price.toString(),
-                                      initialValue:
-                                          _buyerExpectedBook.price.toString(),
-                                      cursorColor:
-                                          Theme.of(context).primaryColor,
-                                      focusNode: _buyerPriceFocusNode,
-                                      decoration: InputDecoration(
-                                        prefix: Text('Rs. '),
-                                        labelText: 'Expected price per piece',
-                                        focusColor: Colors.redAccent,
-                                      ),
-                                      textInputAction: TextInputAction.next,
-                                      autovalidateMode: AutovalidateMode.always,
-                                      onFieldSubmitted: (_) {
-                                        FocusScope.of(context).requestFocus(
-                                            _buyerBooksCountFocusNode);
-                                      },
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Price can\'t be empty';
-                                        }
-                                        if (double.tryParse(value) == null) {
-                                          return 'Invalid number';
-                                        }
-                                        return null;
-                                      },
-                                      onSaved: (value) {}),
-                                ),
-                              ),
-                              Flexible(
-                                child: Padding(
-                                  // padding: const EdgeInsets.all(8.0),
-                                  padding: EdgeInsets.only(
-                                    top: AppPadding.p8,
-                                    left: AppPadding.p8,
-                                    right: AppPadding.p8,
-                                    bottom: MediaQuery.of(context)
-                                        .viewInsets
-                                        .bottom,
-                                  ),
-                                  child: TextFormField(
-                                    initialValue:
-                                        _buyerExpectedBook.bookCount.toString(),
-                                    focusNode: _buyerBooksCountFocusNode,
-                                    keyboardType: TextInputType.number,
-                                    cursorColor: Theme.of(context).primaryColor,
-                                    decoration: InputDecoration(
-                                      labelText: 'Number of Books you want',
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: AppPadding.p8,
                                     ),
-                                    textInputAction: TextInputAction.next,
-                                    autovalidateMode: AutovalidateMode.always,
-                                    // onFieldSubmitted: (_) {
-                                    //   FocusScope.of(context).requestFocus(_descFocusNode);
-                                    // },
-                                    validator: (value) {
-                                      if (double.tryParse(value as String) ==
-                                          null) {
-                                        return 'Invalid Number';
-                                      }
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Flexible(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: AppPadding.p12,
+                                            ),
+                                            child: TextFormField(
+                                                // initialValue: _edittedBook.price.toString(),
+                                                initialValue: _buyerExpectedBook
+                                                    .price
+                                                    .toString(),
+                                                cursorColor: Theme.of(context)
+                                                    .primaryColor,
+                                                focusNode: _buyerPriceFocusNode,
+                                                decoration: InputDecoration(
+                                                  prefix: Text('Rs. '),
+                                                  labelText:
+                                                      'Expected price per piece',
+                                                  focusColor: Colors.redAccent,
+                                                ),
+                                                textInputAction:
+                                                    TextInputAction.next,
+                                                autovalidateMode:
+                                                    AutovalidateMode.always,
+                                                onFieldSubmitted: (_) {
+                                                  FocusScope.of(context)
+                                                      .requestFocus(
+                                                          _buyerBooksCountFocusNode);
+                                                },
+                                                validator: (value) {
+                                                  if (value!.isEmpty) {
+                                                    return 'Price can\'t be empty';
+                                                  }
+                                                  if (double.tryParse(value) ==
+                                                      null) {
+                                                    return 'Invalid number';
+                                                  }
+                                                  return null;
+                                                },
+                                                onSaved: (value) {}),
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: AppPadding.p12,
+                                            ),
+                                            child: TextFormField(
+                                              initialValue: _buyerExpectedBook
+                                                  .bookCount
+                                                  .toString(),
+                                              focusNode:
+                                                  _buyerBooksCountFocusNode,
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              cursorColor: Theme.of(context)
+                                                  .primaryColor,
+                                              decoration: InputDecoration(
+                                                labelText:
+                                                    'Number of Books you want',
+                                              ),
+                                              textInputAction:
+                                                  TextInputAction.next,
+                                              autovalidateMode:
+                                                  AutovalidateMode.always,
+                                              // onFieldSubmitted: (_) {
+                                              //   FocusScope.of(context).requestFocus(_descFocusNode);
+                                              // },
+                                              validator: (value) {
+                                                if (double.tryParse(
+                                                        value as String) ==
+                                                    null) {
+                                                  return 'Invalid Number';
+                                                }
 
-                                      if (double.parse(value) < 1) {
-                                        return 'Book count must be at least 1';
-                                      }
-                                      return null;
-                                    },
-                                    onSaved: (value) {
-                                      // _edittedBook = Book(
-                                      //   id: _edittedBook.id,
-                                      //   author: _edittedBook.author,
-                                      //   bookName: _edittedBook.bookName,
-                                      //   userId: _edittedBook.userId,
-                                      //   postType: _edittedBook.postType,
-                                      //   boughtDate: _edittedBook.boughtDate,
-                                      //   description: _edittedBook.description,
-                                      //   wishlisted: _edittedBook.wishlisted,
-                                      //   price: _edittedBook.price,
-                                      //   bookCount: int.parse(value as String),
-                                      //   postedOn: _edittedBook.postedOn,
-                                      //   postRating: _edittedBook.postRating,
-                                      // );
-                                    },
+                                                if (double.parse(value) < 1) {
+                                                  return 'Book count must be at least 1';
+                                                }
+                                                return null;
+                                              },
+                                              onSaved: (value) {
+                                                // _edittedBook = Book(
+                                                //   id: _edittedBook.id,
+                                                //   author: _edittedBook.author,
+                                                //   bookName: _edittedBook.bookName,
+                                                //   userId: _edittedBook.userId,
+                                                //   postType: _edittedBook.postType,
+                                                //   boughtDate: _edittedBook.boughtDate,
+                                                //   description: _edittedBook.description,
+                                                //   wishlisted: _edittedBook.wishlisted,
+                                                //   price: _edittedBook.price,
+                                                //   bookCount: int.parse(value as String),
+                                                //   postedOn: _edittedBook.postedOn,
+                                                //   postRating: _edittedBook.postRating,
+                                                // );
+                                              },
+                                            ),
+                                          ),
+                                          // ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
+                                  Flexible(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        minimumSize:
+                                            const Size.fromHeight(40), // NEW
+                                      ),
+                                      child: Text(
+                                        'Place an order',
+                                        style: getBoldStyle(
+                                          color: ColorManager.white,
+                                          fontSize: FontSize.s14,
+                                        ),
+                                      ),
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          )),
-                        );
-                      },
-                    );
-                  },
-                  // onPressed: () async {
-                  //   Cart _cartItem = new Cart(
-                  //       id: 'tempId',
-                  //       bookId: selectedPost.id,
-                  //       sellingUserId: selectedPost.userId,
-                  //       buyingUserId: loggedInUserSession.userId,
-                  //       bookCount: 1,
-                  //       pricePerPiece: selectedPost.price,
-                  //       wishlisted: selectedPost.wishlisted,
-                  //       postType: selectedPost.postType);
-                  //   // carts.postCartItem(loggedInUserSession, _cartItem);
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    // onPressed: () async {
+                    //   Cart _cartItem = new Cart(
+                    //       id: 'tempId',
+                    //       bookId: selectedPost.id,
+                    //       sellingUserId: selectedPost.userId,
+                    //       buyingUserId: loggedInUserSession.userId,
+                    //       bookCount: 1,
+                    //       pricePerPiece: selectedPost.price,
+                    //       wishlisted: selectedPost.wishlisted,
+                    //       postType: selectedPost.postType);
+                    //   // carts.postCartItem(loggedInUserSession, _cartItem);
+                    //   showModalBottomSheet(
+                    //       context: context,
+                    //       builder: (context) {
+                    //         return Container(
+                    //           height: AppHeight.h200,
+                    //           child: Text(
+                    //             'Book added to cart',
+                    //           ),
+                    //         );
+                    //       });
 
-                  //   showModalBottomSheet(
-                  //       context: context,
-                  //       builder: (context) {
-                  //         return Container(
-                  //           height: AppHeight.h200,
-                  //           child: Text(
-                  //             'Book added to cart',
-                  //           ),
-                  //         );
-                  //       });
-
-                  //   await carts
-                  //       .postCartItem(loggedInUserSession, _cartItem)
-                  //       .then((value) {
-                  //     if (value) {
-                  //       Navigator.pushNamed(
-                  //         context,
-                  //         CartScreen.routeName,
-                  //         arguments: {
-                  //           'loggedInUserSession': loggedInUserSession
-                  //         },
-                  //       );
-                  //       BotToast.showSimpleNotification(
-                  //         title: 'Book added to your cart !',
-                  //         duration: Duration(seconds: 3),
-                  //         backgroundColor: ColorManager.primary,
-                  //         titleStyle: getBoldStyle(color: ColorManager.white),
-                  //         align: Alignment(0, 1),
-                  //         hideCloseButton: true,
-                  //       );
-                  //     } else
-                  //       BotToast.showSimpleNotification(
-                  //         title:
-                  //             "Couldn't add this book to cart, Please try again!!",
-                  //         duration: Duration(seconds: 3),
-                  //         backgroundColor: ColorManager.primary,
-                  //         titleStyle: getBoldStyle(color: ColorManager.white),
-                  //         align: Alignment(0, 0),
-                  //         hideCloseButton: true,
-                  //       );
-                  //   });
-                  // },
-                  child: const Text(
-                    'Order this book',
-                    style: TextStyle(fontSize: 24),
+                    //   await carts
+                    //       .postCartItem(loggedInUserSession, _cartItem)
+                    //       .then((value) {
+                    //     if (value) {
+                    //       Navigator.pushNamed(
+                    //         context,
+                    //         CartScreen.routeName,
+                    //         arguments: {
+                    //           'loggedInUserSession': loggedInUserSession
+                    //         },
+                    //       );
+                    //       BotToast.showSimpleNotification(
+                    //         title: 'Book added to your cart !',
+                    //         duration: Duration(seconds: 3),
+                    //         backgroundColor: ColorManager.primary,
+                    //         titleStyle: getBoldStyle(color: ColorManager.white),
+                    //         align: Alignment(0, 1),
+                    //         hideCloseButton: true,
+                    //       );
+                    //     } else
+                    //       BotToast.showSimpleNotification(
+                    //         title:
+                    //             "Couldn't add this book to cart, Please try again!!",
+                    //         duration: Duration(seconds: 3),
+                    //         backgroundColor: ColorManager.primary,
+                    //         titleStyle: getBoldStyle(color: ColorManager.white),
+                    //         align: Alignment(0, 0),
+                    //         hideCloseButton: true,
+                    //       );
+                    //   });
+                    // },
+                    child: const Text(
+                      'Order this book',
+                      style: TextStyle(
+                        fontSize: FontSize.s20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ))
           // ElevatedButton(

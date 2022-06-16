@@ -21,6 +21,10 @@ class ColorManager {
 
   static Color primaryColorWithOpacity = Color.fromARGB(89, 229, 99, 999);
   static Color blackWithOpacity = Color.fromARGB(89, 0, 0, 0);
+  static Color blackWithLowOpacity = Color.fromARGB(100, 0, 0, 0);
+  static Color whiteWithOpacity = Color.fromARGB(89, 255, 255, 255);
+  static Color greyWithOpacity = Color.fromARGB(89, 70, 70, 70);
+  static Color grey2WithOpacity = Color.fromARGB(89, 79, 79, 79);
 }
 
 extension HexColor on Color {
